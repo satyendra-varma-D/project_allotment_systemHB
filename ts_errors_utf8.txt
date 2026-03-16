@@ -1,0 +1,633 @@
+﻿src/app/App.tsx(3,25): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/Sidebar.js'?
+src/app/App.tsx(4,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/GlobalHeader.js'?
+src/app/App.tsx(5,19): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/UIKit.js'?
+src/app/App.tsx(6,26): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/SampleDesign.js'?
+src/app/App.tsx(7,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/DashboardModule.js'?
+src/app/App.tsx(8,25): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/LeadsModule.js'?
+src/app/App.tsx(9,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/ProjectsModule.js'?
+src/app/App.tsx(10,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/MilestonesModule.js'?
+src/app/App.tsx(11,31): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/HireRenewalModule.js'?
+src/app/App.tsx(12,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/SupportAMCModule.js'?
+src/app/App.tsx(13,34): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/ChangeRequestsModule.js'?
+src/app/App.tsx(14,34): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/InfrastructureModule.js'?
+src/app/App.tsx(15,26): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/AddonsModule.js'?
+src/app/App.tsx(16,23): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/AWSModule.js'?
+src/app/App.tsx(17,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/MilestonesMasterModule.js'?
+src/app/App.tsx(18,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/PaymentTermsMasterModule.js'?
+src/app/App.tsx(19,45): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/MilestoneStatusChangeLogsModule.js'?
+src/app/App.tsx(20,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/ResourceRenewalsModule.js'?
+src/app/App.tsx(21,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/ProjectAllotmentModule.js'?
+src/app/App.tsx(22,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/UserRolesModule.js'?
+src/app/App.tsx(23,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/SystemArchitectureModule.js'?
+src/app/App.tsx(24,45): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './components/NonFunctionalArchitectureModule.js'?
+src/app/components/AddEditAddonPanel.tsx(10,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/AddEditAddonPanel.tsx(57,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/AddEditAddonPanel.tsx(62,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/AddEditAddonPanel.tsx(127,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(138,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(148,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(159,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(172,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(194,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(205,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(216,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(227,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(237,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(247,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(267,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(279,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(299,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(309,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(318,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(328,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(338,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAddonPanel.tsx(348,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(9,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/AddEditAWSPanel.tsx(53,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/AddEditAWSPanel.tsx(128,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(139,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(151,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(169,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(188,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(197,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(217,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(227,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(239,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(256,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(266,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(282,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(288,34): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(299,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(318,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(328,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(340,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddEditAWSPanel.tsx(357,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/AddonsEditSidePanel.tsx(43,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/AddonsEditSidePanel.tsx(48,3): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/AddonsModule.tsx(19,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/AddonsModule.tsx(20,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/AddonsModule.tsx(21,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AddEditAddonPanel.js'?
+src/app/components/AddonsModule.tsx(688,18): error TS7006: Parameter 'formData' implicitly has an 'any' type.
+src/app/components/AddonsModule.tsx(690,19): error TS2375: Type '{ addonId: any; addonTitle: any; addonType: any; addonStatus: any; proposedTotalHours: number; scheduleInWeeks: number; amount: number; addonRequestedDate: any; addonRequestedBy: any; approvedHours: number | undefined; ... 9 more ...; approvalStatus?: "Approved" | "Under Review" | "Rejected"; }' is not assignable to type 'Addon' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'approvedHours' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/app/components/AddonsModule.tsx(711,19): error TS2375: Type '{ id: string; addonId: any; addonTitle: any; addonType: any; addonStatus: any; proposedTotalHours: number; scheduleInWeeks: number; amount: number; addonRequestedDate: any; addonRequestedBy: any; ... 6 more ...; createdDate: any; }' is not assignable to type 'Addon' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'approvedHours' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+src/app/components/AgreementsEditSidePanel.tsx(300,25): error TS2322: Type '(el: HTMLInputElement | null) => HTMLInputElement | null' is not assignable to type 'Ref<HTMLInputElement> | undefined'.
+  Type '(el: HTMLInputElement | null) => HTMLInputElement | null' is not assignable to type '(instance: HTMLInputElement | null) => void | (() => VoidOrUndefinedOnly)'.
+    Type 'HTMLInputElement | null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+      Type 'null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+src/app/components/AWSListing.tsx(12,77): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/AWSListing.tsx(13,38): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/AWSListing.tsx(14,37): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../mockAPI/awsData.js'?
+src/app/components/AWSListing.tsx(15,33): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AddEditAWSPanel.js'?
+src/app/components/AWSListing.tsx(174,12): error TS7053: Element implicitly has an 'any' type because expression of type 'AWSItem' can't be used to index type '{ Requested: string; Approved: string; Active: string; Inactive: string; Cancelled: string; }'.
+src/app/components/AWSListing.tsx(185,12): error TS7053: Element implicitly has an 'any' type because expression of type 'AWSItem' can't be used to index type '{ Requested: string; Approved: string; Active: string; Inactive: string; Cancelled: string; }'.
+src/app/components/AWSListing.tsx(198,12): error TS7053: Element implicitly has an 'any' type because expression of type 'AWSItem' can't be used to index type '{ HostingServer: string; EC2: string; S3: string; RDS: string; Lambda: string; CloudFront: string; Other: string; }'.
+src/app/components/AWSListing.tsx(211,12): error TS7053: Element implicitly has an 'any' type because expression of type 'AWSItem' can't be used to index type '{ HostingServer: string; EC2: string; S3: string; RDS: string; Lambda: string; CloudFront: string; Other: string; }'.
+src/app/components/AWSModule.tsx(1,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AWSListing.js'?
+src/app/components/ChangeRequestsModule.tsx(17,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/ChangeRequestsModule.tsx(18,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/ChangeRequestsModule.tsx(19,37): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AddonsEditSidePanel.js'?
+src/app/components/ChangeRequestsModule.tsx(20,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AddonsEditSidePanel.js'?
+src/app/components/ChangeRequestsModule.tsx(734,18): error TS7006: Parameter 'updatedRequest' implicitly has an 'any' type.
+src/app/components/ContactEditSidePanel.tsx(252,39): error TS2532: Object is possibly 'undefined'.
+src/app/components/DashboardModule.tsx(10,44): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/GlobalHeader.tsx(41,18): error TS2307: Cannot find module '../../assets/1b7ab447194c5f0fc1b269452281b2173e53bd29.png' or its corresponding type declarations.
+src/app/components/GlobalHeader.tsx(49,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/GlobalHeader.tsx(348,7): error TS2532: Object is possibly 'undefined'.
+src/app/components/GlobalHeader.tsx(957,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/GlobalHeader.tsx(976,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/GlobalHeader.tsx(998,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/hb/common/Form.tsx(11,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/utils.js'?
+src/app/components/hb/common/Form.tsx(12,23): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/input.js'?
+src/app/components/hb/common/Form.tsx(13,26): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/textarea.js'?
+src/app/components/hb/common/Form.tsx(14,58): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/select.js'?
+src/app/components/hb/common/index.tsx(7,24): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './Select.js'?
+src/app/components/hb/common/index.tsx(8,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/select.js'?
+src/app/components/hb/common/index.tsx(22,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './Form.js'?
+src/app/components/hb/common/index.tsx(23,26): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './StatCard.js'?
+src/app/components/hb/common/Select.tsx(10,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/utils.js'?
+src/app/components/hb/common/SidePanel.tsx(2,10): error TS1484: 'ReactNode' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/hb/common/StatCard.tsx(8,10): error TS1484: 'LucideIcon' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/hb/common/StatCard.tsx(9,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/utils.js'?
+src/app/components/hb/listing/AdvancedSearchPanel.tsx(484,23): error TS2322: Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+  Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type '(instance: HTMLDivElement | null) => void | (() => VoidOrUndefinedOnly)'.
+    Type 'HTMLDivElement | null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+      Type 'null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+src/app/components/hb/listing/AdvancedSearchPanel.tsx(526,23): error TS2322: Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+  Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type '(instance: HTMLDivElement | null) => void | (() => VoidOrUndefinedOnly)'.
+    Type 'HTMLDivElement | null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+      Type 'null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+src/app/components/hb/listing/DateRangeFilter.tsx(48,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(49,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(57,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(58,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(66,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(67,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(75,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(76,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(83,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(84,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(92,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/DateRangeFilter.tsx(93,5): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/components/hb/listing/FilterChips.tsx(16,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FilterPopup.js'?
+src/app/components/hb/listing/FilterPopup.tsx(197,26): error TS2322: Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+  Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type '(instance: HTMLDivElement | null) => void | (() => VoidOrUndefinedOnly)'.
+    Type 'HTMLDivElement | null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+      Type 'null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+src/app/components/hb/listing/FilterPopup.tsx(235,208): error TS2322: Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type 'Ref<HTMLDivElement> | undefined'.
+  Type '(el: HTMLDivElement | null) => HTMLDivElement | null' is not assignable to type '(instance: HTMLDivElement | null) => void | (() => VoidOrUndefinedOnly)'.
+    Type 'HTMLDivElement | null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+      Type 'null' is not assignable to type 'void | (() => VoidOrUndefinedOnly)'.
+src/app/components/hb/listing/FlyoutMenu.tsx(34,10): error TS1484: 'LucideIcon' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/hb/listing/IconButton.tsx(34,10): error TS1484: 'LucideIcon' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/hb/listing/index.ts(16,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './IconButton.js'?
+src/app/components/hb/listing/index.ts(17,31): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './PrimaryButton.js'?
+src/app/components/hb/listing/index.ts(18,33): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './SecondaryButton.js'?
+src/app/components/hb/listing/index.ts(19,77): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FlyoutMenu.js'?
+src/app/components/hb/listing/index.ts(20,44): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './Breadcrumb.js'?
+src/app/components/hb/listing/index.ts(21,27): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './SearchBar.js'?
+src/app/components/hb/listing/index.ts(22,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './PageHeader.js'?
+src/app/components/hb/listing/index.ts(23,63): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './PageHeader.js'?
+src/app/components/hb/listing/index.ts(24,31): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ListingHeader.js'?
+src/app/components/hb/listing/index.ts(25,87): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ListingHeader.js'?
+src/app/components/hb/listing/index.ts(26,34): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ViewModeSwitcher.js'?
+src/app/components/hb/listing/index.ts(27,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './StatusFilter.js'?
+src/app/components/hb/listing/index.ts(28,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FilterPopup.js'?
+src/app/components/hb/listing/index.ts(29,37): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AdvancedSearchPanel.js'?
+src/app/components/hb/listing/index.ts(30,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FilterChips.js'?
+src/app/components/hb/listing/index.ts(31,33): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './DateRangeFilter.js'?
+src/app/components/hb/listing/index.ts(32,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './Pagination.js'?
+src/app/components/hb/listing/index.ts(33,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './SummaryWidgets.js'?
+src/app/components/hb/listing/index.ts(34,31): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ViewModeSwitcher.js'?
+src/app/components/hb/listing/index.ts(35,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './StatusFilter.js'?
+src/app/components/hb/listing/index.ts(36,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FilterPopup.js'?
+src/app/components/hb/listing/index.ts(37,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './Pagination.js'?
+src/app/components/hb/listing/index.ts(40,49): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './IconButton.js'?
+src/app/components/hb/listing/index.ts(41,52): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './PrimaryButton.js'?
+src/app/components/hb/listing/index.ts(42,54): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './SecondaryButton.js'?
+src/app/components/hb/listing/ListingHeader.tsx(64,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './IconButton.js'?
+src/app/components/hb/listing/ListingHeader.tsx(65,31): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './PrimaryButton.js'?
+src/app/components/hb/listing/ListingHeader.tsx(66,63): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FlyoutMenu.js'?
+src/app/components/hb/listing/ListingHeader.tsx(67,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/utils.js'?
+src/app/components/hb/listing/PageHeader.tsx(80,44): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './Breadcrumb.js'?
+src/app/components/hb/listing/PageHeader.tsx(81,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './IconButton.js'?
+src/app/components/hb/listing/PageHeader.tsx(82,63): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FlyoutMenu.js'?
+src/app/components/hb/listing/PageHeader.tsx(83,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../ui/utils.js'?
+src/app/components/hb/listing/PrimaryButton.tsx(24,10): error TS1484: 'LucideIcon' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/hb/listing/SecondaryButton.tsx(22,10): error TS1484: 'LucideIcon' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/hb/listing/StatusFilter.tsx(35,44): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FlyoutMenu.js'?
+src/app/components/hb/listing/SummaryWidgets.tsx(17,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../../../types/widgets.js'?
+src/app/components/hb/listing/SummaryWidgets.tsx(18,76): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../../../utils/widgetCalculator.js'?
+src/app/components/hb/listing/SummaryWidgets.tsx(76,13): error TS7053: Element implicitly has an 'any' type because expression of type 'any' can't be used to index type '{ Building2: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; ... 11 more ...; Clock: ForwardRefExoticComponent<...>; }'.
+src/app/components/hb/listing/ViewModeSwitcher.tsx(29,44): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './FlyoutMenu.js'?
+src/app/components/HireRenewalModule.tsx(29,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/HireRenewalModule.tsx(30,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/HireRenewalModule.tsx(31,42): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './HireRenewalEditSidePanel.js'?
+src/app/components/InfrastructureModule.tsx(17,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/InfrastructureModule.tsx(18,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/LeadsModule.tsx(26,111): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/LeadsModule.tsx(27,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/LeadsModule.tsx(28,60): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/LeadsModule.tsx(29,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ImageViewerModal.js'?
+src/app/components/LeadsModule.tsx(304,26): error TS2304: Cannot find name 'useMemo'.
+src/app/components/LeadsModule.tsx(310,3): error TS2304: Cannot find name 'useEffect'.
+src/app/components/LeadsModule.tsx(318,114): error TS2552: Cannot find name 'CheckCircle2'. Did you mean 'CheckCircle'?
+src/app/components/LeadsModule.tsx(319,112): error TS2304: Cannot find name 'FileText'.
+src/app/components/LeadsModule.tsx(320,116): error TS2552: Cannot find name 'Users'. Did you mean 'User'?
+src/app/components/LeadsModule.tsx(321,119): error TS2552: Cannot find name 'CheckCircle2'. Did you mean 'CheckCircle'?
+src/app/components/LeadsModule.tsx(376,13): error TS2552: Cannot find name 'CheckCircle2'. Did you mean 'CheckCircle'?
+src/app/components/LeadsModule.tsx(485,7): error TS2353: Object literal may only specify known properties, and 'className' does not exist in type '{ icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; label: string; onClick: () => void; }'.
+src/app/components/LeadsModule.tsx(595,18): error TS2304: Cannot find name 'Building2'.
+src/app/components/LeadsModule.tsx(704,28): error TS7006: Parameter 'index' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(717,26): error TS7006: Parameter 'newFilters' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(728,34): error TS7006: Parameter 'lead' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(759,40): error TS2339: Property 'className' does not exist on type '{ icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; label: string; onClick: () => void; }'.
+src/app/components/LeadsModule.tsx(796,26): error TS2304: Cannot find name 'Building2'.
+src/app/components/LeadsModule.tsx(823,34): error TS7006: Parameter 'lead' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(854,40): error TS2339: Property 'className' does not exist on type '{ icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; label: string; onClick: () => void; }'.
+src/app/components/LeadsModule.tsx(949,38): error TS7006: Parameter 'lead' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(997,42): error TS2339: Property 'className' does not exist on type '{ icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>; label: string; onClick: () => void; }'.
+src/app/components/LeadsModule.tsx(1024,36): error TS7006: Parameter 'value' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1033,8): error TS2304: Cannot find name 'FormModal'.
+src/app/components/LeadsModule.tsx(1041,12): error TS2304: Cannot find name 'FormSection'.
+src/app/components/LeadsModule.tsx(1043,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1044,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1044,79): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1045,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1049,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1052,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1054,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1055,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1055,77): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1056,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1060,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1063,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1065,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1066,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1066,67): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1067,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1072,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1075,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1077,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1078,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1078,58): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1079,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1083,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1085,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1087,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1088,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1088,66): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1089,18): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1092,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1102,19): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1103,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1105,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1106,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1106,57): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1107,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1111,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1113,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1115,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1116,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1116,71): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1117,18): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1120,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1130,19): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1131,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1133,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1134,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1134,71): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1135,18): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1138,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1145,19): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1146,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1148,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1149,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1149,87): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1150,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1155,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1158,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1160,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1161,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1161,81): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1162,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1166,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1168,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1170,13): error TS2304: Cannot find name 'FormSection'.
+src/app/components/LeadsModule.tsx(1172,12): error TS2304: Cannot find name 'FormFooter'.
+src/app/components/LeadsModule.tsx(1179,13): error TS2304: Cannot find name 'FormFooter'.
+src/app/components/LeadsModule.tsx(1181,9): error TS2304: Cannot find name 'FormModal'.
+src/app/components/LeadsModule.tsx(1184,8): error TS2304: Cannot find name 'FormModal'.
+src/app/components/LeadsModule.tsx(1192,12): error TS2304: Cannot find name 'FormSection'.
+src/app/components/LeadsModule.tsx(1194,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1195,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1195,84): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1196,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1200,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1203,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1205,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1206,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1206,82): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1207,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1211,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1214,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1216,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1217,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1217,72): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1218,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1223,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1226,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1228,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1229,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1229,63): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1230,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1234,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1236,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1238,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1239,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1239,80): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1240,18): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1243,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1252,19): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1253,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1255,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1256,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1256,67): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1257,18): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1260,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1266,19): error TS2304: Cannot find name 'FormSelect'.
+src/app/components/LeadsModule.tsx(1267,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1269,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1270,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1270,92): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1271,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1276,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1279,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1281,16): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1282,18): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1282,86): error TS2304: Cannot find name 'FormLabel'.
+src/app/components/LeadsModule.tsx(1283,18): error TS2304: Cannot find name 'FormInput'.
+src/app/components/LeadsModule.tsx(1287,30): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/LeadsModule.tsx(1289,17): error TS2304: Cannot find name 'FormField'.
+src/app/components/LeadsModule.tsx(1291,13): error TS2304: Cannot find name 'FormSection'.
+src/app/components/LeadsModule.tsx(1293,12): error TS2304: Cannot find name 'FormFooter'.
+src/app/components/LeadsModule.tsx(1300,13): error TS2304: Cannot find name 'FormFooter'.
+src/app/components/LeadsModule.tsx(1302,9): error TS2304: Cannot find name 'FormModal'.
+src/app/components/MilestonesMasterModule.tsx(10,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/MilestonesMasterModule.tsx(11,59): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/MilestonesMasterModule.tsx(18,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/MilestonesMasterModule.tsx(19,44): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/SidePanel.js'?
+src/app/components/MilestonesModule.tsx(23,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/MilestonesModule.tsx(24,59): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/MilestonesModule.tsx(25,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './MilestonesEditSidePanel.js'?
+src/app/components/MilestonesModule.tsx(26,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './MilestonesEditSidePanel.js'?
+src/app/components/MilestonesModule.tsx(74,5): error TS2353: Object literal may only specify known properties, and 'remarks' does not exist in type 'Milestone'.
+src/app/components/MilestonesModule.tsx(97,5): error TS2353: Object literal may only specify known properties, and 'createdDate' does not exist in type 'Milestone'.
+src/app/components/MilestonesModule.tsx(118,5): error TS2353: Object literal may only specify known properties, and 'remarks' does not exist in type 'Milestone'.
+src/app/components/MilestonesModule.tsx(141,5): error TS2353: Object literal may only specify known properties, and 'remarks' does not exist in type 'Milestone'.
+src/app/components/MilestonesModule.tsx(163,5): error TS2353: Object literal may only specify known properties, and 'createdDate' does not exist in type 'Milestone'.
+src/app/components/MilestonesModule.tsx(185,5): error TS2353: Object literal may only specify known properties, and 'remarks' does not exist in type 'Milestone'.
+src/app/components/MilestonesModule.tsx(786,18): error TS7006: Parameter 'milestoneData' implicitly has an 'any' type.
+src/app/components/MilestonesModule.tsx(816,15): error TS2353: Object literal may only specify known properties, and 'remarks' does not exist in type 'Milestone'.
+src/app/components/MilestoneStatusChangeLogsModule.tsx(11,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/MilestoneStatusChangeLogsModule.tsx(12,59): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/MilestoneStatusChangeLogsModule.tsx(82,3): error TS2375: Type '{ id: string; projectCode: string; projectName: string; milestoneCode: string; milestoneName: string; milestoneAmount: number; currency: string; milestoneActualDate: undefined; milestonePlannedDate: string; ... 4 more ...; changedDate: string; }' is not assignable to type 'MilestoneStatusChangeLog' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'milestoneActualDate' are incompatible.
+    Type 'undefined' is not assignable to type 'string'.
+src/app/components/MilestoneStatusChangeLogsModule.tsx(130,3): error TS2375: Type '{ id: string; projectCode: string; projectName: string; milestoneCode: string; milestoneName: string; milestoneAmount: number; currency: string; milestoneActualDate: undefined; milestonePlannedDate: string; ... 4 more ...; changedDate: string; }' is not assignable to type 'MilestoneStatusChangeLog' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'milestoneActualDate' are incompatible.
+    Type 'undefined' is not assignable to type 'string'.
+src/app/components/NonFunctionalArchitectureModule.tsx(20,56): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/PaymentTermsMasterModule.tsx(11,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/PaymentTermsMasterModule.tsx(12,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/ProjectAllotmentModule.tsx(21,146): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/ProjectAllotmentModule.tsx(22,38): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/ProjectAllotmentModule.tsx(32,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/ProjectAllotmentModule.tsx(392,16): error TS2345: Argument of type '(ProjectIntake | { status: "Approved"; approvalStatus: "Fully Approved"; approvedBy: string; approvedDate: string | undefined; id: string; intakeId: string; leadId: string; ... 12 more ...; createdBy: string; })[]' is not assignable to parameter of type 'SetStateAction<ProjectIntake[]>'.
+  Type '(ProjectIntake | { status: "Approved"; approvalStatus: "Fully Approved"; approvedBy: string; approvedDate: string | undefined; id: string; intakeId: string; leadId: string; ... 12 more ...; createdBy: string; })[]' is not assignable to type 'ProjectIntake[]'.
+    Type 'ProjectIntake | { status: "Approved"; approvalStatus: "Fully Approved"; approvedBy: string; approvedDate: string | undefined; id: string; intakeId: string; leadId: string; ... 12 more ...; createdBy: string; }' is not assignable to type 'ProjectIntake' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Type '{ status: "Approved"; approvalStatus: "Fully Approved"; approvedBy: string; approvedDate: string | undefined; id: string; intakeId: string; leadId: string; clientName: string; projectName: string; ... 10 more ...; createdBy: string; }' is not assignable to type 'ProjectIntake' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+        Types of property 'approvedDate' are incompatible.
+          Type 'string | undefined' is not assignable to type 'string'.
+            Type 'undefined' is not assignable to type 'string'.
+src/app/components/ProjectDetailsModule.tsx(3,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(4,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './TeamEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(5,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ClientTeamEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(6,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ContactEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(7,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './TechnologyEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(8,39): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ScheduleEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(9,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './CommercialEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(10,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AgreementsEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(11,40): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './MilestoneEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(12,40): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ResourcesEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(13,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './AttachmentEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(14,41): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './SalesNotesEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(15,47): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ResourceRenewalsEditSidePanel.js'?
+src/app/components/ProjectDetailsModule.tsx(16,42): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectEmailPreviewModal.js'?
+src/app/components/ProjectDetailsModule.tsx(17,40): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectMilestonesModal.js'?
+src/app/components/ProjectDetailsModule.tsx(18,36): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectAddonsModal.js'?
+src/app/components/ProjectDetailsModule.tsx(19,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectRenewalsModal.js'?
+src/app/components/ProjectDetailsModule.tsx(1263,34): error TS2339: Property 'fileName' does not exist on type '{ name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | { name: string; status: boolean; requiresAttachment: boolean; } | { name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | ... 5 more ... | { ...; }'.
+  Property 'fileName' does not exist on type '{ name: string; status: boolean; requiresAttachment: boolean; }'.
+src/app/components/ProjectDetailsModule.tsx(1270,79): error TS2339: Property 'fileName' does not exist on type '{ name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | { name: string; status: boolean; requiresAttachment: boolean; } | { name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | ... 5 more ... | { ...; }'.
+  Property 'fileName' does not exist on type '{ name: string; status: boolean; requiresAttachment: boolean; }'.
+src/app/components/ProjectDetailsModule.tsx(1271,40): error TS2339: Property 'fileSize' does not exist on type '{ name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | { name: string; status: boolean; requiresAttachment: boolean; } | { name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | ... 5 more ... | { ...; }'.
+  Property 'fileSize' does not exist on type '{ name: string; status: boolean; requiresAttachment: boolean; }'.
+src/app/components/ProjectDetailsModule.tsx(1273,45): error TS2339: Property 'fileSize' does not exist on type '{ name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | { name: string; status: boolean; requiresAttachment: boolean; } | { name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | ... 5 more ... | { ...; }'.
+  Property 'fileSize' does not exist on type '{ name: string; status: boolean; requiresAttachment: boolean; }'.
+src/app/components/ProjectDetailsModule.tsx(1280,35): error TS2339: Property 'fileName' does not exist on type '{ name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | { name: string; status: boolean; requiresAttachment: boolean; } | { name: string; status: boolean; fileName: string; fileSize: string; requiresAttachment: boolean; } | ... 5 more ... | { ...; }'.
+  Property 'fileName' does not exist on type '{ name: string; status: boolean; requiresAttachment: boolean; }'.
+src/app/components/ProjectDetailsModule.tsx(1774,18): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1789,18): error TS7006: Parameter 'updatedMembers' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1809,18): error TS7006: Parameter 'updatedData' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1824,18): error TS7006: Parameter 'updatedContact' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1840,18): error TS7006: Parameter 'updatedStack' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1851,18): error TS7006: Parameter 'updatedEfforts' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1862,18): error TS7006: Parameter 'updatedDetails' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1874,18): error TS7006: Parameter 'updatedAgreements' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1928,18): error TS7006: Parameter 'updatedMilestones' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1942,18): error TS7006: Parameter 'updatedResources' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1954,18): error TS7006: Parameter 'newAttachment' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(1970,18): error TS7006: Parameter 'updatedNotes' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(2005,27): error TS7006: Parameter 'milestone' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(2022,23): error TS7006: Parameter 'addon' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(2039,25): error TS7006: Parameter 'renewal' implicitly has an 'any' type.
+src/app/components/ProjectDetailsModule.tsx(2054,18): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/app/components/ProjectEmailPreviewModal.tsx(476,41): error TS7006: Parameter 'contact' implicitly has an 'any' type.
+src/app/components/ProjectMilestonesModal.tsx(3,42): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './MilestoneChangeLogsModal.js'?
+src/app/components/ProjectsModule.tsx(19,79): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/listing/ListingHeader.js'?
+src/app/components/ProjectsModule.tsx(20,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/listing/SummaryWidgets.js'?
+src/app/components/ProjectsModule.tsx(21,59): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/listing/AdvancedSearchPanel.js'?
+src/app/components/ProjectsModule.tsx(22,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/listing/FilterChips.js'?
+src/app/components/ProjectsModule.tsx(23,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/listing/Pagination.js'?
+src/app/components/ProjectsModule.tsx(24,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectDetailsModule.js'?
+src/app/components/ProjectsModule.tsx(25,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectEditSidePanel.js'?
+src/app/components/ProjectsModule.tsx(26,37): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectEmailPreview.js'?
+src/app/components/ProjectsModule.tsx(27,38): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ProjectEmailComposer.js'?
+src/app/components/ProjectsModule.tsx(306,54): error TS7053: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ project: boolean; client: boolean; type: boolean; salesExecutive: boolean; techBA: boolean; confirmedDate: boolean; clientType: boolean; projectTypeCategory: boolean; technologyPlatform: boolean; projectAllotment: boolean; projectStatus: boolean; paymentStatus: boolean; }'.
+  No index signature with a parameter of type 'string' was found on type '{ project: boolean; client: boolean; type: boolean; salesExecutive: boolean; techBA: boolean; confirmedDate: boolean; clientType: boolean; projectTypeCategory: boolean; technologyPlatform: boolean; projectAllotment: boolean; projectStatus: boolean; paymentStatus: boolean; }'.
+src/app/components/ProjectsModule.tsx(513,29): error TS7006: Parameter 'summary' implicitly has an 'any' type.
+src/app/components/ProjectsModule.tsx(1108,26): error TS7006: Parameter 'tab' implicitly has an 'any' type.
+src/app/components/ResourceRenewalsModule.tsx(19,47): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ResourceRenewalsEditSidePanel.js'?
+src/app/components/ResourceRenewalsModule.tsx(512,18): error TS7006: Parameter 'data' implicitly has an 'any' type.
+src/app/components/SalesNotesEditSidePanel.tsx(3,8): error TS2307: Cannot find module 'react-quill-new/dist/quill.snow.css' or its corresponding type declarations.
+src/app/components/SampleDesign.tsx(21,146): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/SampleDesign.tsx(22,38): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/SampleDesign.tsx(31,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/SampleDesign.tsx(32,33): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/SampleDesign.tsx(33,28): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './EmployeeDetail.js'?
+src/app/components/SampleDesign.tsx(34,30): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ImageViewerModal.js'?
+src/app/components/SampleDesign.tsx(216,35): error TS7006: Parameter 'v' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(342,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(354,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(366,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(377,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(391,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(410,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(422,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(432,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(565,24): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(985,28): error TS7006: Parameter 'page' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(986,36): error TS7006: Parameter 'count' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1014,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1026,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1038,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1049,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1063,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1082,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1094,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SampleDesign.tsx(1104,32): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/Sidebar.tsx(13,18): error TS2307: Cannot find module '../../assets/1b7ab447194c5f0fc1b269452281b2173e53bd29.png' or its corresponding type declarations.
+src/app/components/Sidebar.tsx(14,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../../mockAPI/navigationData.js'?
+src/app/components/Sidebar.tsx(22,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/app/components/Sidebar.tsx(150,27): error TS7006: Parameter 'menuItem' implicitly has an 'any' type.
+src/app/components/Sidebar.tsx(156,16): error TS7006: Parameter 'sub' implicitly has an 'any' type.
+src/app/components/Sidebar.tsx(208,47): error TS7006: Parameter 'subItem' implicitly has an 'any' type.
+src/app/components/Sidebar.tsx(393,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/Sidebar.tsx(412,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/Sidebar.tsx(434,28): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/app/components/SupportAMCModule.tsx(17,93): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/SupportAMCModule.tsx(18,48): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/SystemArchitectureModule.tsx(19,73): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/TeamEditSidePanel.tsx(111,5): error TS2322: Type '{ name: string; email: string; phone: string; id?: string; role?: string; }' is not assignable to type 'TeamMember'.
+  Property 'id' is optional in type '{ name: string; email: string; phone: string; id?: string; role?: string; }' but required in type 'TeamMember'.
+src/app/components/TeamEditSidePanel.tsx(123,5): error TS2322: Type '{ name: string; id?: string; role?: string; email?: string; phone?: string; }' is not assignable to type 'TeamMember'.
+  Property 'id' is optional in type '{ name: string; id?: string; role?: string; email?: string; phone?: string; }' but required in type 'TeamMember'.
+src/app/components/ui/accordion.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/alert-dialog.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/alert-dialog.tsx(7,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './button.js'?
+src/app/components/ui/alert.tsx(4,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/avatar.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/badge.tsx(5,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/breadcrumb.tsx(5,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/button.tsx(5,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/calendar.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/calendar.tsx(8,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './button.js'?
+src/app/components/ui/card.tsx(3,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/carousel.tsx(9,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/carousel.tsx(10,24): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './button.js'?
+src/app/components/ui/chart.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/checkbox.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/command.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/command.tsx(14,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './dialog.js'?
+src/app/components/ui/context-menu.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/context-menu.tsx(144,6): error TS2375: Type '{ children: (Element | ReactNode)[]; title?: string | undefined; suppressHydrationWarning?: boolean | undefined; color?: string | undefined; id?: string | undefined; ... 280 more ...; checked: CheckedState | undefined; }' is not assignable to type 'ContextMenuCheckboxItemProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'checked' are incompatible.
+    Type 'CheckedState | undefined' is not assignable to type 'CheckedState'.
+      Type 'undefined' is not assignable to type 'CheckedState'.
+src/app/components/ui/dialog.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/drawer.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/dropdown-menu.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/dropdown-menu.tsx(92,6): error TS2375: Type '{ children: (Element | ReactNode)[]; title?: string | undefined; suppressHydrationWarning?: boolean | undefined; color?: string | undefined; id?: string | undefined; ... 280 more ...; checked: CheckedState | undefined; }' is not assignable to type 'DropdownMenuCheckboxItemProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'checked' are incompatible.
+    Type 'CheckedState | undefined' is not assignable to type 'CheckedState'.
+      Type 'undefined' is not assignable to type 'CheckedState'.
+src/app/components/ui/form.tsx(16,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/form.tsx(17,23): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './label.js'?
+src/app/components/ui/hover-card.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/input-otp.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/input.tsx(3,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/label.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/menubar.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/menubar.tsx(121,6): error TS2375: Type '{ children: (Element | ReactNode)[]; title?: string | undefined; suppressHydrationWarning?: boolean | undefined; color?: string | undefined; id?: string | undefined; ... 280 more ...; checked: CheckedState | undefined; }' is not assignable to type 'MenubarCheckboxItemProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'checked' are incompatible.
+    Type 'CheckedState | undefined' is not assignable to type 'CheckedState'.
+      Type 'undefined' is not assignable to type 'CheckedState'.
+src/app/components/ui/navigation-menu.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/pagination.tsx(8,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/pagination.tsx(9,40): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './button.js'?
+src/app/components/ui/pagination.tsx(75,7): error TS2783: 'size' is specified more than once, so this usage will be overwritten.
+src/app/components/ui/pagination.tsx(92,7): error TS2783: 'size' is specified more than once, so this usage will be overwritten.
+src/app/components/ui/popover.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/progress.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/radio-group.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/resizable.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/scroll-area.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/select.tsx(11,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/separator.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/sheet.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/sidebar.tsx(5,10): error TS1484: 'VariantProps' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/ui/sidebar.tsx(8,29): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './use-mobile.js'?
+src/app/components/ui/sidebar.tsx(9,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/sidebar.tsx(10,24): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './button.js'?
+src/app/components/ui/sidebar.tsx(11,23): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './input.js'?
+src/app/components/ui/sidebar.tsx(12,27): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './separator.js'?
+src/app/components/ui/sidebar.tsx(19,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './sheet.js'?
+src/app/components/ui/sidebar.tsx(20,26): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './skeleton.js'?
+src/app/components/ui/sidebar.tsx(26,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './tooltip.js'?
+src/app/components/ui/sidebar.tsx(270,17): error TS7006: Parameter 'event' implicitly has an 'any' type.
+src/app/components/ui/skeleton.tsx(1,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/slider.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/slider.tsx(27,6): error TS2375: Type '{ children: (Element | Element[])[]; name?: string; disabled?: boolean; orientation?: "horizontal" | "vertical" | undefined; dir?: Direction; step?: number; minStepsBetweenThumbs?: number; ... 286 more ...; className: any; }' is not assignable to type 'SliderProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'value' are incompatible.
+    Type 'number[] | undefined' is not assignable to type 'number[]'.
+      Type 'undefined' is not assignable to type 'number[]'.
+src/app/components/ui/sonner.tsx(4,29): error TS1484: 'ToasterProps' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/app/components/ui/sonner.tsx(10,6): error TS2375: Type '{ invert?: boolean; theme: "dark" | "light" | "system" | undefined; position?: Position; hotkey?: string[]; richColors?: boolean; expand?: boolean; duration?: number; gap?: number; visibleToasts?: number; ... 9 more ...; containerAriaLabel?: string; }' is not assignable to type 'ToasterProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'theme' are incompatible.
+    Type '"dark" | "light" | "system" | undefined' is not assignable to type '"dark" | "light" | "system"'.
+      Type 'undefined' is not assignable to type '"dark" | "light" | "system"'.
+src/app/components/ui/switch.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/table.tsx(5,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/tabs.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/textarea.tsx(3,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/toggle-group.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/toggle-group.tsx(8,32): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './toggle.js'?
+src/app/components/ui/toggle.tsx(7,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/ui/tooltip.tsx(6,20): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './utils.js'?
+src/app/components/UIKit.tsx(45,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/UIKit.tsx(55,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/UIKit.tsx(56,24): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/button.js'?
+src/app/components/UIKit.tsx(57,34): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/badge.js'?
+src/app/components/UIKit.tsx(58,75): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/card.js'?
+src/app/components/UIKit.tsx(59,58): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/tabs.js'?
+src/app/components/UIKit.tsx(60,53): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/alert.js'?
+src/app/components/UIKit.tsx(61,27): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/separator.js'?
+src/app/components/UIKit.tsx(62,26): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/checkbox.js'?
+src/app/components/UIKit.tsx(63,44): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/radio-group.js'?
+src/app/components/UIKit.tsx(64,24): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/switch.js'?
+src/app/components/UIKit.tsx(65,23): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/label.js'?
+src/app/components/UIKit.tsx(66,79): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/select.js'?
+src/app/components/UIKit.tsx(73,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './ui/dropdown-menu.js'?
+src/app/components/UIKit.tsx(1473,36): error TS7006: Parameter 'id' implicitly has an 'any' type.
+src/app/components/UIKit.tsx(1498,37): error TS7006: Parameter 'start' implicitly has an 'any' type.
+src/app/components/UIKit.tsx(1498,44): error TS7006: Parameter 'end' implicitly has an 'any' type.
+src/app/components/UIKit.tsx(1498,49): error TS7006: Parameter 'label' implicitly has an 'any' type.
+src/app/components/UserRolesModule.tsx(20,163): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/UserRolesModule.tsx(21,38): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+src/app/components/UserRolesModule.tsx(30,8): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './hb/common/Form.js'?
+src/main.tsx(3,19): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+src/main.tsx(4,10): error TS2307: Cannot find module './styles/index.css' or its corresponding type declarations.
+src/types/index.ts(5,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './widgets.js'?
+src/utils/widgetCalculator.ts(8,35): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '../types/widgets.js'?
+src/utils/widgetCalculator.ts(148,28): error TS18048: 'value' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(149,32): error TS18048: 'field' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(160,28): error TS18048: 'value' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(161,32): error TS18048: 'field' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(171,39): error TS18048: 'field' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(172,56): error TS18048: 'value' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(177,39): error TS18048: 'field' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(178,56): error TS18048: 'value' is possibly 'undefined'.
+src/utils/widgetCalculator.ts(207,3): error TS2322: Type '{ bg: string; text: string; } | undefined' is not assignable to type '{ bg: string; text: string; }'.
+  Type 'undefined' is not assignable to type '{ bg: string; text: string; }'.
+templates/detail_view/DetailViewTemplate.tsx(53,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/detail_view/DetailViewTemplate.tsx(59,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/detail_view/DetailViewTemplate.tsx(60,41): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/detail_view/DetailViewTemplate.tsx(449,64): error TS18048: 'currentStatus' is possibly 'undefined'.
+templates/detail_view/DetailViewTemplate.tsx(450,20): error TS18048: 'currentStatus' is possibly 'undefined'.
+templates/listing/EXAMPLE_AdvancedFiltering.tsx(23,8): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/listing/EXAMPLE_AdvancedFiltering.tsx(79,38): error TS2538: Type 'undefined' cannot be used as an index type.
+templates/listing/EXAMPLE_AdvancedFiltering.tsx(148,24): error TS7006: Parameter 'filterId' implicitly has an 'any' type.
+templates/listing/TEMPLATE_Listing.tsx(27,82): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/listing/TEMPLATE_Listing.tsx(30,35): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/listing/TEMPLATE_Listing.tsx(33,84): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+templates/listing/TEMPLATE_Listing.tsx(93,38): error TS7006: Parameter 'item' implicitly has an 'any' type.
+templates/listing/TEMPLATE_Listing.tsx(272,33): error TS7006: Parameter 'item' implicitly has an 'any' type.
+templates/listing/TEMPLATE_Listing.tsx(326,33): error TS7006: Parameter 'item' implicitly has an 'any' type.
+templates/listing/TEMPLATE_Listing.tsx(402,39): error TS7006: Parameter 'item' implicitly has an 'any' type.
+templates/listing/TEMPLATE_mockData.ts(227,9): error TS18048: 'aValue' is possibly 'undefined'.
+templates/listing/TEMPLATE_mockData.ts(227,18): error TS18048: 'bValue' is possibly 'undefined'.
+templates/listing/TEMPLATE_mockData.ts(228,9): error TS18048: 'aValue' is possibly 'undefined'.
+templates/listing/TEMPLATE_mockData.ts(228,18): error TS18048: 'bValue' is possibly 'undefined'.
