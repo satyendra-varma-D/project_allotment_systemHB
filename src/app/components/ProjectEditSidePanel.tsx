@@ -5,7 +5,7 @@ interface ProjectEditSidePanelProps {
   isOpen: boolean;
   onClose: () => void;
   project?: {
-    crmId: string;
+    crmCode: string;
     subject: string;
     projectCode: string;
     projectName: string;
@@ -58,7 +58,7 @@ export function ProjectEditSidePanel({ isOpen, onClose, project, onSave }: Proje
         className="fixed inset-0 bg-black/50 z-50"
         onClick={onClose}
       />
-      
+
       {/* Side Panel */}
       <div className="fixed right-0 top-0 h-full w-full max-w-lg bg-white dark:bg-neutral-900 shadow-2xl z-50 overflow-y-auto">
         <div className="flex flex-col h-full">
@@ -84,7 +84,7 @@ export function ProjectEditSidePanel({ isOpen, onClose, project, onSave }: Proje
               </label>
               <input
                 type="text"
-                value={project?.crmId || ''}
+                value={project?.crmCode || ''}
                 readOnly
                 className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-700 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 cursor-not-allowed"
               />

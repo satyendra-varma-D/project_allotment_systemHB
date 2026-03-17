@@ -28,9 +28,10 @@ interface ProjectDetailsModuleProps {
     attachedToProjectCount: number;
     assignedMembers: string[];
   }) => void; // Callback when agreements are updated
+  onNavigate?: (pageId: string, filters?: any[]) => void;
 }
 
-export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: ProjectDetailsModuleProps) {
+export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onAgreementUpdate, onNavigate }: ProjectDetailsModuleProps) {
   const [activeTab, setActiveTab] = useState('details');
   const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
   const [isTeamEditPanelOpen, setIsTeamEditPanelOpen] = useState(false);
@@ -57,13 +58,13 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
 
   // State for Pre-Sales Team
   const [preSalesTeam, setPreSalesTeam] = useState([
-    { id: 'pre-1', name: 'Sarah Connor', role: 'Sales HOD', email: 'sarah.connor@company.com', phone: '+1 (968) 306-6008' },
-    { id: 'pre-2', name: 'John Reese', role: 'Sales Team Lead', email: 'john.reese@company.com', phone: '+1 (733) 409-1711' },
-    { id: 'pre-3', name: 'T-800', role: 'Sales Executive', email: 't-800@company.com', phone: '+1 (575) 705-8983' },
-    { id: 'pre-4', name: 'Miles Dyson', role: 'Contact Owner', email: 'miles.dyson@company.com', phone: '+1 (271) 696-3837' },
-    { id: 'pre-5', name: 'To be assigned', role: 'Tech1 Member', email: 'to.be@company.com', phone: '+1 (446) 959-2668' },
-    { id: 'pre-6', name: 'To be assigned', role: 'Tech1 Analyst', email: 'to.be@company.com', phone: '+1 (848) 488-4430' },
-    { id: 'pre-7', name: 'To be assigned', role: 'Estimation Approver', email: 'to.be@company.com', phone: '+1 (780) 785-4118' },
+    { id: 'pre-1', name: 'Sarah Connor', role: 'Sales HOD', department: 'Sales', subDepartment: 'Management', division: 'Sales Division', email: 'sarah.connor@company.com', phone: '+1 (968) 306-6008' },
+    { id: 'pre-2', name: 'John Reese', role: 'Sales Team Lead', department: 'Sales', subDepartment: 'Sales Team', division: 'Sales Division', email: 'john.reese@company.com', phone: '+1 (733) 409-1711' },
+    { id: 'pre-3', name: 'T-800', role: 'Sales Executive', department: 'Sales', subDepartment: 'Sales Team', division: 'Sales Division', email: 't-800@company.com', phone: '+1 (575) 705-8983' },
+    { id: 'pre-4', name: 'Miles Dyson', role: 'Contact Owner', department: 'Sales', subDepartment: 'Account Management', division: 'Sales Division', email: 'miles.dyson@company.com', phone: '+1 (271) 696-3837' },
+    { id: 'pre-5', name: 'To be assigned', role: 'Tech1 Member', department: 'Sales', subDepartment: 'Technical Sales', division: 'Sales Division', email: 'to.be@company.com', phone: '+1 (446) 959-2668' },
+    { id: 'pre-6', name: 'To be assigned', role: 'Tech1 Analyst', department: 'Sales', subDepartment: 'Technical Sales', division: 'Sales Division', email: 'to.be@company.com', phone: '+1 (848) 488-4430' },
+    { id: 'pre-7', name: 'To be assigned', role: 'Estimation Approver', department: 'Sales', subDepartment: 'Estimations', division: 'Sales Division', email: 'to.be@company.com', phone: '+1 (780) 785-4118' },
   ]);
 
   // State for Post-Sales Team
@@ -106,18 +107,18 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
   });
 
   // Mock project data - now stateful to allow editing
-  const [project, setProject] = useState({
+  const [project, setProject] = useState(propProject || {
     id: 'PRJ-2026-001',
     projectCode: 'PRJ-2026-001',
     projectName: 'Enterprise Resource Planning System',
     clientName: 'Global Tech Solutions Inc.',
     subject: 'Corporate Website Revamp',
-    projectType: 'Hire', // 'Fixed Cost' for milestones, 'Hire' for resources
+    projectType: 'Hire',
     status: 'In Progress',
     startDate: 'Jan 15, 2025',
     endDate: 'Dec 31, 2025',
     budget: 245000,
-    crmId: 'CRM-10293',
+    crmCode: 'CRM-10293',
     businessType: 'Web Development',
     domain: 'Digital Experience',
     industry: 'Technology',
@@ -198,14 +199,14 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
   // State for Agreements
   const [agreements, setAgreements] = useState({
     invoiceSent: { name: 'Invoice Sent', status: true, fileName: 'INV-2026-001.pdf', fileSize: '245 KB', requiresAttachment: true },
-    paymentSwiftCopy: { name: 'Payment Swift Copy Attached', status: false, requiresAttachment: true },
+    paymentSwiftCopy: { name: 'Payment Swift Copy Attached', status: false, fileName: '', fileSize: '', requiresAttachment: true },
     hbNda: { name: 'HB NDA', status: true, fileName: 'HB_NDA_Signed.pdf', fileSize: '1.2 MB', requiresAttachment: true },
     clientNda: { name: 'Client NDA', status: true, fileName: 'Client_NDA_Final.pdf', fileSize: '980 KB', requiresAttachment: true },
-    hireAgreement: { name: 'Hire Agreement Signed', status: false, requiresAttachment: true },
-    postDeliverySupport: { name: 'Post Delivery Support Agreement', status: false, requiresAttachment: true },
+    hireAgreement: { name: 'Hire Agreement Signed', status: false, fileName: '', fileSize: '', requiresAttachment: true },
+    postDeliverySupport: { name: 'Post Delivery Support Agreement', status: false, fileName: '', fileSize: '', requiresAttachment: true },
     proposalCopySigned: { name: 'Proposal Copy Signed', status: true, fileName: 'Proposal_V2_Signed.pdf', fileSize: '3.5 MB', requiresAttachment: true },
-    designDevelopByHB: { name: 'Design & Develop By HB *', status: true, requiresAttachment: false },
-    portfolioDisplay: { name: 'Portfolio Display', status: false, requiresAttachment: false },
+    designDevelopByHB: { name: 'Design & Develop By HB *', status: true, fileName: '', fileSize: '', requiresAttachment: false },
+    portfolioDisplay: { name: 'Portfolio Display', status: false, fileName: '', fileSize: '', requiresAttachment: false },
   });
 
   // State for Milestones
@@ -560,17 +561,16 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
                   <>
                     {/* Milestones Button */}
                     <button
-                      onClick={() => setIsMilestonesModalOpen(true)}
+                      onClick={() => onNavigate?.('milestones', [{ field: 'projectName', operator: 'contains', value: project.projectName }])}
                       className="px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                       title="View Milestones"
                     >
                       <Flag className="w-4 h-4" />
                       Milestones
                     </button>
-
                     {/* Addons Button */}
                     <button
-                      onClick={() => setIsAddonsModalOpen(true)}
+                      onClick={() => onNavigate?.('addons', [{ field: 'projectName', operator: 'contains', value: project.projectName }])}
                       className="px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                       title="View Addons"
                     >
@@ -585,7 +585,7 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
                   <>
                     {/* Resources Button */}
                     <button
-                      onClick={() => setIsResourcesModalOpen(true)}
+                      onClick={() => onNavigate?.('hire-renewal', [{ field: 'projectName', operator: 'contains', value: project.projectName }])}
                       className="px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
                       title="View Resources"
                     >
@@ -593,29 +593,27 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
                       Resources
                     </button>
 
-                    {/* Renewals Button */}
+                    {/* Resource Renewals Button */}
                     <button
-                      onClick={() => setIsRenewalsModalOpen(true)}
+                      onClick={() => onNavigate?.('resource-renewals', [{ field: 'projectName', operator: 'contains', value: project.projectName }])}
                       className="px-4 py-2.5 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-900 dark:text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
-                      title="View Renewals"
+                      title="View Resource Renewals"
                     >
                       <Clock className="w-4 h-4" />
-                      Renewals
+                      Resource Renewals
                     </button>
                   </>
                 )}
 
                 {/* Send Email Button - Show for both types */}
-                {project.status === 'Published' || project.status === 'In Progress' ? (
-                  <button
-                    onClick={() => setIsEmailPreviewOpen(true)}
-                    className="px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
-                    title="Send Email"
-                  >
-                    <Mail className="w-4 h-4" />
-                    Send Email
-                  </button>
-                ) : null}
+                <button
+                  onClick={() => setIsEmailPreviewOpen(true)}
+                  className="px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium"
+                  title="Send Email"
+                >
+                  <Mail className="w-4 h-4" />
+                  Send Email
+                </button>
               </div>
             </div>
 
@@ -677,8 +675,8 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">CRM</label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{project.crmId}</p>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">CRM Code</label>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">{project.crmCode}</p>
               </div>
               <div>
                 <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Subject</label>
@@ -1786,12 +1784,12 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
         }}
         teamType={currentEditTeam}
         currentMembers={getCurrentTeamMembers()}
-        onSave={(updatedMembers) => {
+        onSave={(updatedMembers: any) => {
           // Update the appropriate team state
           if (currentEditTeam === 'preSales') {
-            setPreSalesTeam(updatedMembers);
+            setPreSalesTeam(updatedMembers as any);
           } else if (currentEditTeam === 'postSales') {
-            setPostSalesTeam(updatedMembers);
+            setPostSalesTeam(updatedMembers as any);
           }
           setIsTeamEditPanelOpen(false);
           setCurrentEditTeam(null);
@@ -1806,8 +1804,8 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
           setCurrentEditTeam(null);
         }}
         currentData={clientTeamInfo}
-        onSave={(updatedData) => {
-          setClientTeamInfo(updatedData);
+        onSave={(updatedData: any) => {
+          setClientTeamInfo(updatedData as any);
           setIsTeamEditPanelOpen(false);
           setCurrentEditTeam(null);
         }}
@@ -1826,7 +1824,7 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
           const updatedContacts = clientTeamInfo.contacts.map((contact) =>
             contact.id === updatedContact.id ? updatedContact : contact
           );
-          setClientTeamInfo({ ...clientTeamInfo, contacts: updatedContacts });
+          setClientTeamInfo({ ...clientTeamInfo, contacts: updatedContacts } as any);
           setIsContactEditPanelOpen(false);
           setCurrentEditContact(null);
         }}
@@ -1871,8 +1869,8 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
         onClose={() => setIsAgreementsEditPanelOpen(false)}
         currentData={agreements}
         projectType={project.projectType}
-        onSave={(updatedAgreements) => {
-          setAgreements(updatedAgreements);
+        onSave={(updatedAgreements: any) => {
+          setAgreements(updatedAgreements as any);
           setIsAgreementsEditPanelOpen(false);
           
           // Calculate agreement summary
@@ -1925,8 +1923,8 @@ export function ProjectDetailsModule({ onBack, onEdit, onAgreementUpdate }: Proj
         isOpen={isMilestoneEditPanelOpen}
         onClose={() => setIsMilestoneEditPanelOpen(false)}
         currentMilestones={milestones}
-        onSave={(updatedMilestones) => {
-          setMilestones(updatedMilestones);
+        onSave={(updatedMilestones: any) => {
+          setMilestones(updatedMilestones as any);
           setIsMilestoneEditPanelOpen(false);
         }}
         projectType={project.projectType}

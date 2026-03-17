@@ -310,12 +310,6 @@ export function ProjectEmailPreviewModal({
           <td>${project.clientType}</td>
         </tr>
         ` : ''}
-        ${project.projectTypeCategory ? `
-        <tr>
-          <td>Project Type Category</td>
-          <td>${project.projectTypeCategory}</td>
-        </tr>
-        ` : ''}
         ${project.salesExecutive ? `
         <tr>
           <td>Sales Executive</td>

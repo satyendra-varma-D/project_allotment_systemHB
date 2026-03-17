@@ -43,6 +43,7 @@ export default function App() {
     useState(false);
 
   const [currentPage, setCurrentPage] = useState("dashboard");
+  const [initialFilters, setInitialFilters] = useState<any[]>([]);
 
   /* -------------------- Theme Effects -------------------- */
   useEffect(() => {
@@ -69,7 +70,12 @@ export default function App() {
     console.log("Logout clicked");
   };
 
-  const handleNavigate = (pageId: string) => {
+  const handleNavigate = (pageId: string, filters?: any[]) => {
+    if (filters) {
+      setInitialFilters(filters);
+    } else {
+      setInitialFilters([]);
+    }
     setCurrentPage(pageId);
   };
 
@@ -111,11 +117,17 @@ export default function App() {
         ) : currentPage === "leads" ? (
           <LeadsModule />
         ) : currentPage === "projects" ? (
-          <ProjectsModule />
+          <ProjectsModule onNavigate={handleNavigate} />
         ) : currentPage === "milestones" ? (
-          <MilestonesModule />
+          <MilestonesModule 
+            initialFilters={initialFilters} 
+            onFiltersConsumed={() => setInitialFilters([])} 
+          />
         ) : currentPage === "hire-renewal" ? (
-          <HireRenewalModule />
+          <HireRenewalModule 
+            initialFilters={initialFilters} 
+            onFiltersConsumed={() => setInitialFilters([])} 
+          />
         ) : currentPage === "support-amc" ? (
           <SupportAMCModule />
         ) : currentPage === "change-requests" ? (
@@ -123,7 +135,10 @@ export default function App() {
         ) : currentPage === "infrastructure" ? (
           <InfrastructureModule />
         ) : currentPage === "addons" ? (
-          <AddonsModule />
+          <AddonsModule 
+            initialFilters={initialFilters} 
+            onFiltersConsumed={() => setInitialFilters([])} 
+          />
         ) : currentPage === "aws" ? (
           <AWSModule />
         ) : currentPage === "milestones-master" ? (
@@ -133,7 +148,10 @@ export default function App() {
         ) : currentPage === "milestone-status-logs" ? (
           <MilestoneStatusChangeLogsModule />
         ) : currentPage === "resource-renewals" ? (
-          <ResourceRenewalsModule />
+          <ResourceRenewalsModule 
+            initialFilters={initialFilters} 
+            onFiltersConsumed={() => setInitialFilters([])} 
+          />
         ) : currentPage === "project-allotment" ? (
           <ProjectAllotmentModule />
         ) : currentPage === "user-roles" ? (

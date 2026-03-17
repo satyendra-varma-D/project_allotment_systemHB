@@ -6,14 +6,14 @@ export interface MilestoneData {
   milestoneName: string;
   milestoneCode: string;
   projectId: string;
-  paymentStatus: string;
+  paymentStatus: 'Pending' | 'Partially Paid' | 'Paid' | 'Overdue';
   plannedDate: string;
   actualDate: string;
-  completionStatus: string;
-  approvalStatus: string;
-  invoiceStatus: string;
+  completionStatus: 'Not Started' | 'In Progress' | 'Completed' | 'Delayed';
+  approvalStatus: 'Pending' | 'Approved' | 'Rejected';
+  invoiceStatus: 'Not Generated' | 'Generated' | 'Sent' | 'Paid';
   assignedTo: string;
-  priority: string;
+  priority: 'Low' | 'Medium' | 'High';
   remarks: string;
 }
 
@@ -28,7 +28,7 @@ const initialMilestoneData: MilestoneData = {
   milestoneName: '',
   milestoneCode: '',
   projectId: '',
-  paymentStatus: '',
+  paymentStatus: 'Pending',
   plannedDate: '',
   actualDate: '',
   completionStatus: 'Not Started',

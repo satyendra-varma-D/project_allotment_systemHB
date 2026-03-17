@@ -3,12 +3,12 @@ import { useState } from 'react';
 
 interface Project {
   id: string;
-  projectId: string;
-  crmCode: string;
-  subject: string;
+  projectId: string; // Auto-generated
+  crmCode: string; // Auto-generated CRM code
+  subject: string; // Editable subject
   projectName: string;
   clientName: string;
-  projectType: 'Web' | 'Mobile' | 'Total';
+  projectType: 'Fixed Cost' | 'Hire';
   projectManager: string;
   deliveryManager: string;
   startDate: string;
@@ -27,7 +27,6 @@ interface Project {
   techBA: string;
   confirmedDate: string;
   clientType: 'New' | 'Existing';
-  projectTypeCategory: 'Fixed Cost' | 'Hire';
   technologyPlatform: string;
 }
 
@@ -218,7 +217,7 @@ export function ProjectEmailPreview({ project, isOpen, onClose, onOpenComposer }
                     </tr>
                     <tr className="border border-neutral-300 dark:border-neutral-700">
                       <td className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 font-medium text-neutral-700 dark:text-neutral-300">Project Category</td>
-                      <td className="bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-white">{project.projectTypeCategory}</td>
+                      <td className="bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-white">{project.projectType}</td>
                     </tr>
                     <tr className="border border-neutral-300 dark:border-neutral-700">
                       <td className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 font-medium text-neutral-700 dark:text-neutral-300">Payment Terms</td>

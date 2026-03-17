@@ -16,7 +16,7 @@ import {
   Users,
   Link2
 } from 'lucide-react';
-import { ListingHeader, type ListingViewMode, type ListingColumnConfig } from './hb/listing/ListingHeader';
+import { ListingHeader, type ViewMode, type ColumnConfig } from './hb/listing/ListingHeader';
 import { SummaryWidgets } from './hb/listing/SummaryWidgets';
 import { AdvancedSearchPanel, type FilterCondition } from './hb/listing/AdvancedSearchPanel';
 import { FilterChips } from './hb/listing/FilterChips';
@@ -34,7 +34,7 @@ interface Project {
   subject: string; // Editable subject
   projectName: string;
   clientName: string;
-  projectType: 'Web' | 'Mobile' | 'Total';
+  projectType: 'Fixed Cost' | 'Hire';
   projectManager: string;
   deliveryManager: string;
   startDate: string;
@@ -43,24 +43,22 @@ interface Project {
   overallProgress: number;
   commercialValue: number;
   domain?: string;
-  industry?: string; // New industry field
+  industry?: string;
   linkedLeadId?: string;
   riskIndicator?: 'Low' | 'Medium' | 'High';
   priorityLevel?: 'Low' | 'Medium' | 'High' | 'Critical';
   createdDate: string;
   modifiedDate: string;
-  // New fields
   salesExecutive: string;
   techBA: string;
   confirmedDate: string;
   clientType: 'New' | 'Existing';
-  projectTypeCategory: 'Fixed Cost' | 'Hire';
   technologyPlatform: string;
   // Agreement summary
   agreementSummary?: {
-    assignedMembersCount: number; // Total agreements with assigned members
-    attachedToProjectCount: number; // Total agreements attached to project
-    assignedMembers: string[]; // List of unique assigned member names
+    assignedMembersCount: number;
+    attachedToProjectCount: number;
+    assignedMembers: string[];
   };
 }
 
@@ -73,7 +71,7 @@ const mockProjects: Project[] = [
     subject: 'Enterprise CRM Platform',
     projectName: 'Enterprise CRM Platform',
     clientName: 'TechCorp Solutions',
-    projectType: 'Web',
+    projectType: 'Fixed Cost',
     projectManager: 'John Anderson',
     deliveryManager: 'Sarah Mitchell',
     startDate: '2024-01-15',
@@ -92,7 +90,6 @@ const mockProjects: Project[] = [
     techBA: 'Bob Smith',
     confirmedDate: '2024-01-10',
     clientType: 'Existing',
-    projectTypeCategory: 'Fixed Cost',
     technologyPlatform: 'AWS',
     agreementSummary: {
       assignedMembersCount: 3,
@@ -107,7 +104,7 @@ const mockProjects: Project[] = [
     subject: 'Mobile Banking App',
     projectName: 'Mobile Banking App',
     clientName: 'FinanceGlobal Bank',
-    projectType: 'Mobile',
+    projectType: 'Hire',
     projectManager: 'Emily Chen',
     deliveryManager: 'Michael Brown',
     startDate: '2024-02-01',
@@ -122,11 +119,10 @@ const mockProjects: Project[] = [
     priorityLevel: 'High',
     createdDate: '2024-01-25',
     modifiedDate: '2024-02-18',
-    salesExecutive: 'Charlie Brown',
-    techBA: 'David Wilson',
-    confirmedDate: '2024-01-25',
+    salesExecutive: 'Michael Brown',
+    techBA: 'Sarah Lee',
+    confirmedDate: '2024-02-14',
     clientType: 'New',
-    projectTypeCategory: 'Hire',
     technologyPlatform: 'Azure',
   },
   {
@@ -136,7 +132,7 @@ const mockProjects: Project[] = [
     subject: 'E-Commerce Platform Redesign',
     projectName: 'E-Commerce Platform Redesign',
     clientName: 'RetailMax Inc',
-    projectType: 'Total',
+    projectType: 'Fixed Cost',
     projectManager: 'David Wilson',
     deliveryManager: 'Sarah Mitchell',
     startDate: '2023-11-01',
@@ -155,7 +151,6 @@ const mockProjects: Project[] = [
     techBA: 'Franklin Stone',
     confirmedDate: '2023-10-20',
     clientType: 'Existing',
-    projectTypeCategory: 'Fixed Cost',
     technologyPlatform: 'Google Cloud',
   },
   {
@@ -165,7 +160,7 @@ const mockProjects: Project[] = [
     subject: 'Healthcare Management System',
     projectName: 'Healthcare Management System',
     clientName: 'MediCare Solutions',
-    projectType: 'Web',
+    projectType: 'Hire',
     projectManager: 'Rachel Green',
     deliveryManager: 'Michael Brown',
     startDate: '2023-09-01',
@@ -184,7 +179,6 @@ const mockProjects: Project[] = [
     techBA: 'Henry Adams',
     confirmedDate: '2023-08-15',
     clientType: 'New',
-    projectTypeCategory: 'Hire',
     technologyPlatform: 'IBM Cloud',
   },
   {
@@ -194,7 +188,7 @@ const mockProjects: Project[] = [
     subject: 'Supply Chain Optimization',
     projectName: 'Supply Chain Optimization',
     clientName: 'LogisticsPro Corp',
-    projectType: 'Web',
+    projectType: 'Fixed Cost',
     projectManager: 'James Martinez',
     deliveryManager: 'Sarah Mitchell',
     startDate: '2024-01-20',
@@ -213,7 +207,6 @@ const mockProjects: Project[] = [
     techBA: 'Jack White',
     confirmedDate: '2024-01-15',
     clientType: 'Existing',
-    projectTypeCategory: 'Fixed Cost',
     technologyPlatform: 'Oracle Cloud',
   },
   {
@@ -223,7 +216,7 @@ const mockProjects: Project[] = [
     subject: 'Smart City Dashboard',
     projectName: 'Smart City Dashboard',
     clientName: 'Urban Development Authority',
-    projectType: 'Total',
+    projectType: 'Hire',
     projectManager: 'Lisa Anderson',
     deliveryManager: 'Michael Brown',
     startDate: '2024-03-01',
@@ -242,13 +235,16 @@ const mockProjects: Project[] = [
     techBA: 'Leo Black',
     confirmedDate: '2024-02-15',
     clientType: 'New',
-    projectTypeCategory: 'Hire',
     technologyPlatform: 'Salesforce',
   },
 ];
 
-export default function ProjectsModule() {
-  const [viewMode, setViewMode] = useState<ListingViewMode>('grid');
+interface ProjectsModuleProps {
+  onNavigate?: (pageId: string, filters?: any[]) => void;
+}
+
+export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -281,15 +277,12 @@ export default function ProjectsModule() {
     techBA: true,
     confirmedDate: true,
     clientType: true,
-    projectTypeCategory: true,
-    technologyPlatform: true,
-    projectAllotment: true,
     projectStatus: true,
     paymentStatus: true,
   });
 
   // Table columns configuration
-  const tableColumns: ListingColumnConfig[] = [
+  const tableColumns: ColumnConfig[] = [
     { key: 'project', label: 'Project' },
     { key: 'client', label: 'Client' },
     { key: 'type', label: 'Type' },
@@ -297,7 +290,7 @@ export default function ProjectsModule() {
     { key: 'techBA', label: 'Tech BA' },
     { key: 'confirmedDate', label: 'Confirmed Date' },
     { key: 'clientType', label: 'Client Type' },
-    { key: 'projectTypeCategory', label: 'Project Category' },
+    { key: 'projectType', label: 'Project Type' },
     { key: 'technologyPlatform', label: 'Tech Platform' },
     { key: 'projectStatus', label: 'Status' },
   ];
@@ -391,13 +384,15 @@ export default function ProjectsModule() {
 
     // Apply advanced filters
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((project) => {
           const projectValue = project[filter.field as keyof Project];
           if (typeof projectValue === 'string') {
-            return projectValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(val =>
+              projectValue.toLowerCase().includes(val.toLowerCase())
+            );
           }
-          return projectValue === filter.value;
+          return filter.values.includes(String(projectValue));
         });
       }
     });
@@ -414,15 +409,7 @@ export default function ProjectsModule() {
 
   // Handlers
   const handleAddFilter = (filter: FilterCondition) => {
-    setActiveFilters([...activeFilters, filter]);
-  };
-
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
-  };
-
-  const handleClearFilters = () => {
-    setActiveFilters([]);
+    setActiveFilters([...activeFilters, { ...filter, id: Date.now().toString() }]); // Assign a unique ID
   };
 
   const handleViewProject = (project: Project) => {
@@ -441,7 +428,7 @@ export default function ProjectsModule() {
     }
   };
 
-  const handleSaveProject = () => {
+  const handleSaveProject = (data?: Project) => {
     // Mock save functionality
     setIsAddModalOpen(false);
     setSelectedProject(null);
@@ -502,6 +489,7 @@ export default function ProjectsModule() {
     return (
       <ProjectDetailsModule
         project={selectedProject}
+        onNavigate={onNavigate}
         onBack={() => {
           setIsDetailView(false);
           setSelectedProject(null);
@@ -512,9 +500,9 @@ export default function ProjectsModule() {
         }}
         onAgreementUpdate={(summary) => {
           // Update the project in the projects list with the new agreement summary
-          setProjects(prevProjects => 
-            prevProjects.map(p => 
-              p.id === selectedProject.id 
+          setProjects(prevProjects =>
+            prevProjects.map(p =>
+              p.id === selectedProject.id
                 ? { ...p, agreementSummary: summary }
                 : p
             )
@@ -563,18 +551,20 @@ export default function ProjectsModule() {
       {/* Advanced Search Panel */}
       {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
-          <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
-            onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'projectStatus', label: 'Project Status', type: 'select', options: ['Created', 'Draft', 'Published', 'On Hold', 'Cancelled'] },
-              { field: 'projectType', label: 'Project Type', type: 'select', options: ['Web', 'Mobile', 'Total'] },
-              { field: 'projectManager', label: 'Project Manager', type: 'text' },
-              { field: 'clientName', label: 'Client Name', type: 'text' },
-              { field: 'riskIndicator', label: 'Risk Level', type: 'select', options: ['Low', 'Medium', 'High'] },
-              { field: 'startDate', label: 'Start Date', type: 'date' },
-            ]}
-          />
+      <AdvancedSearchPanel
+        isOpen={isAdvancedSearchOpen}
+        onClose={() => setIsAdvancedSearchOpen(false)}
+        filters={activeFilters}
+        onFiltersChange={setActiveFilters}
+        filterOptions={{
+          'Status': ['In Progress', 'Completed', 'On Hold', 'Not Started'],
+          'Project Type': ['Fixed Cost', 'Hire', 'T&M', 'Retainer'],
+          'Business Type': ['Web Development', 'Mobile App', 'Cloud Services', 'UI/UX Design'],
+          'Industry': ['Technology', 'Finance', 'Healthcare', 'Retail'],
+          'Project Name': [],
+          'Client Name': [],
+        }}
+      />
         </div>
       )}
 
@@ -583,8 +573,8 @@ export default function ProjectsModule() {
         <div className="px-6 pb-4">
           <FilterChips
             filters={activeFilters}
-            onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onRemove={(id) => setActiveFilters(activeFilters.filter((f) => f.id !== id))}
+            onClearAll={() => setActiveFilters([])}
           />
         </div>
       )}
@@ -752,7 +742,7 @@ export default function ProjectsModule() {
                     {/* Project Type */}
                     <div>
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Project Type</div>
-                      <div className="font-medium text-neutral-900 dark:text-white">{project.projectTypeCategory}</div>
+                      <div className="font-medium text-neutral-900 dark:text-white">{project.projectType}</div>
                     </div>
                     
                     {/* Tech Platform */}
@@ -925,7 +915,7 @@ export default function ProjectsModule() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-500 font-medium mb-0.5">Project Type</div>
-                          <div className="text-sm font-medium text-neutral-900 dark:text-white">{project.projectTypeCategory}</div>
+                          <div className="text-sm font-medium text-neutral-900 dark:text-white">{project.projectType}</div>
                         </div>
                       </div>
 
@@ -1025,7 +1015,7 @@ export default function ProjectsModule() {
                         <span className="text-sm text-neutral-900 dark:text-white">{project.clientType}</span>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm text-neutral-900 dark:text-white">{project.projectTypeCategory}</span>
+                        <span className="text-sm text-neutral-900 dark:text-white">{project.projectType}</span>
                       </td>
                       <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
                         {project.technologyPlatform}
@@ -1089,11 +1079,11 @@ export default function ProjectsModule() {
           setSelectedProject(null);
         }}
         project={selectedProject ? {
-          crmId: selectedProject.crmCode,
+          crmCode: selectedProject.crmCode,
           subject: selectedProject.subject,
           projectCode: selectedProject.projectId,
           projectName: selectedProject.projectName,
-          projectType: selectedProject.projectTypeCategory,
+          projectType: selectedProject.projectType,
           businessType: selectedProject.clientType,
           domain: selectedProject.domain || 'Digital Experience',
           industry: selectedProject.industry || 'Technology',

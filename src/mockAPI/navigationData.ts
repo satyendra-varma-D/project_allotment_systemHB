@@ -124,14 +124,13 @@ export const getNavigationData = (
         },
       ],
     },
-    // HIDDEN: User Roles & Access
-    // {
-    //   id: "user-roles",
-    //   label: "User Roles & Access",
-    //   icon: Users,
-    //   onClick: () => onNavigate("user-roles"),
-    //   active: currentPage === "user-roles",
-    // },
+    {
+      id: "user-roles",
+      label: "User Roles & Access",
+      icon: Users,
+      onClick: () => onNavigate("user-roles"),
+      active: currentPage === "user-roles",
+    },
     // HIDDEN: System Architecture
     // {
     //   id: "system-architecture",

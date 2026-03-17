@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Package,
   Calendar,
@@ -158,7 +158,12 @@ const mockAddons: Addon[] = [
   },
 ];
 
-export default function AddonsModule() {
+interface AddonsModuleProps {
+  initialFilters?: any[];
+  onFiltersConsumed?: () => void;
+}
+
+export default function AddonsModule({ initialFilters, onFiltersConsumed }: AddonsModuleProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -169,6 +174,18 @@ export default function AddonsModule() {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [addons, setAddons] = useState<Addon[]>(mockAddons);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+
+  useEffect(() => {
+    if (initialFilters && initialFilters.length > 0) {
+      const filtersWithIds = initialFilters.map(f => ({
+        id: f.id || `filter-${Date.now()}-${Math.random()}`,
+        field: f.field,
+        values: Array.isArray(f.value) ? f.value : [f.value]
+      }));
+      setActiveFilters(prev => [...prev, ...filtersWithIds]);
+      onFiltersConsumed?.();
+    }
+  }, [initialFilters, onFiltersConsumed]);
   const [showSummary, setShowSummary] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
@@ -258,13 +275,15 @@ export default function AddonsModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((addon) => {
           const addonValue = addon[filter.field as keyof Addon];
           if (typeof addonValue === 'string') {
-            return addonValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(val => 
+              addonValue.toLowerCase().includes(val.toLowerCase())
+            );
           }
-          return addonValue === filter.value;
+          return filter.values.includes(String(addonValue));
         });
       }
     });
@@ -380,27 +399,25 @@ export default function AddonsModule() {
         <SummaryWidgets widgets={summaryData} />
       </div>}
 
-      {isAdvancedSearchOpen && (
-        <div className="px-6 pb-4">
-          <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
-            onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'addonType', label: 'Addon Type', type: 'select', options: ['Addon', 'Support', 'AMC'] },
-              { field: 'addonStatus', label: 'Addon Status', type: 'select', options: ['Identified', 'Requested', 'Confirmed', 'Cancelled', 'On Hold'] },
-              { field: 'addonRequestedBy', label: 'Requested By', type: 'text' },
-              { field: 'projectName', label: 'Project Name', type: 'text' },
-            ]}
-          />
-        </div>
-      )}
+      <AdvancedSearchPanel
+        isOpen={isAdvancedSearchOpen}
+        onClose={() => setIsAdvancedSearchOpen(false)}
+        filters={activeFilters}
+        onFiltersChange={setActiveFilters}
+        filterOptions={{
+          'Addon Type': ['Addon', 'Support', 'AMC'],
+          'Addon Status': ['Identified', 'Requested', 'Confirmed', 'Cancelled', 'On Hold'],
+          'Requested By': [],
+          'Project Name': [],
+        }}
+      />
 
       {activeFilters.length > 0 && (
         <div className="px-6 pb-4">
           <FilterChips
             filters={activeFilters}
-            onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onRemove={(id) => setActiveFilters(activeFilters.filter((f) => f.id !== id))}
+            onClearAll={() => setActiveFilters([])}
           />
         </div>
       )}

@@ -3,12 +3,12 @@ import { useState } from 'react';
 
 interface Project {
   id: string;
-  projectId: string;
-  crmCode: string;
-  subject: string;
+  projectId: string; // Auto-generated
+  crmCode: string; // Auto-generated CRM code
+  subject: string; // Editable subject
   projectName: string;
   clientName: string;
-  projectType: 'Web' | 'Mobile' | 'Total';
+  projectType: 'Fixed Cost' | 'Hire';
   projectManager: string;
   deliveryManager: string;
   startDate: string;
@@ -27,7 +27,6 @@ interface Project {
   techBA: string;
   confirmedDate: string;
   clientType: 'New' | 'Existing';
-  projectTypeCategory: 'Fixed Cost' | 'Hire';
   technologyPlatform: string;
 }
 

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { 
   Plus, 
   Search, 
@@ -44,12 +44,28 @@ interface ResourceRenewal {
   transactionNumber: string;
 }
 
-export function ResourceRenewalsModule() {
+interface ResourceRenewalsModuleProps {
+  initialFilters?: any[];
+  onFiltersConsumed?: () => void;
+}
+
+export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: ResourceRenewalsModuleProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
   const [currentEditRenewal, setCurrentEditRenewal] = useState<ResourceRenewal | null>(null);
   const [filterStatus, setFilterStatus] = useState<'all' | 'current' | 'completed'>('all');
+  const [activeProjectFilter, setActiveProjectFilter] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialFilters && initialFilters.length > 0) {
+      const projectFilter = initialFilters.find(f => f.field === 'projectName');
+      if (projectFilter) {
+        setActiveProjectFilter(Array.isArray(projectFilter.value) ? projectFilter.value[0] : projectFilter.value);
+      }
+      onFiltersConsumed?.();
+    }
+  }, [initialFilters, onFiltersConsumed]);
 
   // Mock data
   const renewals: ResourceRenewal[] = [
@@ -138,14 +154,15 @@ export function ResourceRenewalsModule() {
         renewal.projectCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
         renewal.resourceType.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesFilter = 
-        filterStatus === 'all' ||
-        (filterStatus === 'current' && renewal.publishStatus === 'Published') ||
-        (filterStatus === 'completed' && renewal.publishStatus === 'Draft');
+      const matchesProject = !activeProjectFilter || renewal.projectName.toLowerCase() === activeProjectFilter.toLowerCase();
+      
+      const matchesFilter = filterStatus === 'all' || 
+        (filterStatus === 'current' && new Date(renewal.renewalEndDate) >= new Date()) ||
+        (filterStatus === 'completed' && new Date(renewal.renewalEndDate) < new Date());
 
-      return matchesSearch && matchesFilter;
+      return matchesSearch && matchesFilter && matchesProject;
     });
-  }, [renewals, searchQuery, filterStatus]);
+  }, [renewals, searchQuery, filterStatus, activeProjectFilter]);
 
   const getStatusBadgeStyle = (status: ResourceRenewal['publishStatus']) => {
     const styles = {

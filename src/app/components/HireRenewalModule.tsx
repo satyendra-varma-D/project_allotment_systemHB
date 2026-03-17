@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Users,
   Calendar,
@@ -159,7 +159,12 @@ const mockEngagements: ResourceEngagement[] = [
   },
 ];
 
-export default function HireRenewalModule() {
+interface HireRenewalModuleProps {
+  initialFilters?: any[];
+  onFiltersConsumed?: () => void;
+}
+
+export default function HireRenewalModule({ initialFilters, onFiltersConsumed }: HireRenewalModuleProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -170,6 +175,18 @@ export default function HireRenewalModule() {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [engagements, setEngagements] = useState<ResourceEngagement[]>(mockEngagements);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+
+  useEffect(() => {
+    if (initialFilters && initialFilters.length > 0) {
+      const filtersWithIds = initialFilters.map(f => ({
+        id: f.id || `filter-${Date.now()}-${Math.random()}`,
+        field: f.field,
+        values: Array.isArray(f.value) ? f.value : [f.value]
+      }));
+      setActiveFilters(prev => [...prev, ...filtersWithIds]);
+      onFiltersConsumed?.();
+    }
+  }, [initialFilters, onFiltersConsumed]);
   const [showSummary, setShowSummary] = useState(false);
 
   // Calculate summary statistics
@@ -255,13 +272,15 @@ export default function HireRenewalModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((engagement) => {
           const engagementValue = engagement[filter.field as keyof ResourceEngagement];
           if (typeof engagementValue === 'string') {
-            return engagementValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(val => 
+              engagementValue.toLowerCase().includes(val.toLowerCase())
+            );
           }
-          return engagementValue === filter.value;
+          return filter.values.includes(String(engagementValue));
         });
       }
     });
@@ -360,6 +379,7 @@ export default function HireRenewalModule() {
 
           {/* Filter Button */}
           <button
+            onClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}
             className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
             title="Filter"
           >
@@ -411,26 +431,24 @@ export default function HireRenewalModule() {
         <SummaryWidgets widgets={summaryData} />
       </div>}
 
-      {isAdvancedSearchOpen && (
-        <div className="px-6 pb-4">
-          <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
-            onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'engagementModel', label: 'Engagement Model', type: 'select', options: ['Full-Time', 'Part-Time', 'Contract', 'Consultant'] },
-              { field: 'projectName', label: 'Project Name', type: 'text' },
-              { field: 'resourceName', label: 'Resource Name', type: 'text' },
-            ]}
-          />
-        </div>
-      )}
+      <AdvancedSearchPanel
+        isOpen={isAdvancedSearchOpen}
+        onClose={() => setIsAdvancedSearchOpen(false)}
+        filters={activeFilters}
+        onFiltersChange={setActiveFilters}
+        filterOptions={{
+          'Engagement Model': ['Full-Time', 'Part-Time', 'Contract', 'Consultant'],
+          'Project Name': [],
+          'Resource Name': [],
+        }}
+      />
 
       {activeFilters.length > 0 && (
         <div className="px-6 pb-4">
           <FilterChips
             filters={activeFilters}
-            onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onRemove={(id) => setActiveFilters(activeFilters.filter((f) => f.id !== id))}
+            onClearAll={() => setActiveFilters([])}
           />
         </div>
       )}

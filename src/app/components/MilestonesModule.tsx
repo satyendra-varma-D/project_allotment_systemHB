@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Flag,
   Calendar,
@@ -47,6 +47,8 @@ interface Milestone {
   assignedTo: string;
   priority: 'Low' | 'Medium' | 'High';
   dependencies?: string[];
+  remarks?: string;
+  createdDate?: string;
 }
 
 // Mock data
@@ -187,7 +189,12 @@ const mockMilestones: Milestone[] = [
   },
 ];
 
-export default function MilestonesModule() {
+interface MilestonesModuleProps {
+  initialFilters?: any[];
+  onFiltersConsumed?: () => void;
+}
+
+export default function MilestonesModule({ initialFilters, onFiltersConsumed }: MilestonesModuleProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -197,6 +204,19 @@ export default function MilestonesModule() {
   const [selectedMilestone, setSelectedMilestone] = useState<Milestone | null>(null);
   const [milestones, setMilestones] = useState<Milestone[]>(mockMilestones);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+
+  useEffect(() => {
+    if (initialFilters && initialFilters.length > 0) {
+      // Map initial filters to include unique IDs if they don't have them
+      const filtersWithIds = initialFilters.map(f => ({
+        id: f.id || `filter-${Date.now()}-${Math.random()}`,
+        field: f.field,
+        values: Array.isArray(f.value) ? f.value : [f.value]
+      }));
+      setActiveFilters(prev => [...prev, ...filtersWithIds]);
+      onFiltersConsumed?.();
+    }
+  }, [initialFilters, onFiltersConsumed]);
   const [showSummary, setShowSummary] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>({
     milestone: true,
@@ -303,13 +323,15 @@ export default function MilestonesModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((milestone) => {
           const milestoneValue = milestone[filter.field as keyof Milestone];
           if (typeof milestoneValue === 'string') {
-            return milestoneValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(val => 
+              milestoneValue.toLowerCase().includes(val.toLowerCase())
+            );
           }
-          return milestoneValue === filter.value;
+          return filter.values.includes(String(milestoneValue));
         });
       }
     });
@@ -449,17 +471,19 @@ export default function MilestonesModule() {
       {/* Advanced Search Panel */}
       {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
-          <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
-            onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'completionStatus', label: 'Completion Status', type: 'select', options: ['Not Started', 'In Progress', 'Completed', 'Delayed'] },
-              { field: 'approvalStatus', label: 'Approval Status', type: 'select', options: ['Pending', 'Approved', 'Rejected'] },
-              { field: 'invoiceStatus', label: 'Invoice Status', type: 'select', options: ['Not Generated', 'Generated', 'Sent', 'Paid'] },
-              { field: 'projectName', label: 'Project Name', type: 'text' },
-              { field: 'milestoneCode', label: 'Milestone Code', type: 'text' },
-            ]}
-          />
+      <AdvancedSearchPanel
+        isOpen={isAdvancedSearchOpen}
+        onClose={() => setIsAdvancedSearchOpen(false)}
+        filters={activeFilters}
+        onFiltersChange={setActiveFilters}
+        filterOptions={{
+          'Completion Status': ['Not Started', 'In Progress', 'Completed', 'Delayed'],
+          'Approval Status': ['Pending', 'Approved', 'Rejected'],
+          'Invoice Status': ['Not Generated', 'Generated', 'Sent', 'Paid'],
+          'Project Name': [], // Text fields can be handled by empty options or specialized logic if the component supports it. Since AdvancedSearchPanel uses the options to build dropdowns, for text fields we might need a different approach or just provide an empty list. 
+          'Milestone Code': [],
+        }}
+      />
         </div>
       )}
 
@@ -468,8 +492,8 @@ export default function MilestonesModule() {
         <div className="px-6 pb-4">
           <FilterChips
             filters={activeFilters}
-            onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onRemove={(id) => setActiveFilters(activeFilters.filter((f) => f.id !== id))}
+            onClearAll={() => setActiveFilters([])}
           />
         </div>
       )}
@@ -778,7 +802,7 @@ export default function MilestonesModule() {
       {/* Add/Edit Modal */}
       <MilestonesEditSidePanel
         isOpen={isAddModalOpen}
-        milestone={selectedMilestone}
+        milestone={selectedMilestone as any}
         onClose={() => {
           setIsAddModalOpen(false);
           setSelectedMilestone(null);
@@ -788,7 +812,7 @@ export default function MilestonesModule() {
             // Update existing milestone
             setMilestones(milestones.map(m =>
               m.id === selectedMilestone.id
-                ? { ...selectedMilestone, ...milestoneData }
+                ? ({ ...selectedMilestone, ...milestoneData } as any)
                 : m
             ));
           } else {

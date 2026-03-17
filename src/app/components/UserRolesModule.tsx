@@ -4,11 +4,8 @@ import {
   Users,
   MoreVertical,
   Plus,
-  BarChart3,
   RefreshCw,
-  Upload,
   Download,
-  Printer,
   Eye,
   Edit2,
   Trash2,
@@ -16,9 +13,11 @@ import {
   XCircle,
   Key,
   Lock,
+  Search,
+  Filter,
+  LayoutGrid,
+  User,
 } from 'lucide-react';
-import { PageHeader, PrimaryButton, IconButton, SummaryWidgets, ViewModeSwitcher, AdvancedSearchPanel, FilterChips, SearchBar, Pagination, SecondaryButton } from './hb/listing';
-import type { FilterCondition } from './hb/listing';
 import {
   FormModal,
   FormSection,
@@ -30,7 +29,7 @@ import {
 } from './hb/common/Form';
 
 // User interface
-interface User {
+interface AppUser {
   id: string;
   userId: string;
   name: string;
@@ -171,7 +170,7 @@ const mockRoles: Role[] = [
 ];
 
 // Mock users data
-const mockUsers: User[] = [
+const mockUsers: AppUser[] = [
   {
     id: '1',
     userId: 'USR-001',
@@ -280,146 +279,14 @@ const mockUsers: User[] = [
 
 export default function UserRolesModule() {
   const [activeTab, setActiveTab] = useState<'roles' | 'users'>('roles');
-  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
-  const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<Role | User | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Role | AppUser | null>(null);
   const [roles, setRoles] = useState<Role[]>(mockRoles);
-  const [users, setUsers] = useState<User[]>(mockUsers);
-  const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
-
-  // Calculate summary statistics
-  const summaryData = useMemo(() => {
-    if (activeTab === 'roles') {
-      const total = roles.length;
-      const active = roles.filter(r => r.status === 'active').length;
-      const totalUsers = roles.reduce((sum, r) => sum + r.userCount, 0);
-      const adminRoles = roles.filter(r => r.roleName.includes('Admin') || r.roleName.includes('Manager')).length;
-
-      return [
-        {
-          label: 'Total Roles',
-          value: total.toString(),
-          icon: 'Shield',
-          bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-          iconColor: 'text-blue-600 dark:text-blue-400',
-          trend: '+1',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Active Roles',
-          value: active.toString(),
-          icon: 'CheckCircle',
-          bgColor: 'bg-green-50 dark:bg-green-950/30',
-          iconColor: 'text-green-600 dark:text-green-400',
-          trend: '+1',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Total Users',
-          value: totalUsers.toString(),
-          icon: 'Users',
-          bgColor: 'bg-purple-50 dark:bg-purple-950/30',
-          iconColor: 'text-purple-600 dark:text-purple-400',
-          trend: '+5',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Admin Roles',
-          value: adminRoles.toString(),
-          icon: 'Key',
-          bgColor: 'bg-orange-50 dark:bg-orange-950/30',
-          iconColor: 'text-orange-600 dark:text-orange-400',
-          trend: '0',
-          trendDirection: 'neutral' as const,
-        },
-        {
-          label: 'Delivery Access',
-          value: roles.filter(r => r.permissions.projects !== 'No Access').length.toString(),
-          icon: 'Activity',
-          bgColor: 'bg-indigo-50 dark:bg-indigo-950/30',
-          iconColor: 'text-indigo-600 dark:text-indigo-400',
-          trend: '0',
-          trendDirection: 'neutral' as const,
-        },
-        {
-          label: 'Finance Access',
-          value: roles.filter(r => r.permissions.masters.includes('Payment') || r.permissions.projects.includes('Commercial')).length.toString(),
-          icon: 'DollarSign',
-          bgColor: 'bg-green-50 dark:bg-green-950/30',
-          iconColor: 'text-green-600 dark:text-green-400',
-          trend: '0',
-          trendDirection: 'neutral' as const,
-        },
-      ];
-    } else {
-      const total = users.length;
-      const active = users.filter(u => u.status === 'active').length;
-      const inactive = users.filter(u => u.status === 'inactive').length;
-      const globalAccess = users.filter(u => u.accessScope === 'Global').length;
-
-      return [
-        {
-          label: 'Total Users',
-          value: total.toString(),
-          icon: 'Users',
-          bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-          iconColor: 'text-blue-600 dark:text-blue-400',
-          trend: '+2',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Active Users',
-          value: active.toString(),
-          icon: 'CheckCircle',
-          bgColor: 'bg-green-50 dark:bg-green-950/30',
-          iconColor: 'text-green-600 dark:text-green-400',
-          trend: '+2',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Inactive Users',
-          value: inactive.toString(),
-          icon: 'XCircle',
-          bgColor: 'bg-red-50 dark:bg-red-950/30',
-          iconColor: 'text-red-600 dark:text-red-400',
-          trend: '0',
-          trendDirection: 'neutral' as const,
-        },
-        {
-          label: 'Global Access',
-          value: globalAccess.toString(),
-          icon: 'Globe',
-          bgColor: 'bg-purple-50 dark:bg-purple-950/30',
-          iconColor: 'text-purple-600 dark:text-purple-400',
-          trend: '+1',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Sales Team',
-          value: users.filter(u => u.department === 'Sales').length.toString(),
-          icon: 'TrendingUp',
-          bgColor: 'bg-indigo-50 dark:bg-indigo-950/30',
-          iconColor: 'text-indigo-600 dark:text-indigo-400',
-          trend: '+1',
-          trendDirection: 'up' as const,
-        },
-        {
-          label: 'Delivery Team',
-          value: users.filter(u => u.department === 'Delivery').length.toString(),
-          icon: 'Activity',
-          bgColor: 'bg-orange-50 dark:bg-orange-950/30',
-          iconColor: 'text-orange-600 dark:text-orange-400',
-          trend: '+1',
-          trendDirection: 'up' as const,
-        },
-      ];
-    }
-  }, [activeTab, roles, users]);
+  const [users, setUsers] = useState<AppUser[]>(mockUsers);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   // Filter and search logic
   const filteredData = useMemo(() => {
@@ -434,17 +301,6 @@ export default function UserRolesModule() {
             role.description.toLowerCase().includes(query)
         );
       }
-      activeFilters.forEach((filter) => {
-        if (filter.value && filter.value !== 'all') {
-          filtered = filtered.filter((role) => {
-            const roleValue = role[filter.field as keyof Role];
-            if (typeof roleValue === 'string') {
-              return roleValue.toLowerCase().includes(filter.value.toLowerCase());
-            }
-            return roleValue === filter.value;
-          });
-        }
-      });
       return filtered;
     } else {
       let filtered = [...users];
@@ -458,42 +314,12 @@ export default function UserRolesModule() {
             user.role.toLowerCase().includes(query)
         );
       }
-      activeFilters.forEach((filter) => {
-        if (filter.value && filter.value !== 'all') {
-          filtered = filtered.filter((user) => {
-            const userValue = user[filter.field as keyof User];
-            if (typeof userValue === 'string') {
-              return userValue.toLowerCase().includes(filter.value.toLowerCase());
-            }
-            return userValue === filter.value;
-          });
-        }
-      });
       return filtered;
     }
-  }, [activeTab, roles, users, searchQuery, activeFilters]);
-
-  // Pagination
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const paginatedData = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredData.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredData, currentPage, itemsPerPage]);
+  }, [activeTab, roles, users, searchQuery]);
 
   // Handlers
-  const handleAddFilter = (filter: FilterCondition) => {
-    setActiveFilters([...activeFilters, filter]);
-  };
-
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
-  };
-
-  const handleClearFilters = () => {
-    setActiveFilters([]);
-  };
-
-  const handleEdit = (item: Role | User) => {
+  const handleEdit = (item: Role | AppUser) => {
     setSelectedItem(item);
     setIsAddModalOpen(true);
   };
@@ -525,264 +351,238 @@ export default function UserRolesModule() {
       : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
   };
 
+  const getAccessScopeStyle = (scope: string) => {
+    return scope === 'Global'
+      ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+      : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400';
+  };
+
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
-      {/* Page Header */}
-      <PageHeader
-        title="User Roles & Access Control"
-        subtitle="Manage roles, permissions, and user access across the platform"
-        primaryAction={
-          <PrimaryButton onClick={() => setIsAddModalOpen(true)}>
+    <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
+      {/* Header */}
+      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-6 py-5">
+        <div className="flex items-start justify-between mb-5">
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">User Roles & Permissions</h1>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1.5">
+              Manage roles, permissions, and user access across the platform
+            </p>
+          </div>
+        </div>
+
+        {/* Tab Switcher */}
+        <div className="flex gap-1 mb-5">
+          <button
+            onClick={() => { setActiveTab('roles'); setSearchQuery(''); }}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+              activeTab === 'roles'
+                ? 'bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400'
+                : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+            }`}
+          >
+            <Shield className="w-4 h-4" />
+            Roles
+          </button>
+          <button
+            onClick={() => { setActiveTab('users'); setSearchQuery(''); }}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
+              activeTab === 'users'
+                ? 'bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400'
+                : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            Users
+          </button>
+        </div>
+
+        {/* Action Buttons Row */}
+        <div className="flex items-center gap-2">
+          {/* View Toggle Buttons */}
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`p-2.5 rounded-lg border transition-colors ${
+              viewMode === 'grid'
+                ? 'bg-primary-50 text-primary-600 border-primary-200 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-800'
+                : 'bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+            }`}
+            title="Grid View"
+          >
+            <LayoutGrid className="w-4 h-4" />
+          </button>
+
+          {/* Search Button */}
+          <button
+            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+            title="Search"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+
+          {/* Filter Button */}
+          <button
+            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+            title="Filter"
+          >
+            <Filter className="w-4 h-4" />
+          </button>
+
+          {/* Refresh Button */}
+          <button
+            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+            title="Refresh"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </button>
+
+          {/* Download Button */}
+          <button
+            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+            title="Download"
+          >
+            <Download className="w-4 h-4" />
+          </button>
+
+          {/* Table View Button */}
+          <button
+            onClick={() => setViewMode('table')}
+            className={`p-2.5 rounded-lg border transition-colors ${
+              viewMode === 'table'
+                ? 'bg-primary-50 text-primary-600 border-primary-200 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-800'
+                : 'bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+            }`}
+            title="Table View"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+
+          {/* Add Button */}
+          <button
+            onClick={() => {
+              setSelectedItem(null);
+              setIsAddModalOpen(true);
+            }}
+            className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium shadow-sm ml-auto"
+          >
             <Plus className="w-4 h-4" />
             {activeTab === 'roles' ? 'Add Role' : 'Add User'}
-          </PrimaryButton>
-        }
-        secondaryActions={
-          <>
-            <IconButton icon={RefreshCw} title="Refresh" onClick={() => {}} />
-            <IconButton icon={Upload} title="Import" onClick={() => {}} />
-            <IconButton icon={Download} title="Export" onClick={() => {}} />
-            <IconButton icon={Printer} title="Print" onClick={() => {}} />
-            <IconButton icon={BarChart3} title="Analytics" onClick={() => {}} />
-          </>
-        }
-      />
-
-      {/* Tab Switcher */}
-      <div className="px-6 pb-6">
-        <div className="flex gap-2 border-b border-neutral-200 dark:border-neutral-800">
-          <button
-            onClick={() => setActiveTab('roles')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'roles'
-                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4" />
-              Roles
-            </div>
-          </button>
-          <button
-            onClick={() => setActiveTab('users')}
-            className={`px-4 py-2 text-sm font-medium transition-colors ${
-              activeTab === 'users'
-                ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
-                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              Users
-            </div>
           </button>
         </div>
       </div>
 
-      {/* Summary Widgets */}
-      <div className="px-6 pb-6">
-        <SummaryWidgets widgets={summaryData} />
-      </div>
-
-      {/* Search and View Controls */}
-      <div className="px-6 pb-4">
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-          <SearchBar
-            value={searchQuery}
-            onChange={setSearchQuery}
-            onAdvancedSearch={() => setIsAdvancedSearchOpen(true)}
-            placeholder={`Search ${activeTab}...`}
-          />
-          <ViewModeSwitcher currentMode={viewMode} onChange={setViewMode} />
-        </div>
-      </div>
-
-      {/* Advanced Search Panel */}
-      {isAdvancedSearchOpen && (
-        <div className="px-6 pb-4">
-          <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
-            onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={
-              activeTab === 'roles'
-                ? [
-                    { field: 'status', label: 'Status', type: 'select', options: ['active', 'inactive'] },
-                    { field: 'roleName', label: 'Role Name', type: 'text' },
-                  ]
-                : [
-                    { field: 'status', label: 'Status', type: 'select', options: ['active', 'inactive'] },
-                    { field: 'role', label: 'Role', type: 'text' },
-                    { field: 'department', label: 'Department', type: 'text' },
-                    { field: 'accessScope', label: 'Access Scope', type: 'select', options: ['Global', 'Restricted'] },
-                  ]
-            }
-          />
-        </div>
-      )}
-
-      {/* Filter Chips */}
-      {activeFilters.length > 0 && (
-        <div className="px-6 pb-4">
-          <FilterChips
-            filters={activeFilters}
-            onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
-          />
-        </div>
-      )}
-
-      {/* Content Area */}
-      <div className="px-6 pb-6">
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto p-6">
         {activeTab === 'roles' ? (
           <>
             {/* Roles Grid View */}
             {viewMode === 'grid' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(paginatedData as Role[]).map((role) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {(filteredData as Role[]).map((role) => (
                   <div
                     key={role.id}
-                    className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 hover:shadow-lg transition-shadow"
+                    className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden hover:shadow-lg transition-shadow"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Shield className="w-4 h-4 text-neutral-500" />
-                          <span className="text-sm text-neutral-500 dark:text-neutral-400">{role.roleCode}</span>
-                        </div>
-                        <h3 className="font-medium text-neutral-900 dark:text-white mb-1">{role.roleName}</h3>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">{role.description}</p>
-                      </div>
-                      <div className="relative group">
-                        <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
-                          <MoreVertical className="w-4 h-4 text-neutral-500" />
-                        </button>
-                        <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-48 z-10">
-                          <button
-                            onClick={() => handleViewPermissions(role)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                          >
-                            <Eye className="w-4 h-4" />
-                            View Permissions
-                          </button>
-                          <button
-                            onClick={() => handleEdit(role)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(role.id)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    {/* Colored Top Border */}
+                    <div className={`h-1 ${
+                      role.status === 'active' ? 'bg-green-500' : 'bg-neutral-300'
+                    }`} />
 
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-neutral-500 dark:text-neutral-400">Assigned Users:</span>
-                        <span className="font-medium text-neutral-900 dark:text-white">{role.userCount}</span>
+                    <div className="p-5">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-primary-50 dark:bg-primary-950/30 rounded-md">
+                          <Shield className="w-3 h-3 text-primary-600 dark:text-primary-400" />
+                          <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{role.roleCode}</span>
+                        </div>
+
+                        {/* Action Menu */}
+                        <div className="relative ml-auto">
+                          <button
+                            onClick={() => setOpenMenuId(openMenuId === role.id ? null : role.id)}
+                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
+                          >
+                            <MoreVertical className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                          </button>
+                          {openMenuId === role.id && (
+                            <>
+                              <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenMenuId(null)}
+                              />
+                              <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
+                                <button
+                                  onClick={() => {
+                                    handleViewPermissions(role);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                  View Permissions
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    handleEdit(role);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    handleDelete(role.id);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2.5 transition-colors"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-neutral-500 dark:text-neutral-400">Status:</span>
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md capitalize ${getStatusBadge(role.status)}`}>
+
+                      {/* Role Name */}
+                      <h3 className="font-semibold text-base text-neutral-900 dark:text-white mb-2 line-clamp-2 leading-snug min-h-[2.5rem]">
+                        {role.roleName}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-3 line-clamp-2">
+                        {role.description}
+                      </p>
+
+                      {/* Status Badge */}
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold capitalize ${getStatusBadge(role.status)}`}>
                           {role.status}
                         </span>
                       </div>
-                    </div>
 
-                    <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800">
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-2">Key Permissions:</div>
-                      <div className="flex flex-wrap gap-1">
-                        {role.permissions.leads !== 'No Access' && (
-                          <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs rounded">
-                            Leads: {role.permissions.leads}
-                          </span>
-                        )}
-                        {role.permissions.projects !== 'No Access' && (
-                          <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs rounded">
-                            Projects: {role.permissions.projects}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+                      {/* Divider */}
+                      <div className="border-t border-neutral-100 dark:border-neutral-800 my-3" />
 
-            {/* Roles List View */}
-            {viewMode === 'list' && (
-              <div className="space-y-4">
-                {(paginatedData as Role[]).map((role) => (
-                  <div
-                    key={role.id}
-                    className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="text-sm text-neutral-500 dark:text-neutral-400">{role.roleCode}</span>
-                          <span className={`px-2 py-1 rounded-md text-xs font-medium capitalize ${getStatusBadge(role.status)}`}>
-                            {role.status}
-                          </span>
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Assigned Users</div>
+                          <div className="font-medium text-neutral-900 dark:text-white">{role.userCount}</div>
                         </div>
-                        <h3 className="font-medium text-neutral-900 dark:text-white mb-2">{role.roleName}</h3>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">{role.description}</p>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 text-sm">
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Leads</span>
-                            <span className="text-neutral-900 dark:text-white text-xs">{role.permissions.leads}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Projects</span>
-                            <span className="text-neutral-900 dark:text-white text-xs">{role.permissions.projects}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Submodules</span>
-                            <span className="text-neutral-900 dark:text-white text-xs">{role.permissions.submodules}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Masters</span>
-                            <span className="text-neutral-900 dark:text-white text-xs">{role.permissions.masters}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Users</span>
-                            <span className="text-neutral-900 dark:text-white font-medium">{role.userCount}</span>
-                          </div>
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Leads Access</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{role.permissions.leads}</div>
                         </div>
-                      </div>
-                      <div className="ml-4 relative group">
-                        <button className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
-                          <MoreVertical className="w-4 h-4 text-neutral-500" />
-                        </button>
-                        <div className="hidden group-hover:block absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-48 z-10">
-                          <button
-                            onClick={() => handleViewPermissions(role)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                          >
-                            <Eye className="w-4 h-4" />
-                            View Permissions
-                          </button>
-                          <button
-                            onClick={() => handleEdit(role)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(role.id)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Projects Access</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{role.permissions.projects}</div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Masters Access</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{role.permissions.masters}</div>
                         </div>
                       </div>
                     </div>
@@ -796,90 +596,80 @@ export default function UserRolesModule() {
               <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                    <thead className="bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Role
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Code
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Users
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                          Permissions
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                          Leads
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                          Projects
+                        </th>
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Actions
                         </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                      {(paginatedData as Role[]).map((role) => (
-                        <tr key={role.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                          <td className="px-6 py-4">
+                      {(filteredData as Role[]).map((role) => (
+                        <tr key={role.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                          <td className="px-4 py-4">
                             <div>
                               <div className="font-medium text-neutral-900 dark:text-white">{role.roleName}</div>
-                              <div className="text-sm text-neutral-500 dark:text-neutral-400 line-clamp-1">{role.description}</div>
+                              <div className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-1">{role.description}</div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
+                          <td className="px-4 py-4 text-sm text-neutral-900 dark:text-white">
                             {role.roleCode}
                           </td>
-                          <td className="px-6 py-4 text-sm font-medium text-neutral-900 dark:text-white">
+                          <td className="px-4 py-4 text-sm font-medium text-neutral-900 dark:text-white">
                             {role.userCount}
                           </td>
-                          <td className="px-6 py-4">
-                            <div className="flex flex-wrap gap-1">
-                              {role.permissions.leads !== 'No Access' && (
-                                <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs rounded">
-                                  Leads
-                                </span>
-                              )}
-                              {role.permissions.projects !== 'No Access' && (
-                                <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 text-xs rounded">
-                                  Projects
-                                </span>
-                              )}
-                            </div>
+                          <td className="px-4 py-4 text-sm text-neutral-900 dark:text-white">
+                            {role.permissions.leads}
                           </td>
-                          <td className="px-6 py-4">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md capitalize ${getStatusBadge(role.status)}`}>
+                          <td className="px-4 py-4 text-sm text-neutral-900 dark:text-white">
+                            {role.permissions.projects}
+                          </td>
+                          <td className="px-4 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded capitalize ${getStatusBadge(role.status)}`}>
                               {role.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="relative inline-block group">
-                              <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded">
-                                <MoreVertical className="w-4 h-4 text-neutral-500" />
+                          <td className="px-4 py-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleViewPermissions(role)}
+                                className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                                title="View Permissions"
+                              >
+                                <Eye className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
                               </button>
-                              <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-48 z-10">
-                                <button
-                                  onClick={() => handleViewPermissions(role)}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                                >
-                                  <Eye className="w-4 h-4" />
-                                  View Permissions
-                                </button>
-                                <button
-                                  onClick={() => handleEdit(role)}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(role.id)}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                  Delete
-                                </button>
-                              </div>
+                              <button
+                                onClick={() => handleEdit(role)}
+                                className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                                title="Edit"
+                              >
+                                <Edit2 className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(role.id)}
+                                className="p-1.5 hover:bg-error-50 dark:hover:bg-error-950/30 rounded transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4 text-error-600 dark:text-error-400" />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -894,138 +684,106 @@ export default function UserRolesModule() {
           <>
             {/* Users Grid View */}
             {viewMode === 'grid' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {(paginatedData as User[]).map((user) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {(filteredData as AppUser[]).map((user) => (
                   <div
                     key={user.id}
-                    className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 hover:shadow-lg transition-shadow"
+                    className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 overflow-hidden hover:shadow-lg transition-shadow"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Users className="w-4 h-4 text-neutral-500" />
-                          <span className="text-sm text-neutral-500 dark:text-neutral-400">{user.userId}</span>
-                        </div>
-                        <h3 className="font-medium text-neutral-900 dark:text-white mb-1">{user.name}</h3>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400">{user.email}</p>
-                      </div>
-                      <div className="relative group">
-                        <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
-                          <MoreVertical className="w-4 h-4 text-neutral-500" />
-                        </button>
-                        <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                          <button
-                            onClick={() => handleEdit(user)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(user.id)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    {/* Colored Top Border */}
+                    <div className={`h-1 ${
+                      user.status === 'active' ? 'bg-green-500' : 'bg-neutral-300'
+                    }`} />
 
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-neutral-500 dark:text-neutral-400">Role:</span>
-                        <span className="text-neutral-900 dark:text-white">{user.role}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-neutral-500 dark:text-neutral-400">Department:</span>
-                        <span className="text-neutral-900 dark:text-white">{user.department}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-neutral-500 dark:text-neutral-400">Manager:</span>
-                        <span className="text-neutral-900 dark:text-white">{user.reportingManager}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-neutral-500 dark:text-neutral-400">Access:</span>
-                        <span className="text-neutral-900 dark:text-white">{user.accessScope}</span>
-                      </div>
-                    </div>
+                    <div className="p-5">
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2 px-2.5 py-1 bg-primary-50 dark:bg-primary-950/30 rounded-md">
+                          <User className="w-3 h-3 text-primary-600 dark:text-primary-400" />
+                          <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{user.userId}</span>
+                        </div>
 
-                    <div className="flex items-center justify-between pt-3 border-t border-neutral-200 dark:border-neutral-800">
-                      <span className={`inline-flex px-3 py-1 text-xs font-medium rounded-md capitalize ${getStatusBadge(user.status)}`}>
-                        {user.status}
-                      </span>
-                      {user.lastLogin && (
-                        <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                          {user.lastLogin}
+                        {/* Action Menu */}
+                        <div className="relative ml-auto">
+                          <button
+                            onClick={() => setOpenMenuId(openMenuId === `user-${user.id}` ? null : `user-${user.id}`)}
+                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
+                          >
+                            <MoreVertical className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                          </button>
+                          {openMenuId === `user-${user.id}` && (
+                            <>
+                              <div
+                                className="fixed inset-0 z-10"
+                                onClick={() => setOpenMenuId(null)}
+                              />
+                              <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
+                                <button
+                                  onClick={() => {
+                                    handleEdit(user);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    handleDelete(user.id);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2.5 transition-colors"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* User Name */}
+                      <h3 className="font-semibold text-base text-neutral-900 dark:text-white mb-2 leading-snug">
+                        {user.name}
+                      </h3>
+
+                      {/* Email */}
+                      <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-3">
+                        <span className="text-xs font-medium truncate">{user.email}</span>
+                      </div>
+
+                      {/* Status Badges */}
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold capitalize ${getStatusBadge(user.status)}`}>
+                          {user.status}
                         </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Users List View */}
-            {viewMode === 'list' && (
-              <div className="space-y-4">
-                {(paginatedData as User[]).map((user) => (
-                  <div
-                    key={user.id}
-                    className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <span className="text-sm text-neutral-500 dark:text-neutral-400">{user.userId}</span>
-                          <span className={`px-2 py-1 rounded-md text-xs font-medium capitalize ${getStatusBadge(user.status)}`}>
-                            {user.status}
-                          </span>
-                        </div>
-                        <h3 className="font-medium text-neutral-900 dark:text-white mb-2">{user.name}</h3>
-                        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">{user.email}</p>
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Role</span>
-                            <span className="text-neutral-900 dark:text-white">{user.role}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Department</span>
-                            <span className="text-neutral-900 dark:text-white">{user.department}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Manager</span>
-                            <span className="text-neutral-900 dark:text-white">{user.reportingManager}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Access Scope</span>
-                            <span className="text-neutral-900 dark:text-white">{user.accessScope}</span>
-                          </div>
-                          <div>
-                            <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Last Login</span>
-                            <span className="text-neutral-900 dark:text-white text-xs">{user.lastLogin || 'Never'}</span>
-                          </div>
-                        </div>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold ${getAccessScopeStyle(user.accessScope)}`}>
+                          {user.accessScope}
+                        </span>
                       </div>
-                      <div className="ml-4 relative group">
-                        <button className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
-                          <MoreVertical className="w-4 h-4 text-neutral-500" />
-                        </button>
-                        <div className="hidden group-hover:block absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                          <button
-                            onClick={() => handleEdit(user)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => handleDelete(user.id)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
+
+                      {/* Divider */}
+                      <div className="border-t border-neutral-100 dark:border-neutral-800 my-3" />
+
+                      {/* Info Grid */}
+                      <div className="grid grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Role</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{user.role}</div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Department</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{user.department}</div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Manager</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{user.reportingManager}</div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Last Login</div>
+                          <div className="font-medium text-neutral-900 dark:text-white truncate">{user.lastLogin || 'Never'}</div>
                         </div>
                       </div>
                     </div>
@@ -1039,72 +797,80 @@ export default function UserRolesModule() {
               <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full">
-                    <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
+                    <thead className="bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           User
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Role
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Department
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Access
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
+                          Last Login
+                        </th>
+                        <th className="px-4 py-3 text-center text-xs font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
                           Actions
                         </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                      {(paginatedData as User[]).map((user) => (
-                        <tr key={user.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                          <td className="px-6 py-4">
-                            <div>
-                              <div className="font-medium text-neutral-900 dark:text-white">{user.name}</div>
-                              <div className="text-sm text-neutral-500 dark:text-neutral-400">{user.email}</div>
+                      {(filteredData as AppUser[]).map((user) => (
+                        <tr key={user.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors">
+                          <td className="px-4 py-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                                <User className="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-neutral-900 dark:text-white">{user.name}</div>
+                                <div className="text-xs text-neutral-500 dark:text-neutral-400">{user.email}</div>
+                              </div>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
+                          <td className="px-4 py-4 text-sm text-neutral-900 dark:text-white">
                             {user.role}
                           </td>
-                          <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
+                          <td className="px-4 py-4 text-sm text-neutral-900 dark:text-white">
                             {user.department}
                           </td>
-                          <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
-                            {user.accessScope}
+                          <td className="px-4 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded ${getAccessScopeStyle(user.accessScope)}`}>
+                              {user.accessScope}
+                            </span>
                           </td>
-                          <td className="px-6 py-4">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md capitalize ${getStatusBadge(user.status)}`}>
+                          <td className="px-4 py-4">
+                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded capitalize ${getStatusBadge(user.status)}`}>
                               {user.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="relative inline-block group">
-                              <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded">
-                                <MoreVertical className="w-4 h-4 text-neutral-500" />
+                          <td className="px-4 py-4 text-sm text-neutral-900 dark:text-white">
+                            {user.lastLogin || 'Never'}
+                          </td>
+                          <td className="px-4 py-4">
+                            <div className="flex items-center justify-center gap-2">
+                              <button
+                                onClick={() => handleEdit(user)}
+                                className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                                title="Edit"
+                              >
+                                <Edit2 className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
                               </button>
-                              <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                                <button
-                                  onClick={() => handleEdit(user)}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(user.id)}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                  Delete
-                                </button>
-                              </div>
+                              <button
+                                onClick={() => handleDelete(user.id)}
+                                className="p-1.5 hover:bg-error-50 dark:hover:bg-error-950/30 rounded transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 className="w-4 h-4 text-error-600 dark:text-error-400" />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -1117,17 +883,23 @@ export default function UserRolesModule() {
           </>
         )}
 
-        {/* Pagination */}
-        <div className="mt-6">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-            itemsPerPage={itemsPerPage}
-            onItemsPerPageChange={setItemsPerPage}
-            totalItems={filteredData.length}
-          />
-        </div>
+        {filteredData.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center mb-4">
+              {activeTab === 'roles' ? (
+                <Shield className="w-8 h-8 text-neutral-400" />
+              ) : (
+                <Users className="w-8 h-8 text-neutral-400" />
+              )}
+            </div>
+            <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
+              No {activeTab} found
+            </h3>
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
+              {searchQuery ? 'Try adjusting your search criteria.' : `Get started by adding your first ${activeTab === 'roles' ? 'role' : 'user'}.`}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Add/Edit Modal */}
@@ -1169,15 +941,15 @@ export default function UserRolesModule() {
             <div className="grid grid-cols-2 gap-4">
               <FormField>
                 <FormLabel required>Name</FormLabel>
-                <FormInput placeholder="Enter full name" defaultValue={(selectedItem as User)?.name} />
+                <FormInput placeholder="Enter full name" defaultValue={(selectedItem as AppUser)?.name} />
               </FormField>
               <FormField>
                 <FormLabel required>Email</FormLabel>
-                <FormInput type="email" placeholder="Enter email" defaultValue={(selectedItem as User)?.email} />
+                <FormInput type="email" placeholder="Enter email" defaultValue={(selectedItem as AppUser)?.email} />
               </FormField>
               <FormField>
                 <FormLabel required>Role</FormLabel>
-                <FormSelect defaultValue={(selectedItem as User)?.role}>
+                <FormSelect defaultValue={(selectedItem as AppUser)?.role}>
                   <option value="">Select role</option>
                   {mockRoles.map(role => (
                     <option key={role.id} value={role.roleName}>{role.roleName}</option>
@@ -1186,15 +958,15 @@ export default function UserRolesModule() {
               </FormField>
               <FormField>
                 <FormLabel required>Department</FormLabel>
-                <FormInput placeholder="Enter department" defaultValue={(selectedItem as User)?.department} />
+                <FormInput placeholder="Enter department" defaultValue={(selectedItem as AppUser)?.department} />
               </FormField>
               <FormField>
                 <FormLabel>Reporting Manager</FormLabel>
-                <FormInput placeholder="Enter manager name" defaultValue={(selectedItem as User)?.reportingManager} />
+                <FormInput placeholder="Enter manager name" defaultValue={(selectedItem as AppUser)?.reportingManager} />
               </FormField>
               <FormField>
                 <FormLabel required>Access Scope</FormLabel>
-                <FormSelect defaultValue={(selectedItem as User)?.accessScope}>
+                <FormSelect defaultValue={(selectedItem as AppUser)?.accessScope}>
                   <option value="">Select scope</option>
                   <option value="Global">Global</option>
                   <option value="Restricted">Restricted</option>
@@ -1202,7 +974,7 @@ export default function UserRolesModule() {
               </FormField>
               <FormField>
                 <FormLabel required>Status</FormLabel>
-                <FormSelect defaultValue={(selectedItem as User)?.status}>
+                <FormSelect defaultValue={(selectedItem as AppUser)?.status}>
                   <option value="">Select status</option>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
