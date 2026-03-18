@@ -106,22 +106,31 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
     ],
   });
 
-  // Mock project data - now stateful to allow editing
-  const [project, setProject] = useState(propProject || {
-    id: 'PRJ-2026-001',
-    projectCode: 'PRJ-2026-001',
-    projectName: 'Enterprise Resource Planning System',
-    clientName: 'Global Tech Solutions Inc.',
-    subject: 'Corporate Website Revamp',
-    projectType: 'Hire',
-    status: 'In Progress',
-    startDate: 'Jan 15, 2025',
-    endDate: 'Dec 31, 2025',
-    budget: 245000,
-    crmCode: 'CRM-10293',
-    businessType: 'Web Development',
-    domain: 'Digital Experience',
-    industry: 'Technology',
+  // State for project data, with normalization for different field naming conventions
+  const [project, setProject] = useState(() => {
+    const baseProject = propProject || {
+      id: 'PRJ-2026-001',
+      projectCode: 'PRJ-2026-001',
+      projectName: 'Enterprise Resource Planning System',
+      clientName: 'Global Tech Solutions Inc.',
+      subject: 'Corporate Website Revamp',
+      projectType: 'Hire',
+      status: 'In Progress',
+      startDate: 'Jan 15, 2025',
+      endDate: 'Dec 31, 2025',
+      budget: 245000,
+      crmCode: 'CRM-10293',
+      businessType: 'Existing',
+      domain: 'Digital Experience',
+      industry: 'Technology',
+    };
+
+    return {
+      ...baseProject,
+      projectCode: baseProject.projectCode || baseProject.projectId,
+      status: baseProject.status || baseProject.projectStatus,
+      businessType: baseProject.businessType || baseProject.clientType,
+    };
   });
 
   // Section IDs matching tab keys - Conditional based on project type
@@ -475,6 +484,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
       'Created': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
       'Draft': 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300',
       'Published': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+      'In Progress': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
       'On Hold': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
       'Cancelled': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
     };
@@ -548,7 +558,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                 </h1>
                 <div className="flex items-center gap-3">
                   <span className="text-base font-medium text-neutral-600 dark:text-neutral-400">{project.projectCode}</span>
-                  <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize ${getStatusBadge(project.status)}`}>
+                  <span className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize ${getStatusBadge(project.status || '')}`}>
                     {project.status}
                   </span>
                 </div>

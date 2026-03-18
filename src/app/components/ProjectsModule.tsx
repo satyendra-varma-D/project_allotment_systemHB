@@ -52,7 +52,7 @@ interface Project {
   salesExecutive: string;
   techBA: string;
   confirmedDate: string;
-  clientType: 'New' | 'Existing';
+  businessType: 'New' | 'Existing';
   technologyPlatform: string;
   // Agreement summary
   agreementSummary?: {
@@ -79,8 +79,8 @@ const mockProjects: Project[] = [
     projectStatus: 'Published',
     overallProgress: 65,
     commercialValue: 250000,
-    domain: 'Technology',
-    industry: 'IT Services',
+    domain: 'Digital Experience',
+    industry: 'Technology',
     linkedLeadId: 'LD-2024-001',
     riskIndicator: 'Low',
     priorityLevel: 'High',
@@ -89,7 +89,7 @@ const mockProjects: Project[] = [
     salesExecutive: 'Alice Johnson',
     techBA: 'Bob Smith',
     confirmedDate: '2024-01-10',
-    clientType: 'Existing',
+    businessType: 'Existing',
     technologyPlatform: 'AWS',
     agreementSummary: {
       assignedMembersCount: 3,
@@ -112,8 +112,8 @@ const mockProjects: Project[] = [
     projectStatus: 'Published',
     overallProgress: 45,
     commercialValue: 180000,
-    domain: 'Finance',
-    industry: 'Banking',
+    domain: 'Finance & Banking',
+    industry: 'Finance',
     linkedLeadId: 'LD-2024-005',
     riskIndicator: 'Medium',
     priorityLevel: 'High',
@@ -122,7 +122,7 @@ const mockProjects: Project[] = [
     salesExecutive: 'Michael Brown',
     techBA: 'Sarah Lee',
     confirmedDate: '2024-02-14',
-    clientType: 'New',
+    businessType: 'New',
     technologyPlatform: 'Azure',
   },
   {
@@ -140,8 +140,8 @@ const mockProjects: Project[] = [
     projectStatus: 'Published',
     overallProgress: 85,
     commercialValue: 320000,
-    domain: 'Retail',
-    industry: 'E-commerce',
+    domain: 'E-Commerce',
+    industry: 'Retail',
     linkedLeadId: 'LD-2023-089',
     riskIndicator: 'Low',
     priorityLevel: 'Medium',
@@ -150,7 +150,7 @@ const mockProjects: Project[] = [
     salesExecutive: 'Eve Davis',
     techBA: 'Franklin Stone',
     confirmedDate: '2023-10-20',
-    clientType: 'Existing',
+    businessType: 'Existing',
     technologyPlatform: 'Google Cloud',
   },
   {
@@ -178,7 +178,7 @@ const mockProjects: Project[] = [
     salesExecutive: 'Grace Lee',
     techBA: 'Henry Adams',
     confirmedDate: '2023-08-15',
-    clientType: 'New',
+    businessType: 'New',
     technologyPlatform: 'IBM Cloud',
   },
   {
@@ -196,8 +196,8 @@ const mockProjects: Project[] = [
     projectStatus: 'On Hold',
     overallProgress: 30,
     commercialValue: 195000,
-    domain: 'Logistics',
-    industry: 'Logistics',
+    domain: 'Transportation & Logistics',
+    industry: 'Transportation',
     linkedLeadId: 'LD-2024-012',
     riskIndicator: 'High',
     priorityLevel: 'Medium',
@@ -206,7 +206,7 @@ const mockProjects: Project[] = [
     salesExecutive: 'Ivy Taylor',
     techBA: 'Jack White',
     confirmedDate: '2024-01-15',
-    clientType: 'Existing',
+    businessType: 'Existing',
     technologyPlatform: 'Oracle Cloud',
   },
   {
@@ -224,7 +224,7 @@ const mockProjects: Project[] = [
     projectStatus: 'Created',
     overallProgress: 15,
     commercialValue: 580000,
-    domain: 'Government',
+    domain: 'Digital Experience',
     industry: 'Government',
     linkedLeadId: 'LD-2024-018',
     riskIndicator: 'Medium',
@@ -234,16 +234,18 @@ const mockProjects: Project[] = [
     salesExecutive: 'Katherine Johnson',
     techBA: 'Leo Black',
     confirmedDate: '2024-02-15',
-    clientType: 'New',
+    businessType: 'New',
     technologyPlatform: 'Salesforce',
   },
 ];
 
 interface ProjectsModuleProps {
   onNavigate?: (pageId: string, filters?: any[]) => void;
+  initialFilters?: any[];
+  onFiltersConsumed?: () => void;
 }
 
-export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
+export default function ProjectsModule({ onNavigate, initialFilters, onFiltersConsumed }: ProjectsModuleProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -264,6 +266,21 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
   // Active filters
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
 
+  // Handle initial filters for auto-opening project details
+  useState(() => {
+    if (initialFilters && initialFilters.length > 0) {
+      const openDetailFilter = initialFilters.find(f => f.openDetail);
+      if (openDetailFilter) {
+        const project = mockProjects.find(p => p.projectName === openDetailFilter.value);
+        if (project) {
+          setSelectedProject(project);
+          setIsDetailView(true);
+          onFiltersConsumed?.();
+        }
+      }
+    }
+  });
+
   // Show summary toggle
   const [showSummary, setShowSummary] = useState(false);
 
@@ -276,7 +293,7 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
     salesExecutive: true,
     techBA: true,
     confirmedDate: true,
-    clientType: true,
+    businessType: true,
     projectStatus: true,
     paymentStatus: true,
   });
@@ -289,7 +306,7 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
     { key: 'salesExecutive', label: 'Sales Executive' },
     { key: 'techBA', label: 'Tech BA' },
     { key: 'confirmedDate', label: 'Confirmed Date' },
-    { key: 'clientType', label: 'Client Type' },
+    { key: 'businessType', label: 'Business Type' },
     { key: 'projectType', label: 'Project Type' },
     { key: 'technologyPlatform', label: 'Tech Platform' },
     { key: 'projectStatus', label: 'Status' },
@@ -559,8 +576,9 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
         filterOptions={{
           'Status': ['In Progress', 'Completed', 'On Hold', 'Not Started'],
           'Project Type': ['Fixed Cost', 'Hire', 'T&M', 'Retainer'],
-          'Business Type': ['Web Development', 'Mobile App', 'Cloud Services', 'UI/UX Design'],
-          'Industry': ['Technology', 'Finance', 'Healthcare', 'Retail'],
+          'Business Type': ['New', 'Existing'],
+          'Domain': ['Digital Experience', 'E-Commerce', 'Healthcare', 'Education', 'Finance & Banking', 'Real Estate', 'Media & Entertainment', 'Transportation & Logistics', 'Travel & Hospitality', 'Manufacturing'],
+          'Industry': ['Technology', 'Retail', 'Healthcare', 'Finance', 'Education', 'Manufacturing', 'Real Estate', 'Media & Entertainment', 'Transportation', 'Hospitality', 'Telecommunications', 'Energy & Utilities', 'Government', 'Non-Profit', 'Other'],
           'Project Name': [],
           'Client Name': [],
         }}
@@ -733,10 +751,10 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
                       <div className="font-medium text-neutral-900 dark:text-white">{project.confirmedDate}</div>
                     </div>
                     
-                    {/* Client Type */}
+                    {/* Business Type */}
                     <div>
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Client Type</div>
-                      <div className="font-medium text-neutral-900 dark:text-white">{project.clientType}</div>
+                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Business Type</div>
+                      <div className="font-medium text-neutral-900 dark:text-white">{project.businessType}</div>
                     </div>
                     
                     {/* Project Type */}
@@ -904,7 +922,7 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="text-[10px] uppercase tracking-wider text-neutral-500 dark:text-neutral-500 font-medium mb-0.5">Client Type</div>
-                          <div className="text-sm font-medium text-neutral-900 dark:text-white">{project.clientType}</div>
+                          <div className="text-sm font-medium text-neutral-900 dark:text-white">{project.businessType}</div>
                         </div>
                       </div>
 
@@ -1012,7 +1030,7 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
                         {project.confirmedDate}
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-sm text-neutral-900 dark:text-white">{project.clientType}</span>
+                        <span className="text-sm text-neutral-900 dark:text-white">{project.businessType}</span>
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm text-neutral-900 dark:text-white">{project.projectType}</span>
@@ -1084,7 +1102,7 @@ export default function ProjectsModule({ onNavigate }: ProjectsModuleProps) {
           projectCode: selectedProject.projectId,
           projectName: selectedProject.projectName,
           projectType: selectedProject.projectType,
-          businessType: selectedProject.clientType,
+          businessType: selectedProject.businessType,
           domain: selectedProject.domain || 'Digital Experience',
           industry: selectedProject.industry || 'Technology',
         } : null}

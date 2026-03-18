@@ -118,14 +118,20 @@ export default function App() {
         ) : currentPage === "leads" ? (
           <LeadsModule />
         ) : currentPage === "projects" ? (
-          <ProjectsModule onNavigate={handleNavigate} />
+          <ProjectsModule 
+            onNavigate={handleNavigate} 
+            initialFilters={initialFilters}
+            onFiltersConsumed={() => setInitialFilters([])}
+          />
         ) : currentPage === "milestones" ? (
           <MilestonesModule 
+            onNavigate={handleNavigate}
             initialFilters={initialFilters} 
             onFiltersConsumed={() => setInitialFilters([])} 
           />
         ) : currentPage === "hire-renewal" ? (
           <HireRenewalModule 
+            onNavigate={handleNavigate}
             initialFilters={initialFilters} 
             onFiltersConsumed={() => setInitialFilters([])} 
           />
@@ -137,6 +143,7 @@ export default function App() {
           <InfrastructureModule />
         ) : currentPage === "addons" ? (
           <AddonsModule 
+            onNavigate={handleNavigate}
             initialFilters={initialFilters} 
             onFiltersConsumed={() => setInitialFilters([])} 
           />
@@ -150,6 +157,7 @@ export default function App() {
           <MilestoneStatusChangeLogsModule />
         ) : currentPage === "resource-renewals" ? (
           <ResourceRenewalsModule 
+            onNavigate={handleNavigate}
             initialFilters={initialFilters} 
             onFiltersConsumed={() => setInitialFilters([])} 
           />

@@ -49,21 +49,26 @@ interface ResourceRenewal {
 interface ResourceRenewalsModuleProps {
   initialFilters?: any[];
   onFiltersConsumed?: () => void;
+  onNavigate?: (pageId: string, filters?: any[]) => void;
 }
 
-export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: ResourceRenewalsModuleProps) {
+export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed, onNavigate }: ResourceRenewalsModuleProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
   const [currentEditRenewal, setCurrentEditRenewal] = useState<ResourceRenewal | null>(null);
   const [filterStatus, setFilterStatus] = useState<'all' | 'current' | 'completed'>('all');
   const [activeProjectFilter, setActiveProjectFilter] = useState<string | null>(null);
+  const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (initialFilters && initialFilters.length > 0) {
-      const projectFilter = initialFilters.find(f => f.field === 'projectName');
+      // Capture project name for back navigation before consuming filters
+      const projectFilter = initialFilters.find(f => f.field === 'projectName' || f.field === 'Project Name');
       if (projectFilter) {
-        setActiveProjectFilter(Array.isArray(projectFilter.value) ? projectFilter.value[0] : projectFilter.value);
+        const projName = Array.isArray(projectFilter.value) ? projectFilter.value[0] : projectFilter.value;
+        setActiveProjectFilter(projName);
+        setBackToProjectName(projName);
       }
       onFiltersConsumed?.();
     }
@@ -196,6 +201,13 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
     return styles[hireType];
   };
 
+
+  const handleBack = () => {
+    if (backToProjectName && onNavigate) {
+      onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
       {/* Page Header */}
@@ -218,6 +230,7 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
           setCurrentEditRenewal(null);
           setIsEditPanelOpen(true);
         }}
+        onBack={backToProjectName ? handleBack : undefined}
       />
 
       {/* Content */}

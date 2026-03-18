@@ -129,14 +129,13 @@ export const getNavigationData = (
           onClick: () => onNavigate("email-groups"),
           active: currentPage === "email-groups",
         },
+        {
+          id: "user-roles",
+          label: "User Roles & Access",
+          onClick: () => onNavigate("user-roles"),
+          active: currentPage === "user-roles",
+        },
       ],
-    },
-    {
-      id: "user-roles",
-      label: "User Roles & Access",
-      icon: Users,
-      onClick: () => onNavigate("user-roles"),
-      active: currentPage === "user-roles",
     },
     // HIDDEN: System Architecture
     // {

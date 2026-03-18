@@ -289,6 +289,9 @@ export default function UserRolesModule() {
   const [roles, setRoles] = useState<Role[]>(mockRoles);
   const [users, setUsers] = useState<AppUser[]>(mockUsers);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [isViewPanelOpen, setIsViewPanelOpen] = useState(false);
+  const [viewItem, setViewItem] = useState<Role | AppUser | null>(null);
+  const [viewType, setViewType] = useState<'role' | 'user'>('role');
 
   // Filter and search logic
   const filteredData = useMemo(() => {
@@ -327,8 +330,15 @@ export default function UserRolesModule() {
   };
 
   const handleViewPermissions = (role: Role) => {
-    setSelectedItem(role);
-    setIsPermissionModalOpen(true);
+    setViewItem(role);
+    setViewType('role');
+    setIsViewPanelOpen(true);
+  };
+
+  const handleViewUser = (user: AppUser) => {
+    setViewItem(user);
+    setViewType('user');
+    setIsViewPanelOpen(true);
   };
 
   const handleDelete = (id: string) => {
@@ -659,6 +669,16 @@ export default function UserRolesModule() {
                               <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
                                 <button
                                   onClick={() => {
+                                    handleViewUser(user);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                  View
+                                </button>
+                                <button
+                                  onClick={() => {
                                     handleEdit(user);
                                     setOpenMenuId(null);
                                   }}
@@ -797,6 +817,13 @@ export default function UserRolesModule() {
                           <td className="px-4 py-4">
                             <div className="flex items-center justify-center gap-2">
                               <button
+                                onClick={() => handleViewUser(user)}
+                                className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                                title="View"
+                              >
+                                <Eye className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                              </button>
+                              <button
                                 onClick={() => handleEdit(user)}
                                 className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
                                 title="Edit"
@@ -933,64 +960,162 @@ export default function UserRolesModule() {
         )}
       </SidePanel>
 
-      {/* Permission Details Modal */}
-      <FormModal
-        isOpen={isPermissionModalOpen}
+      {/* View Side Panel */}
+      <SidePanel
+        isOpen={isViewPanelOpen}
         onClose={() => {
-          setIsPermissionModalOpen(false);
-          setSelectedItem(null);
+          setIsViewPanelOpen(false);
+          setViewItem(null);
         }}
-        title="Role Permissions"
+        title={viewType === 'role' ? 'Role Details' : 'User Details'}
+        footer={
+          <SidePanelFooter
+            onCancel={() => {
+              setIsViewPanelOpen(false);
+              setViewItem(null);
+            }}
+            onSave={() => {
+              setIsViewPanelOpen(false);
+              setViewItem(null);
+            }}
+            saveLabel="Close"
+          />
+        }
       >
-        {selectedItem && (
-          <FormSection title={(selectedItem as Role).roleName}>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Leads Module</span>
-                  <span className="text-neutral-900 dark:text-white font-medium">{(selectedItem as Role).permissions.leads}</span>
+        {viewType === 'role' && viewItem && (() => {
+          const role = viewItem as Role;
+          return (
+            <div className="space-y-6">
+              {/* Role Header */}
+              <div className="flex items-center gap-3 pb-4 border-b border-neutral-200 dark:border-neutral-800">
+                <div className="w-12 h-12 rounded-xl bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div>
-                  <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Projects Module</span>
-                  <span className="text-neutral-900 dark:text-white font-medium">{(selectedItem as Role).permissions.projects}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Submodules</span>
-                  <span className="text-neutral-900 dark:text-white font-medium">{(selectedItem as Role).permissions.submodules}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Masters</span>
-                  <span className="text-neutral-900 dark:text-white font-medium">{(selectedItem as Role).permissions.masters}</span>
-                </div>
-                <div>
-                  <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Allotment System</span>
-                  <span className="text-neutral-900 dark:text-white font-medium">{(selectedItem as Role).permissions.allotment}</span>
+                  <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">{role.roleName}</h3>
+                  <span className="text-xs font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/30 px-2 py-0.5 rounded">{role.roleCode}</span>
                 </div>
               </div>
+
+              {/* General Info */}
+              <FormSection title="General Information">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Status</div>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold capitalize ${getStatusBadge(role.status)}`}>
+                      {role.status}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Assigned Users</div>
+                    <div className="text-sm font-semibold text-neutral-900 dark:text-white">{role.userCount}</div>
+                  </div>
+                  <div className="col-span-2">
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Description</div>
+                    <div className="text-sm text-neutral-900 dark:text-white">{role.description}</div>
+                  </div>
+                </div>
+              </FormSection>
+
+              {/* Permissions */}
+              <FormSection title="Module Permissions">
+                <div className="space-y-3">
+                  {[
+                    { label: 'Leads Module', value: role.permissions.leads },
+                    { label: 'Projects Module', value: role.permissions.projects },
+                    { label: 'Submodules', value: role.permissions.submodules },
+                    { label: 'Masters', value: role.permissions.masters },
+                    { label: 'Allotment System', value: role.permissions.allotment },
+                  ].map((perm) => (
+                    <div key={perm.label} className="flex items-center justify-between py-2.5 px-3 rounded-lg bg-neutral-50 dark:bg-neutral-800/50">
+                      <span className="text-sm text-neutral-700 dark:text-neutral-300">{perm.label}</span>
+                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                        perm.value === 'No Access' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                        perm.value === 'View' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                        perm.value.includes('Full') ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                        perm.value.includes('Edit') ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
+                        'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+                      }`}>
+                        {perm.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </FormSection>
             </div>
-          </FormSection>
-        )}
-        <FormFooter>
-          <button
-            onClick={() => {
-              setIsPermissionModalOpen(false);
-              setSelectedItem(null);
-            }}
-            className="px-4 py-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={() => {
-              setIsPermissionModalOpen(false);
-              setSelectedItem(null);
-            }}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-          >
-            Close
-          </button>
-        </FormFooter>
-      </FormModal>
+          );
+        })()}
+
+        {viewType === 'user' && viewItem && (() => {
+          const user = viewItem as AppUser;
+          return (
+            <div className="space-y-6">
+              {/* User Header */}
+              <div className="flex items-center gap-3 pb-4 border-b border-neutral-200 dark:border-neutral-800">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-lg font-semibold">
+                  {user.name.charAt(0)}
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">{user.name}</h3>
+                  <span className="text-xs font-medium text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/30 px-2 py-0.5 rounded">{user.userId}</span>
+                </div>
+              </div>
+
+              {/* Personal Info */}
+              <FormSection title="Personal Information">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Full Name</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{user.name}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Email</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white break-all">{user.email}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Department</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{user.department}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Reporting Manager</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{user.reportingManager}</div>
+                  </div>
+                </div>
+              </FormSection>
+
+              {/* Access Info */}
+              <FormSection title="Access & Role">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Assigned Role</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{user.role}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Access Scope</div>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold ${getAccessScopeStyle(user.accessScope)}`}>
+                      {user.accessScope}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Status</div>
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold capitalize ${getStatusBadge(user.status)}`}>
+                      {user.status}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Last Login</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{user.lastLogin || 'Never'}</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Created Date</div>
+                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{user.createdDate}</div>
+                  </div>
+                </div>
+              </FormSection>
+            </div>
+          );
+        })()}
+      </SidePanel>
     </div>
   );
 }

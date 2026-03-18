@@ -192,9 +192,10 @@ const mockMilestones: Milestone[] = [
 interface MilestonesModuleProps {
   initialFilters?: any[];
   onFiltersConsumed?: () => void;
+  onNavigate?: (pageId: string, filters?: any[]) => void;
 }
 
-export default function MilestonesModule({ initialFilters, onFiltersConsumed }: MilestonesModuleProps) {
+export default function MilestonesModule({ initialFilters, onFiltersConsumed, onNavigate }: MilestonesModuleProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'table'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -204,9 +205,16 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed }: 
   const [selectedMilestone, setSelectedMilestone] = useState<Milestone | null>(null);
   const [milestones, setMilestones] = useState<Milestone[]>(mockMilestones);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+  const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (initialFilters && initialFilters.length > 0) {
+      // Capture project name for back navigation before consuming filters
+      const projectFilter = initialFilters.find(f => f.field === 'projectName' || f.field === 'Project');
+      if (projectFilter?.value) {
+        setBackToProjectName(projectFilter.value);
+      }
+
       // Map initial filters to include unique IDs if they don't have them
       const filtersWithIds = initialFilters.map(f => ({
         id: f.id || `filter-${Date.now()}-${Math.random()}`,
@@ -435,6 +443,13 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed }: 
     }).format(amount);
   };
 
+
+  const handleBack = () => {
+    if (backToProjectName && onNavigate) {
+      onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       {/* Page Header with ListingHeader Component */}
@@ -459,6 +474,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed }: 
         showSummary={showSummary}
         onSummaryToggle={() => setShowSummary(!showSummary)}
         onAdd={() => setIsAddModalOpen(true)}
+        onBack={backToProjectName ? handleBack : undefined}
       />
 
       {/* Summary Widgets - HIDDEN by default */}

@@ -161,9 +161,10 @@ const mockAddons: Addon[] = [
 interface AddonsModuleProps {
   initialFilters?: any[];
   onFiltersConsumed?: () => void;
+  onNavigate?: (pageId: string, filters?: any[]) => void;
 }
 
-export default function AddonsModule({ initialFilters, onFiltersConsumed }: AddonsModuleProps) {
+export default function AddonsModule({ initialFilters, onFiltersConsumed, onNavigate }: AddonsModuleProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -174,9 +175,16 @@ export default function AddonsModule({ initialFilters, onFiltersConsumed }: Addo
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [addons, setAddons] = useState<Addon[]>(mockAddons);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+  const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (initialFilters && initialFilters.length > 0) {
+      // Capture project name for back navigation before consuming filters
+      const projectFilter = initialFilters.find(f => f.field === 'projectName' || f.field === 'Project Name');
+      if (projectFilter?.value) {
+        setBackToProjectName(projectFilter.value);
+      }
+
       const filtersWithIds = initialFilters.map(f => ({
         id: f.id || `filter-${Date.now()}-${Math.random()}`,
         field: f.field,
@@ -376,6 +384,13 @@ export default function AddonsModule({ initialFilters, onFiltersConsumed }: Addo
     return labels[status];
   };
 
+
+  const handleBack = () => {
+    if (backToProjectName && onNavigate) {
+      onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <ListingHeader
@@ -392,6 +407,7 @@ export default function AddonsModule({ initialFilters, onFiltersConsumed }: Addo
         showSummary={showSummary}
         onSummaryToggle={() => setShowSummary(!showSummary)}
         onAdd={() => setIsAddModalOpen(true)}
+        onBack={backToProjectName ? handleBack : undefined}
       />
 
       {/* Summary Widgets - Conditionally shown */}

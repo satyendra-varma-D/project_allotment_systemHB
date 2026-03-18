@@ -162,9 +162,10 @@ const mockEngagements: ResourceEngagement[] = [
 interface HireRenewalModuleProps {
   initialFilters?: any[];
   onFiltersConsumed?: () => void;
+  onNavigate?: (pageId: string, filters?: any[]) => void;
 }
 
-export default function HireRenewalModule({ initialFilters, onFiltersConsumed }: HireRenewalModuleProps) {
+export default function HireRenewalModule({ initialFilters, onFiltersConsumed, onNavigate }: HireRenewalModuleProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
@@ -175,9 +176,16 @@ export default function HireRenewalModule({ initialFilters, onFiltersConsumed }:
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [engagements, setEngagements] = useState<ResourceEngagement[]>(mockEngagements);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
+  const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (initialFilters && initialFilters.length > 0) {
+      // Capture project name for back navigation before consuming filters
+      const projectFilter = initialFilters.find(f => f.field === 'projectName' || f.field === 'Project Name');
+      if (projectFilter?.value) {
+        setBackToProjectName(projectFilter.value);
+      }
+
       const filtersWithIds = initialFilters.map(f => ({
         id: f.id || `filter-${Date.now()}-${Math.random()}`,
         field: f.field,
@@ -341,6 +349,13 @@ export default function HireRenewalModule({ initialFilters, onFiltersConsumed }:
     return styles[model] || 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
   };
 
+
+  const handleBack = () => {
+    if (backToProjectName && onNavigate) {
+      onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
+    }
+  };
+
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
       {/* Page Header */}
@@ -362,6 +377,7 @@ export default function HireRenewalModule({ initialFilters, onFiltersConsumed }:
         showSummary={showSummary}
         onSummaryToggle={() => setShowSummary(!showSummary)}
         onAdd={() => setIsAddModalOpen(true)}
+        onBack={backToProjectName ? handleBack : undefined}
       />
 
       {/* Summary Widgets - Conditionally shown */}

@@ -26,7 +26,7 @@ interface Project {
   salesExecutive: string;
   techBA: string;
   confirmedDate: string;
-  clientType: 'New' | 'Existing';
+  businessType: 'New' | 'Existing';
   technologyPlatform: string;
 }
 
@@ -197,8 +197,8 @@ export function ProjectEmailPreview({ project, isOpen, onClose, onOpenComposer }
                       <td className="bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-white">+1 (555) 123-4567</td>
                     </tr>
                     <tr className="border border-neutral-300 dark:border-neutral-700">
-                      <td className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 font-medium text-neutral-700 dark:text-neutral-300">Client Type</td>
-                      <td className="bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-white">{project.clientType}</td>
+                      <td className="bg-neutral-100 dark:bg-neutral-800 px-4 py-2 font-medium text-neutral-700 dark:text-neutral-300">Business Type</td>
+                      <td className="bg-white dark:bg-neutral-900 px-4 py-2 text-neutral-900 dark:text-white">{project.businessType}</td>
                     </tr>
                   </tbody>
                 </table>

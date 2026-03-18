@@ -59,6 +59,7 @@ import {
   Check,
   FileSpreadsheet,
   FileText,
+  ArrowLeft,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { IconButton } from './IconButton';
@@ -118,6 +119,9 @@ interface ListingHeaderProps {
   // Add button
   onAdd: () => void;
 
+  // Back button (optional)
+  onBack?: () => void;
+
   // Custom actions (optional)
   customActions?: React.ReactNode;
 
@@ -147,6 +151,7 @@ export function ListingHeader({
   cloneDisabled = false,
   cloneTooltip,
   onAdd,
+  onBack,
   customActions,
   className = '',
 }: ListingHeaderProps) {
@@ -173,15 +178,26 @@ export function ListingHeader({
     <div className={`mb-6 px-6 ${className}`}>
       <div className="flex items-start justify-between gap-4 mb-6">
         {/* LEFT SIDE - Title and Subtitle */}
-        <div className="flex-1">
-          <h2 className="text-[32px] leading-[40px] font-semibold text-neutral-900 dark:text-white mb-1">
-            {title}
-          </h2>
-          {subtitle && (
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-              {subtitle}
-            </p>
+        <div className="flex-1 flex items-start gap-3">
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="mt-1 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+              title="Back"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
           )}
+          <div>
+            <h2 className="text-[32px] leading-[40px] font-semibold text-neutral-900 dark:text-white mb-1">
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
+                {subtitle}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* RIGHT SIDE - All Action Icons */}

@@ -304,10 +304,10 @@ export function ProjectEmailPreviewModal({
           <td>Project Status</td>
           <td>${project.projectStatus || project.status}</td>
         </tr>
-        ${project.clientType ? `
+        ${project.businessType ? `
         <tr>
-          <td>Client Type</td>
-          <td>${project.clientType}</td>
+          <td>Business Type</td>
+          <td>${project.businessType}</td>
         </tr>
         ` : ''}
         ${project.salesExecutive ? `

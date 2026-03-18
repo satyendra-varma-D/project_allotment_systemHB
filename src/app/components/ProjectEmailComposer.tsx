@@ -26,7 +26,7 @@ interface Project {
   salesExecutive: string;
   techBA: string;
   confirmedDate: string;
-  clientType: 'New' | 'Existing';
+  businessType: 'New' | 'Existing';
   technologyPlatform: string;
 }
 
