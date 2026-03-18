@@ -22,6 +22,7 @@ import ProjectAllotmentModule from "./components/ProjectAllotmentModule";
 import UserRolesModule from "./components/UserRolesModule";
 import SystemArchitectureModule from "./components/SystemArchitectureModule";
 import NonFunctionalArchitectureModule from "./components/NonFunctionalArchitectureModule";
+import EmailGroupsModule from "./components/EmailGroupsModule";
 
 export default function App() {
   const [isDark, setIsDark] = useState(() => {
@@ -160,6 +161,8 @@ export default function App() {
           <SystemArchitectureModule />
         ) : currentPage === "non-functional-architecture" ? (
           <NonFunctionalArchitectureModule />
+        ) : currentPage === "email-groups" ? (
+          <EmailGroupsModule />
         ) : (
           <div className="p-6">
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-8">

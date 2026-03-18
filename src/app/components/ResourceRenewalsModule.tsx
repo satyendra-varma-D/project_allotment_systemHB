@@ -17,6 +17,7 @@ import {
   XCircle
 } from 'lucide-react';
 import { ResourceRenewalsEditSidePanel } from './ResourceRenewalsEditSidePanel';
+import { ListingHeader, type ViewMode } from './hb/listing/ListingHeader';
 
 interface ResourceRenewal {
   id: string;
@@ -28,6 +29,7 @@ interface ResourceRenewal {
   resourceSkill: string;
   hireType: 'Full-time' | 'Part-time' | 'Average';
   hireCycle: string;
+  currentCycle: number;
   noOfHours: number;
   currency: string;
   hourlyRate: number;
@@ -50,7 +52,7 @@ interface ResourceRenewalsModuleProps {
 }
 
 export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: ResourceRenewalsModuleProps) {
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
   const [currentEditRenewal, setCurrentEditRenewal] = useState<ResourceRenewal | null>(null);
@@ -79,6 +81,7 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
       resourceSkill: 'Node.js, MongoDB',
       hireType: 'Full-time',
       hireCycle: 'Monthly',
+      currentCycle: 3,
       noOfHours: 160,
       currency: 'USD',
       hourlyRate: 85,
@@ -104,6 +107,7 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
       resourceSkill: 'Figma, React Native',
       hireType: 'Part-time',
       hireCycle: 'Bi-weekly',
+      currentCycle: 2,
       noOfHours: 80,
       currency: 'USD',
       hourlyRate: 75,
@@ -129,6 +133,7 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
       resourceSkill: 'AWS, Kubernetes',
       hireType: 'Full-time',
       hireCycle: 'Monthly',
+      currentCycle: 1,
       noOfHours: 160,
       currency: 'USD',
       hourlyRate: 95,
@@ -193,90 +198,27 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
 
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
-      {/* Header */}
-      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-6 py-5">
-        <div className="flex items-start justify-between mb-5">
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">Resource Renewals</h1>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1.5">
-              Manage active resource billing cycles and renewals - Track billing, payments, and renewal schedules for currently engaged resources
-            </p>
-          </div>
-        </div>
-
-        {/* Action Buttons Row */}
-        <div className="flex items-center gap-2">
-          {/* View Toggle Buttons */}
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`p-2.5 rounded-lg border transition-colors ${
-              viewMode === 'grid'
-                ? 'bg-primary-50 text-primary-600 border-primary-200 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-800'
-                : 'bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700'
-            }`}
-            title="Grid View"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-
-          {/* Search Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Search"
-          >
-            <Search className="w-4 h-4" />
-          </button>
-
-          {/* Filter Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Filter"
-          >
-            <Filter className="w-4 h-4" />
-          </button>
-
-          {/* Refresh Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Refresh"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-
-          {/* Download Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Download"
-          >
-            <Download className="w-4 h-4" />
-          </button>
-
-          {/* View Button */}
-          <button
-            onClick={() => setViewMode('table')}
-            className={`p-2.5 rounded-lg border transition-colors ${
-              viewMode === 'table'
-                ? 'bg-primary-50 text-primary-600 border-primary-200 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-800'
-                : 'bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700'
-            }`}
-            title="Table View"
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-
-          {/* Add Button */}
-          <button
-            onClick={() => {
-              setCurrentEditRenewal(null);
-              setIsEditPanelOpen(true);
-            }}
-            className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium shadow-sm ml-auto"
-          >
-            <Plus className="w-4 h-4" />
-            Add Resource Engagement
-          </button>
-        </div>
-      </div>
+      {/* Page Header */}
+      <ListingHeader
+        title="Resource Renewals"
+        subtitle="Manage active resource billing cycles and renewals - Track billing, payments, and renewal schedules for currently engaged resources"
+        moduleName="Resource Engagement"
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        onFilterClick={() => console.log('Filter')}
+        onRefresh={() => console.log('Refresh')}
+        exportOptions={{
+          onExportCSV: () => console.log('Export CSV'),
+          onExportExcel: () => console.log('Export Excel'),
+          onExportPDF: () => console.log('Export PDF'),
+        }}
+        onAdd={() => {
+          setCurrentEditRenewal(null);
+          setIsEditPanelOpen(true);
+        }}
+      />
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
@@ -311,9 +253,17 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
                         </h3>
                       </div>
                     </div>
-                    <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors">
-                      <MoreVertical className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <div className="px-2.5 py-1 rounded-full bg-primary-50 dark:bg-primary-900/30 border border-primary-100 dark:border-primary-800/50 flex items-center gap-1.5 shadow-sm">
+                        <RefreshCw className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
+                        <span className="text-xs font-semibold text-primary-700 dark:text-primary-300">
+                          {renewal.currentCycle}
+                        </span>
+                      </div>
+                      <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors">
+                        <MoreVertical className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Role and Hire Type */}
@@ -459,7 +409,9 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed }: Re
                         <div className="text-sm font-semibold text-neutral-900 dark:text-white">
                           ${renewal.resourceAmountUSD.toLocaleString()}
                         </div>
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400">{renewal.hireCycle}</div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                          {renewal.hireCycle} &bull; {renewal.currentCycle}
+                        </div>
                       </td>
                       <td className="px-4 py-4">
                         <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold ${getStatusBadgeStyle(renewal.publishStatus)}`}>

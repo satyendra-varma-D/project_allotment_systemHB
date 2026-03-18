@@ -91,12 +91,13 @@ export const getNavigationData = (
           onClick: () => onNavigate("change-requests"),
           active: currentPage === "change-requests",
         },
-        {
-          id: "aws",
-          label: "AWS",
-          onClick: () => onNavigate("aws"),
-          active: currentPage === "aws",
-        },
+        // HIDDEN: AWS - user will use later
+        // {
+        //   id: "aws",
+        //   label: "AWS",
+        //   onClick: () => onNavigate("aws"),
+        //   active: currentPage === "aws",
+        // },
       ],
     },
     {
@@ -121,6 +122,12 @@ export const getNavigationData = (
           label: "Milestone Status Change Logs",
           onClick: () => onNavigate("milestone-status-logs"),
           active: currentPage === "milestone-status-logs",
+        },
+        {
+          id: "email-groups",
+          label: "Email Groups",
+          onClick: () => onNavigate("email-groups"),
+          active: currentPage === "email-groups",
         },
       ],
     },

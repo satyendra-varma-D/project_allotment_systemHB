@@ -27,6 +27,8 @@ import {
   FormFooter,
   FormSelect,
 } from './hb/common/Form';
+import { SidePanel, SidePanelFooter } from './hb/common/SidePanel';
+import { ListingHeader, type ViewMode } from './hb/listing/ListingHeader';
 
 // User interface
 interface AppUser {
@@ -279,7 +281,7 @@ const mockUsers: AppUser[] = [
 
 export default function UserRolesModule() {
   const [activeTab, setActiveTab] = useState<'roles' | 'users'>('roles');
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isPermissionModalOpen, setIsPermissionModalOpen] = useState(false);
@@ -359,116 +361,53 @@ export default function UserRolesModule() {
 
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
-      {/* Header */}
-      <div className="bg-white dark:bg-neutral-900 border-b border-neutral-200 dark:border-neutral-800 px-6 py-5">
-        <div className="flex items-start justify-between mb-5">
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-neutral-900 dark:text-white">User Roles & Permissions</h1>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1.5">
-              Manage roles, permissions, and user access across the platform
-            </p>
+      {/* Page Header */}
+      <ListingHeader
+        title="User Roles & Permissions"
+        subtitle="Manage roles, permissions, and user access across the platform"
+        moduleName={activeTab === 'roles' ? 'user' : 'User'}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        searchValue={searchQuery}
+        onSearchChange={setSearchQuery}
+        onFilterClick={() => console.log('Filter')}
+        onRefresh={() => console.log('Refresh')}
+        exportOptions={{
+          onExportCSV: () => console.log('Export CSV'),
+          onExportExcel: () => console.log('Export Excel'),
+          onExportPDF: () => console.log('Export PDF'),
+        }}
+        onAdd={() => {
+          setSelectedItem(null);
+          setIsAddModalOpen(true);
+        }}
+        customActions={
+          <div className="flex items-center gap-1 bg-neutral-100 dark:bg-neutral-800/50 p-1 rounded-lg">
+            <button
+              onClick={() => { setActiveTab('roles'); setSearchQuery(''); }}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-2 ${
+                activeTab === 'roles'
+                  ? 'bg-white text-primary-600 shadow-sm dark:bg-neutral-800 dark:text-primary-400'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+              }`}
+            >
+              <Shield className="w-4 h-4" />
+              Roles
+            </button>
+            <button
+              onClick={() => { setActiveTab('users'); setSearchQuery(''); }}
+              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-2 ${
+                activeTab === 'users'
+                  ? 'bg-white text-primary-600 shadow-sm dark:bg-neutral-800 dark:text-primary-400'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              Users
+            </button>
           </div>
-        </div>
-
-        {/* Tab Switcher */}
-        <div className="flex gap-1 mb-5">
-          <button
-            onClick={() => { setActiveTab('roles'); setSearchQuery(''); }}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
-              activeTab === 'roles'
-                ? 'bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400'
-                : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'
-            }`}
-          >
-            <Shield className="w-4 h-4" />
-            Roles
-          </button>
-          <button
-            onClick={() => { setActiveTab('users'); setSearchQuery(''); }}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 ${
-              activeTab === 'users'
-                ? 'bg-primary-50 text-primary-600 dark:bg-primary-950/30 dark:text-primary-400'
-                : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            Users
-          </button>
-        </div>
-
-        {/* Action Buttons Row */}
-        <div className="flex items-center gap-2">
-          {/* View Toggle Buttons */}
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`p-2.5 rounded-lg border transition-colors ${
-              viewMode === 'grid'
-                ? 'bg-primary-50 text-primary-600 border-primary-200 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-800'
-                : 'bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700'
-            }`}
-            title="Grid View"
-          >
-            <LayoutGrid className="w-4 h-4" />
-          </button>
-
-          {/* Search Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Search"
-          >
-            <Search className="w-4 h-4" />
-          </button>
-
-          {/* Filter Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Filter"
-          >
-            <Filter className="w-4 h-4" />
-          </button>
-
-          {/* Refresh Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Refresh"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </button>
-
-          {/* Download Button */}
-          <button
-            className="p-2.5 rounded-lg border bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            title="Download"
-          >
-            <Download className="w-4 h-4" />
-          </button>
-
-          {/* Table View Button */}
-          <button
-            onClick={() => setViewMode('table')}
-            className={`p-2.5 rounded-lg border transition-colors ${
-              viewMode === 'table'
-                ? 'bg-primary-50 text-primary-600 border-primary-200 dark:bg-primary-950/30 dark:text-primary-400 dark:border-primary-800'
-                : 'bg-white text-neutral-600 border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700'
-            }`}
-            title="Table View"
-          >
-            <Eye className="w-4 h-4" />
-          </button>
-
-          {/* Add Button */}
-          <button
-            onClick={() => {
-              setSelectedItem(null);
-              setIsAddModalOpen(true);
-            }}
-            className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors flex items-center gap-2 text-sm font-medium shadow-sm ml-auto"
-          >
-            <Plus className="w-4 h-4" />
-            {activeTab === 'roles' ? 'Add Role' : 'Add User'}
-          </button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
@@ -903,13 +842,22 @@ export default function UserRolesModule() {
       </div>
 
       {/* Add/Edit Modal */}
-      <FormModal
+      <SidePanel
         isOpen={isAddModalOpen}
         onClose={() => {
           setIsAddModalOpen(false);
           setSelectedItem(null);
         }}
-        title={selectedItem ? `Edit ${activeTab === 'roles' ? 'Role' : 'User'}` : `Add ${activeTab === 'roles' ? 'Role' : 'User'}`}
+        title={selectedItem ? `Edit ${activeTab === 'roles' ? 'user' : 'User'}` : `Add ${activeTab === 'roles' ? 'user' : 'User'}`}
+        footer={
+          <SidePanelFooter
+            onCancel={() => {
+              setIsAddModalOpen(false);
+              setSelectedItem(null);
+            }}
+            onSave={handleSave}
+          />
+        }
       >
         {activeTab === 'roles' ? (
           <FormSection title="Role Configuration">
@@ -983,14 +931,7 @@ export default function UserRolesModule() {
             </div>
           </FormSection>
         )}
-        <FormFooter
-          onCancel={() => {
-            setIsAddModalOpen(false);
-            setSelectedItem(null);
-          }}
-          onSave={handleSave}
-        />
-      </FormModal>
+      </SidePanel>
 
       {/* Permission Details Modal */}
       <FormModal
@@ -1029,17 +970,26 @@ export default function UserRolesModule() {
             </div>
           </FormSection>
         )}
-        <FormFooter
-          onCancel={() => {
-            setIsPermissionModalOpen(false);
-            setSelectedItem(null);
-          }}
-          onSave={() => {
-            setIsPermissionModalOpen(false);
-            setSelectedItem(null);
-          }}
-          saveLabel="Close"
-        />
+        <FormFooter>
+          <button
+            onClick={() => {
+              setIsPermissionModalOpen(false);
+              setSelectedItem(null);
+            }}
+            className="px-4 py-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              setIsPermissionModalOpen(false);
+              setSelectedItem(null);
+            }}
+            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
+          >
+            Close
+          </button>
+        </FormFooter>
       </FormModal>
     </div>
   );

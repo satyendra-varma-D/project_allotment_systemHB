@@ -18,6 +18,7 @@ export function ResourceRenewalsEditSidePanel({ isOpen, onClose, renewal, onSave
     resourceSkill: renewal?.resourceSkill || '',
     hireType: renewal?.hireType || 'Full-time',
     hireCycle: renewal?.hireCycle || '',
+    currentCycle: renewal?.currentCycle || 1,
     noOfHours: renewal?.noOfHours || '',
     currency: renewal?.currency || 'USD',
     hourlyRate: renewal?.hourlyRate || '',
@@ -171,17 +172,31 @@ export function ResourceRenewalsEditSidePanel({ isOpen, onClose, renewal, onSave
             </div>
 
             {/* Hire Cycle */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                Hire Cycle
-              </label>
-              <input
-                type="text"
-                value={formData.hireCycle}
-                onChange={(e) => setFormData({ ...formData, hireCycle: e.target.value })}
-                className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent"
-                placeholder="Monthly"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                  Hire Cycle
+                </label>
+                <input
+                  type="text"
+                  value={formData.hireCycle}
+                  onChange={(e) => setFormData({ ...formData, hireCycle: e.target.value })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent"
+                  placeholder="Monthly"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                  Current Cycle
+                </label>
+                <input
+                  type="number"
+                  value={formData.currentCycle}
+                  onChange={(e) => setFormData({ ...formData, currentCycle: parseInt(e.target.value) || 0 })}
+                  className="w-full px-4 py-2.5 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 rounded-lg text-sm text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 focus:border-transparent"
+                  placeholder="1"
+                />
+              </div>
             </div>
 
             {/* No of Hours */}
