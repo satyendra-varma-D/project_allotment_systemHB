@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
-import { 
-  Eye, 
-  Edit2, 
-  Trash2, 
-  MoreVertical, 
-  Mail, 
-  Clock, 
-  Package, 
+import {
+  Eye,
+  Edit2,
+  Trash2,
+  MoreVertical,
+  Mail,
+  Clock,
+  Package,
   Cloud,
   Briefcase,
   User,
@@ -505,6 +505,7 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
   if (isDetailView && selectedProject) {
     return (
       <ProjectDetailsModule
+        key={selectedProject.id}
         project={selectedProject}
         onNavigate={onNavigate}
         onBack={() => {
@@ -568,21 +569,21 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
       {/* Advanced Search Panel */}
       {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
-      <AdvancedSearchPanel
-        isOpen={isAdvancedSearchOpen}
-        onClose={() => setIsAdvancedSearchOpen(false)}
-        filters={activeFilters}
-        onFiltersChange={setActiveFilters}
-        filterOptions={{
-          'Status': ['In Progress', 'Completed', 'On Hold', 'Not Started'],
-          'Project Type': ['Fixed Cost', 'Hire', 'T&M', 'Retainer'],
-          'Business Type': ['New', 'Existing'],
-          'Domain': ['Digital Experience', 'E-Commerce', 'Healthcare', 'Education', 'Finance & Banking', 'Real Estate', 'Media & Entertainment', 'Transportation & Logistics', 'Travel & Hospitality', 'Manufacturing'],
-          'Industry': ['Technology', 'Retail', 'Healthcare', 'Finance', 'Education', 'Manufacturing', 'Real Estate', 'Media & Entertainment', 'Transportation', 'Hospitality', 'Telecommunications', 'Energy & Utilities', 'Government', 'Non-Profit', 'Other'],
-          'Project Name': [],
-          'Client Name': [],
-        }}
-      />
+          <AdvancedSearchPanel
+            isOpen={isAdvancedSearchOpen}
+            onClose={() => setIsAdvancedSearchOpen(false)}
+            filters={activeFilters}
+            onFiltersChange={setActiveFilters}
+            filterOptions={{
+              'Status': ['In Progress', 'Completed', 'On Hold', 'Not Started'],
+              'Project Type': ['Fixed Cost', 'Hire', 'T&M', 'Retainer'],
+              'Business Type': ['New', 'Existing'],
+              'Domain': ['Digital Experience', 'E-Commerce', 'Healthcare', 'Education', 'Finance & Banking', 'Real Estate', 'Media & Entertainment', 'Transportation & Logistics', 'Travel & Hospitality', 'Manufacturing'],
+              'Industry': ['Technology', 'Retail', 'Healthcare', 'Finance', 'Education', 'Manufacturing', 'Real Estate', 'Media & Entertainment', 'Transportation', 'Hospitality', 'Telecommunications', 'Energy & Utilities', 'Government', 'Non-Profit', 'Other'],
+              'Project Name': [],
+              'Client Name': [],
+            }}
+          />
         </div>
       )}
 
@@ -608,13 +609,12 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                 className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
               >
                 {/* Colored Top Border Accent */}
-                <div className={`h-1 ${
-                  project.projectStatus === 'Published' ? 'bg-green-500' :
+                <div className={`h-1 ${project.projectStatus === 'Published' ? 'bg-green-500' :
                   project.projectStatus === 'Draft' ? 'bg-neutral-400' :
-                  project.projectStatus === 'On Hold' ? 'bg-orange-500' :
-                  project.projectStatus === 'Cancelled' ? 'bg-red-500' :
-                  'bg-blue-500'
-                }`} />
+                    project.projectStatus === 'On Hold' ? 'bg-orange-500' :
+                      project.projectStatus === 'Cancelled' ? 'bg-red-500' :
+                        'bg-blue-500'
+                  }`} />
 
                 {/* Card Content */}
                 <div className="p-4">
@@ -624,7 +624,7 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                       <Briefcase className="w-3 h-3 text-primary-600 dark:text-primary-400" />
                       <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{project.projectId}</span>
                     </div>
-                    
+
                     {/* Action Menu */}
                     <div className="relative">
                       <button
@@ -635,8 +635,8 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                       </button>
                       {openMenuId === project.id && (
                         <>
-                          <div 
-                            className="fixed inset-0 z-10" 
+                          <div
+                            className="fixed inset-0 z-10"
                             onClick={() => setOpenMenuId(null)}
                           />
                           <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
@@ -658,11 +658,10 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                                 }
                               }}
                               disabled={project.projectStatus !== 'Published'}
-                              className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2.5 transition-colors ${
-                                project.projectStatus === 'Published'
-                                  ? 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700'
-                                  : 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed'
-                              }`}
+                              className={`w-full px-3 py-2 text-left text-sm flex items-center gap-2.5 transition-colors ${project.projectStatus === 'Published'
+                                ? 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700'
+                                : 'text-neutral-400 dark:text-neutral-600 cursor-not-allowed'
+                                }`}
                             >
                               <Mail className="w-3.5 h-3.5" />
                               Send Email
@@ -704,10 +703,13 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                   </div>
 
                   {/* Project Title */}
-                  <h3 className="font-semibold text-base text-neutral-900 dark:text-white mb-2 line-clamp-2 leading-snug min-h-[2.5rem]">
+                  <h3
+                    onClick={() => handleViewProject(project)}
+                    className="font-semibold text-base text-neutral-900 dark:text-white mb-2 line-clamp-2 leading-snug min-h-[2.5rem] cursor-pointer hover:text-primary-600 transition-colors"
+                  >
                     {project.projectName}
                   </h3>
-                  
+
                   {/* Client Name with Icon */}
                   <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-3">
                     <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-[10px] font-semibold flex-shrink-0">
@@ -738,31 +740,31 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Sales Executive</div>
                       <div className="font-medium text-neutral-900 dark:text-white truncate">{project.salesExecutive}</div>
                     </div>
-                    
+
                     {/* Tech BA */}
                     <div>
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Tech SA</div>
                       <div className="font-medium text-neutral-900 dark:text-white truncate">{project.techBA}</div>
                     </div>
-                    
+
                     {/* Confirmed Date */}
                     <div>
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Confirmed Date</div>
                       <div className="font-medium text-neutral-900 dark:text-white">{project.confirmedDate}</div>
                     </div>
-                    
+
                     {/* Business Type */}
                     <div>
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Business Type</div>
                       <div className="font-medium text-neutral-900 dark:text-white">{project.businessType}</div>
                     </div>
-                    
+
                     {/* Project Type */}
                     <div>
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Project Type</div>
                       <div className="font-medium text-neutral-900 dark:text-white">{project.projectType}</div>
                     </div>
-                    
+
                     {/* Tech Platform */}
                     <div>
                       <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Tech Platform</div>
@@ -787,14 +789,13 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
               >
                 {/* Colored Left Border Accent */}
                 <div className="flex">
-                  <div className={`w-1.5 flex-shrink-0 ${
-                    project.projectStatus === 'Published' ? 'bg-green-500' :
+                  <div className={`w-1.5 flex-shrink-0 ${project.projectStatus === 'Published' ? 'bg-green-500' :
                     project.projectStatus === 'Draft' ? 'bg-neutral-400' :
-                    project.projectStatus === 'On Hold' ? 'bg-orange-500' :
-                    project.projectStatus === 'Cancelled' ? 'bg-red-500' :
-                    'bg-blue-500'
-                  }`} />
-                  
+                      project.projectStatus === 'On Hold' ? 'bg-orange-500' :
+                        project.projectStatus === 'Cancelled' ? 'bg-red-500' :
+                          'bg-blue-500'
+                    }`} />
+
                   <div className="flex-1 p-6">
                     <div className="flex items-start justify-between mb-5">
                       {/* Left Section: Header Info */}
@@ -805,7 +806,7 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                             <Briefcase className="w-3.5 h-3.5 text-primary-600 dark:text-primary-400" />
                             <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{project.projectId}</span>
                           </div>
-                          
+
                           {/* Status Badges */}
                           <span className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold ${getStatusStyle(project.projectStatus)}`}>
                             {project.projectStatus}
@@ -816,12 +817,15 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                             </span>
                           )}
                         </div>
-                        
+
                         {/* Project Name */}
-                        <h3 className="font-semibold text-xl text-neutral-900 dark:text-white mb-3 line-clamp-1">
+                        <h3
+                          onClick={() => handleViewProject(project)}
+                          className="font-semibold text-xl text-neutral-900 dark:text-white mb-3 line-clamp-1 cursor-pointer hover:text-primary-600 transition-colors"
+                        >
                           {project.projectName}
                         </h3>
-                        
+
                         {/* Client with Avatar */}
                         <div className="flex items-center gap-2 mb-4">
                           <div className="w-7 h-7 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
@@ -1001,7 +1005,12 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
                     <tr key={project.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="font-medium text-neutral-900 dark:text-white">{project.projectName}</div>
+                          <div
+                            onClick={() => handleViewProject(project)}
+                            className="font-medium text-neutral-900 dark:text-white cursor-pointer hover:text-primary-600 transition-colors"
+                          >
+                            {project.projectName}
+                          </div>
                           <div className="text-sm text-neutral-500 dark:text-neutral-400">{project.projectId}</div>
                         </div>
                       </td>

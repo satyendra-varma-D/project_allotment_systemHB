@@ -53,6 +53,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
   const [isRenewalsModalOpen, setIsRenewalsModalOpen] = useState(false);
   const [isRenewalsEditPanelOpen, setIsRenewalsEditPanelOpen] = useState(false);
   const [currentEditRenewal, setCurrentEditRenewal] = useState<any | null>(null);
+  const [currentEditMilestone, setCurrentEditMilestone] = useState<any | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -143,7 +144,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
     { id: 'schedule', label: 'Project Schedule & Efforts' },
     { id: 'commercial', label: 'Commercial Details' },
     { id: 'agreements', label: 'Agreements & Invoice' },
-    ...(project.projectType === 'Fixed Cost' 
+    ...(project.projectType === 'Fixed Cost'
       ? [{ id: 'milestones', label: 'Milestone Listing' }]
       : [{ id: 'resources', label: 'Resource Allocation' }]
     ),
@@ -648,11 +649,10 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                 <button
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
-                  className={`py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
-                    activeTab === section.id
+                  className={`py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${activeTab === section.id
                       ? 'text-neutral-900 dark:text-white border-primary-600 dark:border-primary-400'
                       : 'text-neutral-600 dark:text-neutral-400 border-transparent hover:text-neutral-900 dark:hover:text-white'
-                  }`}
+                    }`}
                 >
                   {section.label}
                 </button>
@@ -739,13 +739,13 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {preSalesTeam.map((member) => (
-                <div 
+                <div
                   key={member.id}
                   className="group relative p-5 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200"
                 >
                   {/* Decorative corner accent */}
                   <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary-500/10 to-transparent dark:from-primary-400/10 rounded-tr-xl rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                  
+
                   <div className="relative flex items-start gap-4">
                     {/* Avatar with gradient */}
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-400 dark:to-primary-500 flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-white dark:ring-neutral-900 ring-offset-2 ring-offset-transparent group-hover:ring-primary-100 dark:group-hover:ring-primary-900/50 transition-all">
@@ -753,7 +753,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                         {member.name.split(' ').map(n => n[0]).join('')}
                       </span>
                     </div>
-                    
+
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <h3 className="text-base font-semibold text-neutral-900 dark:text-white truncate mb-1">
@@ -764,7 +764,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                           {member.role}
                         </span>
                       </div>
-                      
+
                       {/* Contact info */}
                       <div className="mt-3 space-y-2">
                         {member.email && (
@@ -809,13 +809,13 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {postSalesTeam.map((member) => (
-                <div 
+                <div
                   key={member.id}
                   className="group relative p-5 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200"
                 >
                   {/* Decorative corner accent */}
                   <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary-500/10 to-transparent dark:from-primary-400/10 rounded-tr-xl rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-                  
+
                   <div className="relative flex items-start gap-4">
                     {/* Avatar with gradient */}
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-400 dark:to-primary-500 flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-white dark:ring-neutral-900 ring-offset-2 ring-offset-transparent group-hover:ring-primary-100 dark:group-hover:ring-primary-900/50 transition-all">
@@ -823,7 +823,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                         {member.name.split(' ').map(n => n[0]).join('')}
                       </span>
                     </div>
-                    
+
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <h3 className="text-base font-semibold text-neutral-900 dark:text-white truncate mb-1">
@@ -834,7 +834,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                           {member.role}
                         </span>
                       </div>
-                      
+
                       {/* Organizational Info */}
                       {(member.department || member.subDepartment || member.division) && (
                         <div className="mt-3 space-y-1.5">
@@ -855,7 +855,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                           )}
                         </div>
                       )}
-                      
+
                       {/* Contact info - only show if email or phone exists */}
                       {(member.email || member.phone) && (
                         <div className="mt-3 pt-3 border-t border-neutral-200 dark:border-neutral-700 space-y-2">
@@ -1220,14 +1220,14 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                       return true;
                     })
                     .filter(([, agreement]) => agreement.status).length} of {Object.entries(agreements)
-                    .filter(([key]) => {
-                      if (key === 'hireAgreement') return project.projectType === 'Hire';
-                      if (key === 'postDeliverySupport') return project.projectType === 'Fixed Cost';
-                      return true;
-                    }).length} items completed
+                      .filter(([key]) => {
+                        if (key === 'hireAgreement') return project.projectType === 'Hire';
+                        if (key === 'postDeliverySupport') return project.projectType === 'Fixed Cost';
+                        return true;
+                      }).length} items completed
                 </p>
               </div>
-              <button 
+              <button
                 onClick={() => setIsAgreementsEditPanelOpen(true)}
                 className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
               >
@@ -1247,318 +1247,317 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   return true;
                 })
                 .map(([key, agreement]) => (
-                <div
-                  key={key}
-                  className={`relative p-4 rounded-lg border-2 transition-all ${
-                    agreement.status
-                      ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
-                      : 'bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-neutral-700'
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
-                        {agreement.status ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
-                        ) : (
-                          <div className="w-4 h-4 rounded-full border-2 border-neutral-400 dark:border-neutral-600 flex-shrink-0" />
-                        )}
-                        <p className="text-sm font-semibold text-neutral-900 dark:text-white">
-                          {agreement.name}
-                        </p>
-                      </div>
-                      
-                      {agreement.fileName && agreement.status && (
-                        <div className="ml-6 mt-2 p-2 bg-white dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-700">
-                          <a
-                            href="#"
-                            className="flex items-center gap-2 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
-                          >
-                            <Paperclip className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="truncate font-medium">{agreement.fileName}</span>
-                            {agreement.fileSize && (
-                              <span className="text-neutral-500 dark:text-neutral-400">
-                                ({agreement.fileSize})
-                              </span>
-                            )}
-                          </a>
-                        </div>
-                      )}
-
-                      {!agreement.fileName && agreement.status && agreement.requiresAttachment && (
-                        <div className="ml-6 mt-2 p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-700">
-                          <p className="text-xs text-amber-700 dark:text-amber-300 font-medium">
-                            Attachment required
+                  <div
+                    key={key}
+                    className={`relative p-4 rounded-lg border-2 transition-all ${agreement.status
+                        ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
+                        : 'bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-neutral-700'
+                      }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          {agreement.status ? (
+                            <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                          ) : (
+                            <div className="w-4 h-4 rounded-full border-2 border-neutral-400 dark:border-neutral-600 flex-shrink-0" />
+                          )}
+                          <p className="text-sm font-semibold text-neutral-900 dark:text-white">
+                            {agreement.name}
                           </p>
                         </div>
-                      )}
 
-                      {/* Assigned Members - Show if status is YES and members are assigned */}
-                      {agreement.status && (agreement as any).assignedMembers && (agreement as any).assignedMembers.length > 0 && (
-                        <div className="ml-6 mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-700">
-                          <div className="flex items-start gap-2">
-                            <User className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-[10px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold mb-1">
-                                Assigned to
-                              </p>
-                              <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
-                                {(() => {
-                                  const mockEmployees = [
-                                    { id: '1', name: 'John Anderson' },
-                                    { id: '2', name: 'Sarah Mitchell' },
-                                    { id: '3', name: 'Emily Chen' },
-                                    { id: '4', name: 'Michael Brown' },
-                                    { id: '5', name: 'David Wilson' },
-                                    { id: '6', name: 'Rachel Green' },
-                                    { id: '7', name: 'James Martinez' },
-                                    { id: '8', name: 'Lisa Anderson' },
-                                  ];
-                                  const memberNames = (agreement as any).assignedMembers
-                                    .map((id: string) => mockEmployees.find(emp => emp.id === id)?.name)
-                                    .filter((name: string | undefined) => name);
-                                  return memberNames.join(', ');
-                                })()}
+                        {agreement.fileName && agreement.status && (
+                          <div className="ml-6 mt-2 p-2 bg-white dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-700">
+                            <a
+                              href="#"
+                              className="flex items-center gap-2 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                            >
+                              <Paperclip className="w-3.5 h-3.5 flex-shrink-0" />
+                              <span className="truncate font-medium">{agreement.fileName}</span>
+                              {agreement.fileSize && (
+                                <span className="text-neutral-500 dark:text-neutral-400">
+                                  ({agreement.fileSize})
+                                </span>
+                              )}
+                            </a>
+                          </div>
+                        )}
+
+                        {!agreement.fileName && agreement.status && agreement.requiresAttachment && (
+                          <div className="ml-6 mt-2 p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-200 dark:border-amber-700">
+                            <p className="text-xs text-amber-700 dark:text-amber-300 font-medium">
+                              Attachment required
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Assigned Members - Show if status is YES and members are assigned */}
+                        {agreement.status && (agreement as any).assignedMembers && (agreement as any).assignedMembers.length > 0 && (
+                          <div className="ml-6 mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-700">
+                            <div className="flex items-start gap-2">
+                              <User className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] uppercase tracking-wider text-blue-600 dark:text-blue-400 font-semibold mb-1">
+                                  Assigned to
+                                </p>
+                                <p className="text-xs text-blue-700 dark:text-blue-300 font-medium">
+                                  {(() => {
+                                    const mockEmployees = [
+                                      { id: '1', name: 'John Anderson' },
+                                      { id: '2', name: 'Sarah Mitchell' },
+                                      { id: '3', name: 'Emily Chen' },
+                                      { id: '4', name: 'Michael Brown' },
+                                      { id: '5', name: 'David Wilson' },
+                                      { id: '6', name: 'Rachel Green' },
+                                      { id: '7', name: 'James Martinez' },
+                                      { id: '8', name: 'Lisa Anderson' },
+                                    ];
+                                    const memberNames = (agreement as any).assignedMembers
+                                      .map((id: string) => mockEmployees.find(emp => emp.id === id)?.name)
+                                      .filter((name: string | undefined) => name);
+                                    return memberNames.join(', ');
+                                  })()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Attached to Project - Show if status is YES and attachedToProject is true */}
+                        {agreement.status && (agreement as any).attachedToProject === true && (
+                          <div className="ml-6 mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-700">
+                            <div className="flex items-center gap-2">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                              <p className="text-xs text-green-700 dark:text-green-300 font-semibold">
+                                Attached to Project
                               </p>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
 
-                      {/* Attached to Project - Show if status is YES and attachedToProject is true */}
-                      {agreement.status && (agreement as any).attachedToProject === true && (
-                        <div className="ml-6 mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-700">
-                          <div className="flex items-center gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-green-600 dark:text-green-400 flex-shrink-0" />
-                            <p className="text-xs text-green-700 dark:text-green-300 font-semibold">
-                              Attached to Project
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex-shrink-0">
-                      {agreement.status ? (
-                        <span className="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                          YES
-                        </span>
-                      ) : (
-                        <span className="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
-                          NO
-                        </span>
-                      )}
+                      <div className="flex-shrink-0">
+                        {agreement.status ? (
+                          <span className="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                            YES
+                          </span>
+                        ) : (
+                          <span className="inline-flex px-2.5 py-1 rounded-md text-xs font-semibold bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
+                            NO
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </section>
 
         {/* Milestone Listing Section (Fixed Cost Only) */}
         {project.projectType === 'Fixed Cost' && (
-        <section id="milestones" className="scroll-mt-48">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Milestone Listing</h2>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                  {milestones.length} defined milestones • Project Type: <span className="font-medium text-neutral-700 dark:text-neutral-300">{project.projectType}</span>
-                </p>
-              </div>
-              <button 
-                onClick={() => setIsMilestoneEditPanelOpen(true)}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
-              >
-                <Edit2 className="w-4 h-4 text-neutral-500" />
-              </button>
-            </div>
-
-            {/* Warning for HIRE Projects */}
-            {project.projectType !== 'Fixed Cost' && (
-              <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+          <section id="milestones" className="scroll-mt-48">
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
+              <div className="flex items-center justify-between mb-6">
                 <div>
-                  <p className="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">
-                    Milestones Only Apply to Fixed Cost Projects
-                  </p>
-                  <p className="text-sm text-amber-900 dark:text-amber-200">
-                    This is a {project.projectType} project. Milestone-based payment structure is only applicable for Fixed Cost projects.
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Milestone Listing</h2>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                    {milestones.length} defined milestones • Project Type: <span className="font-medium text-neutral-700 dark:text-neutral-300">{project.projectType}</span>
                   </p>
                 </div>
+                <button
+                  onClick={() => setIsMilestoneEditPanelOpen(true)}
+                  className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                >
+                  <Edit2 className="w-4 h-4 text-neutral-500" />
+                </button>
               </div>
-            )}
 
-            {/* Milestone Table - Clean Tabular Format */}
-            <div className="mb-6 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-neutral-50 dark:bg-neutral-800">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Code
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Milestone Name
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Deliverables
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Due Date
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Amount
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Payment %
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  {milestones.map((milestone, index) => (
-                    <tr key={milestone.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                      <td className="px-4 py-4">
-                        <span className="inline-flex items-center justify-center w-10 h-10 bg-primary-600 dark:bg-primary-500 text-white font-bold rounded-lg">
-                          {milestone.code}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="font-medium text-neutral-900 dark:text-white">
-                          {milestone.name}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="text-sm text-neutral-600 dark:text-neutral-400 max-w-md">
-                          {milestone.deliverables}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="text-sm text-neutral-900 dark:text-white">
-                          {new Date(milestone.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-right">
-                        <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                          ${milestone.amount.toLocaleString()}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-right">
-                        <div className="text-lg font-bold text-primary-600 dark:text-primary-400">
-                          {milestone.percentage}%
-                        </div>
-                      </td>
+              {/* Warning for HIRE Projects */}
+              {project.projectType !== 'Fixed Cost' && (
+                <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-semibold text-amber-900 dark:text-amber-200 mb-1">
+                      Milestones Only Apply to Fixed Cost Projects
+                    </p>
+                    <p className="text-sm text-amber-900 dark:text-amber-200">
+                      This is a {project.projectType} project. Milestone-based payment structure is only applicable for Fixed Cost projects.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Milestone Table - Clean Tabular Format */}
+              <div className="mb-6 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-neutral-50 dark:bg-neutral-800">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Code
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Milestone Name
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Deliverables
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Due Date
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Amount
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Payment %
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                    {milestones.map((milestone, index) => (
+                      <tr key={milestone.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                        <td className="px-4 py-4">
+                          <span className="inline-flex items-center justify-center w-10 h-10 bg-primary-600 dark:bg-primary-500 text-white font-bold rounded-lg">
+                            {milestone.code}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="font-medium text-neutral-900 dark:text-white">
+                            {milestone.name}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-neutral-600 dark:text-neutral-400 max-w-md">
+                            {milestone.deliverables}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-neutral-900 dark:text-white">
+                            {new Date(milestone.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                            ${milestone.amount.toLocaleString()}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <div className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                            {milestone.percentage}%
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
         )}
 
         {/* Resources Section (Hire Projects Only) */}
         {project.projectType === 'Hire' && (
-        <section id="resources" className="scroll-mt-48">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Resource Allocation</h2>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                  {resources.length} hired resources • Project Type: <span className="font-medium text-neutral-700 dark:text-neutral-300">{project.projectType}</span>
-                </p>
+          <section id="resources" className="scroll-mt-48">
+            <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Resource Allocation</h2>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                    {resources.length} hired resources • Project Type: <span className="font-medium text-neutral-700 dark:text-neutral-300">{project.projectType}</span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsResourcesEditPanelOpen(true)}
+                  className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
+                >
+                  <Edit2 className="w-4 h-4 text-neutral-500" />
+                </button>
               </div>
-              <button 
-                onClick={() => setIsResourcesEditPanelOpen(true)}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
-              >
-                <Edit2 className="w-4 h-4 text-neutral-500" />
-              </button>
-            </div>
 
-            {/* Resource Table - Clean Tabular Format */}
-            <div className="mb-6 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
-              <table className="w-full">
-                <thead className="bg-neutral-50 dark:bg-neutral-800">
-                  <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Resource Type
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Skill
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Hire Type
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Cycle
-                    </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Period
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Hours/Cycle
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Hourly Rate
-                    </th>
-                    <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Total Cost
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  {resources.map((resource, index) => (
-                    <tr key={resource.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                      <td className="px-4 py-4">
-                        <div className="font-medium text-neutral-900 dark:text-white">
-                          {resource.resourceType}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <span className="inline-flex px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
-                          {resource.resourceSkill}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="text-sm text-neutral-900 dark:text-white">
-                          {resource.hireType}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="text-sm text-neutral-900 dark:text-white">
-                          {resource.hireCycle}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                          {new Date(resource.hireStartDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                          <br />
-                          {new Date(resource.hireEndDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-right">
-                        <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                          {resource.hoursPerCycle} hrs
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-right">
-                        <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                          ${resource.hourlyRate}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-right">
-                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                          ${resource.resourceAmount.toLocaleString()}
-                        </div>
-                      </td>
+              {/* Resource Table - Clean Tabular Format */}
+              <div className="mb-6 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+                <table className="w-full">
+                  <thead className="bg-neutral-50 dark:bg-neutral-800">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Resource Type
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Skill
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Hire Type
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Cycle
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Period
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Hours/Cycle
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Hourly Rate
+                      </th>
+                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Total Cost
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                    {resources.map((resource, index) => (
+                      <tr key={resource.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                        <td className="px-4 py-4">
+                          <div className="font-medium text-neutral-900 dark:text-white">
+                            {resource.resourceType}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <span className="inline-flex px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
+                            {resource.resourceSkill}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-neutral-900 dark:text-white">
+                            {resource.hireType}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-neutral-900 dark:text-white">
+                            {resource.hireCycle}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                            {new Date(resource.hireStartDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            <br />
+                            {new Date(resource.hireEndDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                            {resource.hoursPerCycle} hrs
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <div className="text-sm font-medium text-neutral-900 dark:text-white">
+                            ${resource.hourlyRate}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                            ${resource.resourceAmount.toLocaleString()}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
         )}
 
         {/* Attachments Section */}
@@ -1566,7 +1565,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
           <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Attachments</h2>
-              <button 
+              <button
                 onClick={() => setIsAttachmentEditPanelOpen(true)}
                 className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
               >
@@ -1656,7 +1655,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Clients Brief From Business Perspective
                 </h3>
                 {salesNotes.clientsBrief ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.clientsBrief }}
                   />
@@ -1671,7 +1670,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Project Back and Forth
                 </h3>
                 {salesNotes.projectBackAndForth ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.projectBackAndForth }}
                   />
@@ -1686,7 +1685,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Client Comments
                 </h3>
                 {salesNotes.clientComments ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.clientComments }}
                   />
@@ -1701,7 +1700,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Sales Comments
                 </h3>
                 {salesNotes.salesComments ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.salesComments }}
                   />
@@ -1716,7 +1715,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Pre-Sales Tech1 Comments
                 </h3>
                 {salesNotes.preSalesTech1Comments ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.preSalesTech1Comments }}
                   />
@@ -1731,7 +1730,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Assumptions
                 </h3>
                 {salesNotes.assumptions ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.assumptions }}
                   />
@@ -1746,7 +1745,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Future Business Possibilities
                 </h3>
                 {salesNotes.futureBusiness ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.futureBusiness }}
                   />
@@ -1761,7 +1760,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   Comment for CRT / Accounts
                 </h3>
                 {salesNotes.crtAccountsComments ? (
-                  <div 
+                  <div
                     className="prose prose-sm max-w-none dark:prose-invert text-neutral-600 dark:text-neutral-400"
                     dangerouslySetInnerHTML={{ __html: salesNotes.crtAccountsComments }}
                   />
@@ -1890,7 +1889,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
         onSave={(updatedAgreements: any) => {
           setAgreements(updatedAgreements as any);
           setIsAgreementsEditPanelOpen(false);
-          
+
           // Calculate agreement summary
           const mockEmployees = [
             { id: '1', name: 'John Anderson' },
@@ -1902,16 +1901,16 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
             { id: '7', name: 'James Martinez' },
             { id: '8', name: 'Lisa Anderson' },
           ];
-          
+
           const agreementValues = Object.values(updatedAgreements);
           const assignedMembersCount = agreementValues.filter(
             (agreement: any) => agreement.status && agreement.assignedMembers && agreement.assignedMembers.length > 0
           ).length;
-          
+
           const attachedToProjectCount = agreementValues.filter(
             (agreement: any) => agreement.status && agreement.attachedToProject === true
           ).length;
-          
+
           // Collect all unique assigned member IDs and convert to names
           const allMemberIds = new Set<string>();
           agreementValues.forEach((agreement: any) => {
@@ -1919,12 +1918,12 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
               agreement.assignedMembers.forEach((id: string) => allMemberIds.add(id));
             }
           });
-          
+
           const assignedMembers = Array.from(allMemberIds).map(id => {
             const employee = mockEmployees.find(emp => emp.id === id);
             return employee ? employee.name : '';
           }).filter(name => name !== '');
-          
+
           // Call the callback to update parent
           if (onAgreementUpdate) {
             onAgreementUpdate({
@@ -1940,7 +1939,10 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
       <MilestoneEditSidePanel
         key={currentEditMilestone?.id || 'new-milestone'}
         isOpen={isMilestoneEditPanelOpen}
-        onClose={() => setIsMilestoneEditPanelOpen(false)}
+        onClose={() => {
+          setIsMilestoneEditPanelOpen(false);
+          setCurrentEditMilestone(null);
+        }}
         currentMilestones={milestones}
         onSave={(updatedMilestones: any) => {
           setMilestones(updatedMilestones as any);
@@ -2021,10 +2023,12 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
         projectName={project.projectName}
         milestones={milestones}
         onAddMilestone={() => {
+          setCurrentEditMilestone(null);
           setIsMilestonesModalOpen(false);
           setIsMilestoneEditPanelOpen(true);
         }}
         onEditMilestone={(milestone) => {
+          setCurrentEditMilestone(milestone);
           setIsMilestonesModalOpen(false);
           setIsMilestoneEditPanelOpen(true);
         }}
