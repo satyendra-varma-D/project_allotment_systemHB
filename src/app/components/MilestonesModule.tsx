@@ -206,6 +206,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
   const [milestones, setMilestones] = useState<Milestone[]>(mockMilestones);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
   const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialFilters && initialFilters.length > 0) {
@@ -359,8 +360,8 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
     setActiveFilters([...activeFilters, filter]);
   };
 
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  const handleRemoveFilter = (id: string) => {
+    setActiveFilters(activeFilters.filter(f => f.id !== id));
   };
 
   const handleClearFilters = () => {
@@ -552,13 +553,42 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
                     {/* Action Menu */}
                     <div className="relative ml-2">
                       <button 
-                        className="p-1.5 opacity-0 group-hover:opacity-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-all"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
+                        onClick={() => setOpenMenuId(openMenuId === milestone.id ? null : milestone.id)}
+                        className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-all"
                       >
                         <MoreVertical className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
                       </button>
+                      
+                      {openMenuId === milestone.id && (
+                        <>
+                          <div 
+                            className="fixed inset-0 z-10" 
+                            onClick={() => setOpenMenuId(null)}
+                          />
+                          <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
+                            <button
+                              onClick={() => {
+                                handleEditMilestone(milestone);
+                                setOpenMenuId(null);
+                              }}
+                              className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
+                            >
+                              <Edit2 className="w-3.5 h-3.5" />
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => {
+                                handleDeleteMilestone(milestone.id);
+                                setOpenMenuId(null);
+                              }}
+                              className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2.5 transition-colors"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              Delete
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -671,26 +701,43 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
                       </div>
                     </div>
                   </div>
-                  <div className="ml-4 relative group">
-                    <button className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
+                  <div className="ml-4 relative">
+                    <button 
+                      onClick={() => setOpenMenuId(openMenuId === milestone.id ? null : milestone.id)}
+                      className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors"
+                    >
                       <MoreVertical className="w-4 h-4 text-neutral-500" />
                     </button>
-                    <div className="hidden group-hover:block absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                      <button
-                        onClick={() => handleEditMilestone(milestone)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteMilestone(milestone.id)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </div>
+                    {openMenuId === milestone.id && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-10" 
+                          onClick={() => setOpenMenuId(null)}
+                        />
+                        <div className="absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                          <button
+                            onClick={() => {
+                              handleEditMilestone(milestone);
+                              setOpenMenuId(null);
+                            }}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleDeleteMilestone(milestone.id);
+                              setOpenMenuId(null);
+                            }}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -772,26 +819,43 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="relative inline-block group">
-                          <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded">
+                        <div className="relative inline-block">
+                          <button 
+                            onClick={() => setOpenMenuId(openMenuId === milestone.id ? null : milestone.id)}
+                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                          >
                             <MoreVertical className="w-4 h-4 text-neutral-500" />
                           </button>
-                          <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                            <button
-                              onClick={() => handleEditMilestone(milestone)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteMilestone(milestone.id)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </button>
-                          </div>
+                          {openMenuId === milestone.id && (
+                            <>
+                              <div 
+                                className="fixed inset-0 z-10" 
+                                onClick={() => setOpenMenuId(null)}
+                              />
+                              <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                                <button
+                                  onClick={() => {
+                                    handleEditMilestone(milestone);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    handleDeleteMilestone(milestone.id);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>
@@ -817,6 +881,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
 
       {/* Add/Edit Modal */}
       <MilestonesEditSidePanel
+        key={selectedMilestone?.id || 'new-milestone'}
         isOpen={isAddModalOpen}
         milestone={selectedMilestone as any}
         onClose={() => {

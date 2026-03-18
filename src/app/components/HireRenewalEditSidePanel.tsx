@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface HireRenewalEditSidePanelProps {
   isOpen: boolean;
@@ -33,6 +33,62 @@ export function HireRenewalEditSidePanel({ isOpen, onClose, engagement, onSave }
     transactionCost: engagement?.transactionCost || '',
     transactionNumber: engagement?.transactionNumber || '',
   });
+  
+  // Sync state when engagement prop changes or panel opens
+  useEffect(() => {
+    if (isOpen && engagement) {
+      setFormData({
+        projectCode: engagement.projectCode || '',
+        projectName: engagement.projectName || '',
+        clientName: engagement.clientName || '',
+        crt: engagement.crt || engagement.resourceName || '',
+        resourceType: engagement.resourceType || engagement.role || '',
+        resourceSkill: engagement.resourceSkill || (Array.isArray(engagement.skills) ? engagement.skills.join(', ') : ''),
+        hireType: engagement.hireType || engagement.engagementModel || 'Full-time',
+        hireCycle: engagement.hireCycle || '',
+        noOfHours: engagement.noOfHours || '',
+        currency: engagement.currency || 'USD',
+        hourlyRate: engagement.hourlyRate || '',
+        resourceAmountUSD: engagement.resourceAmountUSD || '',
+        resourceAmountCurrency: engagement.resourceAmountCurrency || '',
+        renewalStartDate: engagement.renewalStartDate || engagement.startDate || '',
+        renewalEndDate: engagement.renewalEndDate || engagement.endDate || '',
+        publishStatus: engagement.publishStatus || 'Draft',
+        paymentStatus: engagement.paymentStatus || 'Pending',
+        invoiceNumber: engagement.invoiceNumber || '',
+        paymentMode: engagement.paymentMode || '',
+        subPaymentMode: engagement.subPaymentMode || '',
+        transactionCost: engagement.transactionCost || '',
+        transactionNumber: engagement.transactionNumber || '',
+      });
+    } else if (isOpen && !engagement) {
+      // Reset form if engagement is null
+      setFormData({
+        projectCode: '',
+        projectName: '',
+        clientName: '',
+        crt: '',
+        resourceType: '',
+        resourceSkill: '',
+        hireType: 'Full-time',
+        hireCycle: '',
+        noOfHours: '',
+        currency: 'USD',
+        hourlyRate: '',
+        resourceAmountUSD: '',
+        resourceAmountCurrency: '',
+        renewalStartDate: '',
+        renewalEndDate: '',
+        publishStatus: 'Draft',
+        paymentStatus: 'Pending',
+        invoiceNumber: '',
+        paymentMode: '',
+        subPaymentMode: '',
+        transactionCost: '',
+        transactionNumber: '',
+      });
+    }
+  }, [isOpen, engagement]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

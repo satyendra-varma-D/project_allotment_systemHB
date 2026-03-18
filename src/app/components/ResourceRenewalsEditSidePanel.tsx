@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ResourceRenewalsEditSidePanelProps {
   isOpen: boolean;
@@ -34,6 +34,64 @@ export function ResourceRenewalsEditSidePanel({ isOpen, onClose, renewal, onSave
     transactionCost: renewal?.transactionCost || '',
     transactionNumber: renewal?.transactionNumber || '',
   });
+  
+  // Sync state when renewal prop changes or panel opens
+  useEffect(() => {
+    if (isOpen && renewal) {
+      setFormData({
+        projectCode: renewal.projectCode || '',
+        projectName: renewal.projectName || '',
+        clientName: renewal.clientName || '',
+        crt: renewal.crt || '',
+        resourceType: renewal.resourceType || '',
+        resourceSkill: renewal.resourceSkill || '',
+        hireType: renewal.hireType || 'Full-time',
+        hireCycle: renewal.hireCycle || '',
+        currentCycle: renewal.currentCycle || 1,
+        noOfHours: renewal.noOfHours || '',
+        currency: renewal.currency || 'USD',
+        hourlyRate: renewal.hourlyRate || '',
+        resourceAmountUSD: renewal.resourceAmountUSD || '',
+        resourceAmountCurrency: renewal.resourceAmountCurrency || '',
+        renewalStartDate: renewal.renewalStartDate || '',
+        renewalEndDate: renewal.renewalEndDate || '',
+        publishStatus: renewal.publishStatus || 'Draft',
+        paymentStatus: renewal.paymentStatus || 'Pending',
+        invoiceNumber: renewal.invoiceNumber || '',
+        paymentMode: renewal.paymentMode || '',
+        subPaymentMode: renewal.subPaymentMode || '',
+        transactionCost: renewal.transactionCost || '',
+        transactionNumber: renewal.transactionNumber || '',
+      });
+    } else if (!renewal) {
+      // Reset form if renewal is null (for adding new)
+      setFormData({
+        projectCode: '',
+        projectName: '',
+        clientName: '',
+        crt: '',
+        resourceType: '',
+        resourceSkill: '',
+        hireType: 'Full-time',
+        hireCycle: '',
+        currentCycle: 1,
+        noOfHours: '',
+        currency: 'USD',
+        hourlyRate: '',
+        resourceAmountUSD: '',
+        resourceAmountCurrency: '',
+        renewalStartDate: '',
+        renewalEndDate: '',
+        publishStatus: 'Draft',
+        paymentStatus: 'Pending',
+        invoiceNumber: '',
+        paymentMode: '',
+        subPaymentMode: '',
+        transactionCost: '',
+        transactionNumber: '',
+      });
+    }
+  }, [isOpen, renewal]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

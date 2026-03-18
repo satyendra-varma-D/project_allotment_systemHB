@@ -708,6 +708,7 @@ export default function HireRenewalModule({ initialFilters, onFiltersConsumed, o
       </div>
 
       <HireRenewalEditSidePanel
+        key={selectedEngagement?.id || 'new-engagement'}
         isOpen={isAddModalOpen}
         onClose={() => {
           setIsAddModalOpen(false);

@@ -283,13 +283,13 @@ export default function ChangeRequestsModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((request) => {
           const requestValue = request[filter.field as keyof ChangeRequest];
           if (typeof requestValue === 'string') {
-            return requestValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(v => requestValue.toLowerCase().includes(v.toLowerCase()));
           }
-          return requestValue === filter.value;
+          return filter.values.includes(String(requestValue));
         });
       }
     });
@@ -309,8 +309,8 @@ export default function ChangeRequestsModule() {
     setActiveFilters([...activeFilters, filter]);
   };
 
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  const handleRemoveFilter = (id: string) => {
+    setActiveFilters(activeFilters.filter((f) => f.id !== id));
   };
 
   const handleClearFilters = () => {
@@ -378,15 +378,17 @@ export default function ChangeRequestsModule() {
       {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
           <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
+            isOpen={isAdvancedSearchOpen}
             onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'requestType', label: 'Request Type', type: 'select', options: ['Additional Scope', 'Change Request', 'Delivery Extension', 'Feature Enhancement'] },
-              { field: 'status', label: 'Status', type: 'select', options: ['Draft', 'Submitted', 'Under Review', 'Approved', 'Rejected', 'In Progress', 'Completed'] },
-              { field: 'priority', label: 'Priority', type: 'select', options: ['Low', 'Medium', 'High', 'Critical'] },
-              { field: 'projectName', label: 'Project Name', type: 'text' },
-              { field: 'requestedBy', label: 'Requested By', type: 'text' },
-            ]}
+            filters={activeFilters}
+            onFiltersChange={setActiveFilters}
+            filterOptions={{
+              'requestType': ['Additional Scope', 'Change Request', 'Delivery Extension', 'Feature Enhancement'],
+              'status': ['Draft', 'Submitted', 'Under Review', 'Approved', 'Rejected', 'In Progress', 'Completed'],
+              'priority': ['Low', 'Medium', 'High', 'Critical'],
+              'projectName': Array.from(new Set(requests.map(r => r.projectName))),
+              'requestedBy': Array.from(new Set(requests.map(r => r.requestedBy))),
+            }}
           />
         </div>
       )}
@@ -396,7 +398,7 @@ export default function ChangeRequestsModule() {
           <FilterChips
             filters={activeFilters}
             onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onClearAll={handleClearFilters}
           />
         </div>
       )}
@@ -725,6 +727,7 @@ export default function ChangeRequestsModule() {
 
       {/* Addons Edit Side Panel */}
       <AddonsEditSidePanel
+        key={selectedRequest?.id || 'new-addon'}
         isOpen={isAddModalOpen}
         request={selectedRequest}
         onClose={() => {

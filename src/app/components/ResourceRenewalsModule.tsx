@@ -60,6 +60,7 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed, onNa
   const [filterStatus, setFilterStatus] = useState<'all' | 'current' | 'completed'>('all');
   const [activeProjectFilter, setActiveProjectFilter] = useState<string | null>(null);
   const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialFilters && initialFilters.length > 0) {
@@ -273,9 +274,45 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed, onNa
                           {renewal.currentCycle}
                         </span>
                       </div>
-                      <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors">
-                        <MoreVertical className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
-                      </button>
+                      <div className="relative">
+                        <button 
+                          onClick={() => setOpenMenuId(openMenuId === renewal.id ? null : renewal.id)}
+                          className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors"
+                        >
+                          <MoreVertical className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                        </button>
+                        {openMenuId === renewal.id && (
+                          <>
+                            <div 
+                              className="fixed inset-0 z-10" 
+                              onClick={() => setOpenMenuId(null)}
+                            />
+                            <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                              <button
+                                onClick={() => {
+                                  setCurrentEditRenewal(renewal);
+                                  setIsEditPanelOpen(true);
+                                  setOpenMenuId(null);
+                                }}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => {
+                                  // Add delete logic if needed
+                                  setOpenMenuId(null);
+                                }}
+                                className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                                Delete
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -485,6 +522,7 @@ export function ResourceRenewalsModule({ initialFilters, onFiltersConsumed, onNa
 
       {/* Side Panel */}
       <ResourceRenewalsEditSidePanel
+        key={currentEditRenewal?.id || 'new-renewal'}
         isOpen={isEditPanelOpen}
         onClose={() => {
           setIsEditPanelOpen(false);

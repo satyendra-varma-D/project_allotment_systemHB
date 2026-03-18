@@ -75,6 +75,26 @@ export function ResourceRenewalEditSidePanel({ isOpen, onClose, renewal, onSave 
         transactionCost: renewal.transactionCost || 0,
         transactionNumber: renewal.transactionNumber || '',
       });
+    } else if (isOpen && !renewal) {
+      setFormData({
+        resourceSkill: '',
+        hireType: 'Full-time',
+        hireCycle: 'Monthly',
+        numberOfHours: 0,
+        hourlyRate: 0,
+        resourceAmountUSD: 0,
+        currency: 'USD',
+        resourceAmountCurrency: 0,
+        renewalStartDate: '',
+        renewalEndDate: '',
+        publishStatus: 'Draft',
+        paymentStatus: 'Pending',
+        invoiceNumber: '',
+        paymentMode: '',
+        subPaymentMode: '',
+        transactionCost: 0,
+        transactionNumber: '',
+      });
     }
   }, [isOpen, renewal]);
 

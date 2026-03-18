@@ -217,13 +217,15 @@ export default function PaymentTermsMasterModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((term) => {
           const termValue = term[filter.field as keyof PaymentTermsMaster];
           if (typeof termValue === 'string') {
-            return termValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(val => 
+              termValue.toLowerCase().includes(val.toLowerCase())
+            );
           }
-          return termValue === filter.value;
+          return filter.values.includes(String(termValue));
         });
       }
     });
@@ -243,8 +245,8 @@ export default function PaymentTermsMasterModule() {
     setActiveFilters([...activeFilters, filter]);
   };
 
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  const handleRemoveFilter = (id: string) => {
+    setActiveFilters(activeFilters.filter(f => f.id !== id));
   };
 
   const handleClearFilters = () => {
@@ -262,7 +264,7 @@ export default function PaymentTermsMasterModule() {
       alert(`Cannot delete. This payment term is linked to ${term.linkedProjects} active project(s).`);
       return;
     }
-    if (confirm('Are you sure you want to delete this payment term?')) {
+    if (confirm('Are you sure you want to delete this template?')) {
       setPaymentTerms(paymentTerms.filter(t => t.id !== termId));
     }
   };
@@ -277,7 +279,7 @@ export default function PaymentTermsMasterModule() {
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <ListingHeader
-        title="Payment Terms Master"
+        title="Milestone Terms Templates"
         subtitle="Standardize financial milestone distribution structures across projects"
         moduleName="Structure"
         viewMode={viewMode}
@@ -297,25 +299,25 @@ export default function PaymentTermsMasterModule() {
         <SummaryWidgets widgets={summaryData} />
       </div>}
 
-      {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
           <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
+            isOpen={isAdvancedSearchOpen}
             onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'status', label: 'Status', type: 'select', options: ['active', 'inactive'] },
-              { field: 'structureName', label: 'Structure Name', type: 'text' },
-            ]}
+            filters={activeFilters}
+            onFiltersChange={setActiveFilters}
+            filterOptions={{
+              'Status': ['active', 'inactive'],
+              'Structure Name': Array.from(new Set(paymentTerms.map(p => p.structureName))).sort(),
+            }}
           />
         </div>
-      )}
 
       {activeFilters.length > 0 && (
         <div className="px-6 pb-4">
           <FilterChips
             filters={activeFilters}
             onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onClearAll={handleClearFilters}
           />
         </div>
       )}
@@ -483,26 +485,43 @@ export default function PaymentTermsMasterModule() {
                       </div>
                     </div>
                   </div>
-                  <div className="ml-4 relative group">
-                    <button className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
+                  <div className="ml-4 relative">
+                    <button 
+                      onClick={() => setOpenDropdownId(openDropdownId === term.id ? null : term.id)}
+                      className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors"
+                    >
                       <MoreVertical className="w-4 h-4 text-neutral-500" />
                     </button>
-                    <div className="hidden group-hover:block absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                      <button
-                        onClick={() => handleEditTerm(term)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteTerm(term.id)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </div>
+                    {openDropdownId === term.id && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-10" 
+                          onClick={() => setOpenDropdownId(null)}
+                        />
+                        <div className="absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                          <button
+                            onClick={() => {
+                              handleEditTerm(term);
+                              setOpenDropdownId(null);
+                            }}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleDeleteTerm(term.id);
+                              setOpenDropdownId(null);
+                            }}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -568,26 +587,43 @@ export default function PaymentTermsMasterModule() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="relative inline-block group">
-                          <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded">
+                        <div className="relative inline-block">
+                          <button 
+                            onClick={() => setOpenDropdownId(openDropdownId === term.id ? null : term.id)}
+                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                          >
                             <MoreVertical className="w-4 h-4 text-neutral-500" />
                           </button>
-                          <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                            <button
-                              onClick={() => handleEditTerm(term)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteTerm(term.id)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </button>
-                          </div>
+                          {openDropdownId === term.id && (
+                            <>
+                              <div 
+                                className="fixed inset-0 z-10" 
+                                onClick={() => setOpenDropdownId(null)}
+                              />
+                              <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                                <button
+                                  onClick={() => {
+                                    handleEditTerm(term);
+                                    setOpenDropdownId(null);
+                                  }}
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    handleDeleteTerm(term.id);
+                                    setOpenDropdownId(null);
+                                  }}
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>

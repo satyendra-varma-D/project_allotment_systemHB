@@ -107,13 +107,13 @@ export const getNavigationData = (
       subItems: [
         {
           id: "milestones-master",
-          label: "Milestones Master",
+          label: "Payment Milestones",
           onClick: () => onNavigate("milestones-master"),
           active: currentPage === "milestones-master",
         },
         {
           id: "payment-terms-master",
-          label: "Payment Terms Master",
+          label: "Milestone Terms Templates",
           onClick: () => onNavigate("payment-terms-master"),
           active: currentPage === "payment-terms-master",
         },

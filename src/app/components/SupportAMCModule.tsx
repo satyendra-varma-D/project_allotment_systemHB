@@ -236,13 +236,15 @@ export default function SupportAMCModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((contract) => {
           const contractValue = contract[filter.field as keyof SupportContract];
           if (typeof contractValue === 'string') {
-            return contractValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(v => 
+              contractValue.toLowerCase().includes(v.toLowerCase())
+            );
           }
-          return contractValue === filter.value;
+          return filter.values.includes(String(contractValue));
         });
       }
     });
@@ -262,8 +264,8 @@ export default function SupportAMCModule() {
     setActiveFilters([...activeFilters, filter]);
   };
 
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  const handleRemoveFilter = (id: string) => {
+    setActiveFilters(activeFilters.filter(f => f.id !== id));
   };
 
   const handleClearFilters = () => {
@@ -325,28 +327,28 @@ export default function SupportAMCModule() {
         <SummaryWidgets widgets={summaryData} />
       </div>}
 
-      {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
           <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
+            isOpen={isAdvancedSearchOpen}
             onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'contractType', label: 'Contract Type', type: 'select', options: ['AMC', 'Support', 'Both'] },
-              { field: 'contractStatus', label: 'Status', type: 'select', options: ['Active', 'Expiring Soon', 'Expired', 'Renewed'] },
-              { field: 'supportLevel', label: 'Support Level', type: 'select', options: ['Basic', 'Standard', 'Premium', 'Enterprise'] },
-              { field: 'billingCycle', label: 'Billing Cycle', type: 'select', options: ['Monthly', 'Quarterly', 'Annually'] },
-              { field: 'clientName', label: 'Client Name', type: 'text' },
-            ]}
+            filters={activeFilters}
+            onFiltersChange={setActiveFilters}
+            filterOptions={{
+              'Contract Type': ['AMC', 'Support', 'Both'],
+              'Status': ['Active', 'Expiring Soon', 'Expired', 'Renewed'],
+              'Support Level': ['Basic', 'Standard', 'Premium', 'Enterprise'],
+              'Billing Cycle': ['Monthly', 'Quarterly', 'Annually'],
+              'Client Name': Array.from(new Set(paginatedContracts.map(c => c.clientName))).sort(),
+            }}
           />
         </div>
-      )}
 
       {activeFilters.length > 0 && (
         <div className="px-6 pb-4">
           <FilterChips
             filters={activeFilters}
             onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onClearAll={handleClearFilters}
           />
         </div>
       )}
@@ -553,26 +555,43 @@ export default function SupportAMCModule() {
                       </div>
                     </div>
                   </div>
-                  <div className="ml-4 relative group">
-                    <button className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
+                  <div className="ml-4 relative">
+                    <button 
+                      onClick={() => setOpenMenuId(openMenuId === contract.id ? null : contract.id)}
+                      className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors"
+                    >
                       <MoreVertical className="w-4 h-4 text-neutral-500" />
                     </button>
-                    <div className="hidden group-hover:block absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                      <button
-                        onClick={() => handleEditContract(contract)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteContract(contract.id)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </div>
+                    {openMenuId === contract.id && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-10" 
+                          onClick={() => setOpenMenuId(null)}
+                        />
+                        <div className="absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                          <button
+                            onClick={() => {
+                              handleEditContract(contract);
+                              setOpenMenuId(null);
+                            }}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleDeleteContract(contract.id);
+                              setOpenMenuId(null);
+                            }}
+                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            Delete
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -648,26 +667,43 @@ export default function SupportAMCModule() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="relative inline-block group">
-                          <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded">
+                        <div className="relative inline-block">
+                          <button 
+                            onClick={() => setOpenMenuId(openMenuId === contract.id ? null : contract.id)}
+                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
+                          >
                             <MoreVertical className="w-4 h-4 text-neutral-500" />
                           </button>
-                          <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                            <button
-                              onClick={() => handleEditContract(contract)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteContract(contract.id)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </button>
-                          </div>
+                          {openMenuId === contract.id && (
+                            <>
+                              <div 
+                                className="fixed inset-0 z-10" 
+                                onClick={() => setOpenMenuId(null)}
+                              />
+                              <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
+                                <button
+                                  onClick={() => {
+                                    handleEditContract(contract);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                  Edit
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    handleDeleteContract(contract.id);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  Delete
+                                </button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -117,13 +117,13 @@ const mockEntities: Entity[] = [
     attributes: ['Milestone_ID', 'Project_ID', 'Milestone_Name', 'Sequence', 'Start_Date', 'End_Date', 'Status', 'Payment_Percentage', 'Completion_Date'],
     relationships: [
       { entity: 'Project', type: 'M:1', description: 'Belongs to one Project' },
-      { entity: 'Milestone Master', type: 'M:1', description: 'Mapped from Milestone Master template' },
+      { entity: 'Payment Milestones', type: 'M:1', description: 'Mapped from Payment Milestones template' },
       { entity: 'Commercial Structure', type: 'M:1', description: 'Linked to Payment structure' },
     ],
   },
   {
     id: 'milestone-master',
-    name: 'Milestone Master',
+    name: 'Payment Milestones',
     description: 'Template defining reusable milestone configurations',
     primaryKey: 'Milestone_Master_ID',
     category: 'master',
@@ -134,7 +134,7 @@ const mockEntities: Entity[] = [
   },
   {
     id: 'payment-terms-master',
-    name: 'Payment Terms Master',
+    name: 'Milestone Terms Templates',
     description: 'Standardized payment distribution structures',
     primaryKey: 'Payment_Terms_ID',
     category: 'master',
@@ -152,7 +152,7 @@ const mockEntities: Entity[] = [
     attributes: ['Commercial_ID', 'Project_ID', 'Payment_Terms_ID', 'Total_Value', 'Currency', 'Invoice_Status', 'Payment_Status'],
     relationships: [
       { entity: 'Project', type: '1:1', description: 'Linked to one Project' },
-      { entity: 'Payment Terms Master', type: 'M:1', description: 'References Payment Terms Master' },
+      { entity: 'Milestone Terms Template', type: 'M:1', description: 'References Milestone Terms Template' },
       { entity: 'Invoice', type: '1:M', description: 'Has many Invoice records' },
     ],
   },
@@ -263,15 +263,15 @@ const mockIntegrityRules: IntegrityRule[] = [
   },
   {
     id: 'rule-3',
-    rule: 'Milestones must reference valid Milestone Master',
+    rule: 'Milestones must reference valid Payment Milestones',
     priority: 'high',
-    entities: ['Milestone', 'Milestone Master'],
+    entities: ['Milestone', 'Payment Milestones'],
   },
   {
     id: 'rule-4',
-    rule: 'Payment structure must reference valid Payment Terms Master',
+    rule: 'Payment structure must reference valid Milestone Terms Templates',
     priority: 'high',
-    entities: ['Commercial Structure', 'Payment Terms Master'],
+    entities: ['Commercial Structure', 'Milestone Terms Templates'],
   },
   {
     id: 'rule-5',
@@ -555,10 +555,10 @@ export default function SystemArchitectureModule() {
                   </div>
                   <ArrowRight className="w-4 h-4 text-neutral-400" />
                   <div className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-400 rounded-lg text-sm">
-                    Milestone Master → Milestones
+                    Payment Milestones → Milestones
                   </div>
                   <div className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-400 rounded-lg text-sm">
-                    Payment Terms → Commercial Structure
+                    Milestone Terms Templates → Commercial Structure
                   </div>
                 </div>
               </div>

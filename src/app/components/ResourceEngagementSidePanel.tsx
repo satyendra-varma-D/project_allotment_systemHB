@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ResourceEngagementSidePanelProps {
   isOpen: boolean;
@@ -16,6 +16,28 @@ export function ResourceEngagementSidePanel({ isOpen, onClose, resource, onSave 
     engagementModel: resource?.engagementModel || 'Full-Time',
     startDate: resource?.startDate || '',
   });
+  
+  // Sync state when resource prop changes or panel opens
+  useEffect(() => {
+    if (isOpen && resource) {
+      setFormData({
+        resourceName: resource.resourceName || '',
+        role: resource.role || '',
+        project: resource.project || '',
+        engagementModel: resource.engagementModel || 'Full-Time',
+        startDate: resource.startDate || '',
+      });
+    } else if (!resource) {
+      // Reset form if resource is null
+      setFormData({
+        resourceName: '',
+        role: '',
+        project: '',
+        engagementModel: 'Full-Time',
+        startDate: '',
+      });
+    }
+  }, [isOpen, resource]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

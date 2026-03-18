@@ -1776,6 +1776,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Edit Side Panel */}
       <ProjectEditSidePanel
+        key={project.id}
         isOpen={isEditPanelOpen}
         onClose={() => setIsEditPanelOpen(false)}
         project={project}
@@ -1787,6 +1788,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Team Edit Side Panel */}
       <TeamEditSidePanel
+        key={`team-${currentEditTeam}`}
         isOpen={isTeamEditPanelOpen && currentEditTeam !== 'client'}
         onClose={() => {
           setIsTeamEditPanelOpen(false);
@@ -1808,6 +1810,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Client Team Edit Side Panel */}
       <ClientTeamEditSidePanel
+        key="client-team-panel"
         isOpen={isTeamEditPanelOpen && currentEditTeam === 'client'}
         onClose={() => {
           setIsTeamEditPanelOpen(false);
@@ -1823,6 +1826,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Contact Edit Side Panel */}
       <ContactEditSidePanel
+        key={project.id}
         isOpen={isContactEditPanelOpen}
         onClose={() => {
           setIsContactEditPanelOpen(false);
@@ -1842,6 +1846,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Technology Edit Side Panel */}
       <TechnologyEditSidePanel
+        key={project.id}
         isOpen={isTechnologyEditPanelOpen}
         onClose={() => setIsTechnologyEditPanelOpen(false)}
         currentData={technologyStack}
@@ -1853,6 +1858,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Schedule Edit Side Panel */}
       <ScheduleEditSidePanel
+        key={project.id}
         isOpen={isScheduleEditPanelOpen}
         onClose={() => setIsScheduleEditPanelOpen(false)}
         currentData={scheduleEfforts}
@@ -1864,6 +1870,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Commercial Edit Side Panel */}
       <CommercialEditSidePanel
+        key={project.id}
         isOpen={isCommercialEditPanelOpen}
         onClose={() => setIsCommercialEditPanelOpen(false)}
         currentData={commercialDetails}
@@ -1875,6 +1882,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Agreements Edit Side Panel */}
       <AgreementsEditSidePanel
+        key={project.id}
         isOpen={isAgreementsEditPanelOpen}
         onClose={() => setIsAgreementsEditPanelOpen(false)}
         currentData={agreements}
@@ -1930,6 +1938,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Milestone Edit Side Panel */}
       <MilestoneEditSidePanel
+        key={currentEditMilestone?.id || 'new-milestone'}
         isOpen={isMilestoneEditPanelOpen}
         onClose={() => setIsMilestoneEditPanelOpen(false)}
         currentMilestones={milestones}
@@ -1944,6 +1953,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Resources Edit Side Panel */}
       <ResourcesEditSidePanel
+        key={project.id}
         isOpen={isResourcesEditPanelOpen}
         onClose={() => setIsResourcesEditPanelOpen(false)}
         currentResources={resources}
@@ -1957,6 +1967,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Attachment Edit Side Panel */}
       <AttachmentEditSidePanel
+        key={project.id}
         isOpen={isAttachmentEditPanelOpen}
         onClose={() => setIsAttachmentEditPanelOpen(false)}
         onSave={(newAttachment) => {
@@ -1972,6 +1983,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Sales Notes Edit Side Panel */}
       <SalesNotesEditSidePanel
+        key={project.id}
         isOpen={isSalesNotesEditPanelOpen}
         onClose={() => setIsSalesNotesEditPanelOpen(false)}
         salesNotes={salesNotes}
@@ -1983,6 +1995,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Email Preview Modal */}
       <ProjectEmailPreviewModal
+        key={project.id}
         isOpen={isEmailPreviewOpen}
         onClose={() => setIsEmailPreviewOpen(false)}
         project={project}
@@ -2001,6 +2014,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Project Milestones Modal */}
       <ProjectMilestonesModal
+        key={project.id}
         isOpen={isMilestonesModalOpen}
         onClose={() => setIsMilestonesModalOpen(false)}
         projectId={project.id}
@@ -2018,6 +2032,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Project Addons Modal */}
       <ProjectAddonsModal
+        key={project.id}
         isOpen={isAddonsModalOpen}
         onClose={() => setIsAddonsModalOpen(false)}
         projectId={project.id}
@@ -2035,6 +2050,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Project Renewals Modal - Shows Resource Renewals */}
       <ProjectRenewalsModal
+        key={project.id}
         isOpen={isRenewalsModalOpen}
         onClose={() => setIsRenewalsModalOpen(false)}
         projectId={project.id}
@@ -2053,6 +2069,7 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
 
       {/* Resource Renewals Edit Side Panel */}
       <ResourceRenewalsEditSidePanel
+        key={currentEditRenewal?.id || 'new-renewal'}
         isOpen={isRenewalsEditPanelOpen}
         onClose={() => {
           setIsRenewalsEditPanelOpen(false);

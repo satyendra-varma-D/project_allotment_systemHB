@@ -203,13 +203,15 @@ export default function MilestonesMasterModule() {
     }
 
     activeFilters.forEach((filter) => {
-      if (filter.value && filter.value !== 'all') {
+      if (filter.values && filter.values.length > 0) {
         filtered = filtered.filter((milestone) => {
           const milestoneValue = milestone[filter.field as keyof MilestoneMaster];
           if (typeof milestoneValue === 'string') {
-            return milestoneValue.toLowerCase().includes(filter.value.toLowerCase());
+            return filter.values.some(val => 
+              milestoneValue.toLowerCase().includes(val.toLowerCase())
+            );
           }
-          return milestoneValue === filter.value;
+          return filter.values.includes(String(milestoneValue));
         });
       }
     });
@@ -229,8 +231,8 @@ export default function MilestonesMasterModule() {
     setActiveFilters([...activeFilters, filter]);
   };
 
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  const handleRemoveFilter = (id: string) => {
+    setActiveFilters(activeFilters.filter(f => f.id !== id));
   };
 
   const handleClearFilters = () => {
@@ -264,9 +266,9 @@ export default function MilestonesMasterModule() {
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       {/* Page Header with ListingHeader Component */}
       <ListingHeader
-        title="Milestones Master"
+        title="Payment Milestones"
         subtitle="Define milestone templates for your projects"
-        moduleName="Milestone Template"
+        moduleName="Payment Milestones"
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         searchValue={searchQuery}
@@ -294,19 +296,19 @@ export default function MilestonesMasterModule() {
       )}
 
       {/* Advanced Search Panel */}
-      {isAdvancedSearchOpen && (
         <div className="px-6 pb-4">
           <AdvancedSearchPanel
-            onAddFilter={handleAddFilter}
+            isOpen={isAdvancedSearchOpen}
             onClose={() => setIsAdvancedSearchOpen(false)}
-            filterOptions={[
-              { field: 'status', label: 'Status', type: 'select', options: ['Active', 'Inactive'] },
-              { field: 'milestoneCode', label: 'Milestone Code', type: 'text' },
-              { field: 'milestoneName', label: 'Milestone Name', type: 'text' },
-            ]}
+            filters={activeFilters}
+            onFiltersChange={setActiveFilters}
+            filterOptions={{
+              'Status': ['Active', 'Inactive'],
+              'Milestone Code': Array.from(new Set(milestones.map(m => m.milestoneCode))).sort(),
+              'Milestone Name': Array.from(new Set(milestones.map(m => m.milestoneName))).sort(),
+            }}
           />
         </div>
-      )}
 
       {/* Filter Chips */}
       {activeFilters.length > 0 && (
@@ -314,7 +316,7 @@ export default function MilestonesMasterModule() {
           <FilterChips
             filters={activeFilters}
             onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
+            onClearAll={handleClearFilters}
           />
         </div>
       )}
@@ -600,12 +602,13 @@ export default function MilestonesMasterModule() {
 
       {/* Add/Edit Modal */}
       <SidePanel
+        key={selectedMilestone?.id || 'new-milestone'}
         isOpen={isAddModalOpen}
         onClose={() => {
           setIsAddModalOpen(false);
           setSelectedMilestone(null);
         }}
-        title={selectedMilestone ? 'Edit Milestone Template' : 'Add Milestone Template'}
+        title={selectedMilestone ? 'Edit Payment Milestones' : 'Add Payment Milestones'}
         footer={
           <SidePanelFooter
             onCancel={() => {
