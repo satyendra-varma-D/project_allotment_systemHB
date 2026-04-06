@@ -80,16 +80,16 @@ export const getNavigationData = (
           active: currentPage === "resource-renewals",
         },
         {
-          id: "support-amc",
-          label: "Support / AMC",
-          onClick: () => onNavigate("support-amc"),
-          active: currentPage === "support-amc",
+          id: "aws",
+          label: "AWS",
+          onClick: () => onNavigate("aws"),
+          active: currentPage === "aws",
         },
         {
-          id: "change-requests",
+          id: "addons",
           label: "Addons",
-          onClick: () => onNavigate("change-requests"),
-          active: currentPage === "change-requests",
+          onClick: () => onNavigate("addons"),
+          active: currentPage === "addons",
         },
         // HIDDEN: AWS - user will use later
         // {

@@ -116,7 +116,7 @@ export function ResourceRenewalEditSidePanel({ isOpen, onClose, renewal, onSave 
       />
       
       {/* Side Panel */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-lg bg-white dark:bg-neutral-900 shadow-2xl z-50 overflow-y-auto">
+      <div className="fixed right-0 top-0 bottom-0 w-full max-w-2xl bg-white dark:bg-neutral-900 shadow-2xl z-50 flex flex-col animate-in slide-in-from-right duration-300">
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">

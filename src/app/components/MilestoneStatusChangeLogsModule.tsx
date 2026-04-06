@@ -404,6 +404,13 @@ export default function MilestoneStatusChangeLogsModule() {
                   key={log.id}
                   className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
                 >
+                  {/* Colored Top Border Accent */}
+                  <div className={`h-1 ${
+                    log.paymentStatus === 'Received' ? 'bg-green-500' :
+                    log.paymentStatus === 'Pending' ? 'bg-orange-500' :
+                    log.paymentStatus === 'Requested' ? 'bg-blue-500' : 'bg-indigo-500'
+                  }`} />
+
                   {/* Header with Status Change Badge */}
                   <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 px-4 py-3 border-b border-neutral-200 dark:border-neutral-800">
                     <div className="flex items-start justify-between">

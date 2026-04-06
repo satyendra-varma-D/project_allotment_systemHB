@@ -141,7 +141,10 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
     { id: 'postSales', label: 'Post-Sales Team' },
     { id: 'client', label: 'Client Team' },
     { id: 'technology', label: 'Technology Details' },
-    { id: 'schedule', label: 'Project Schedule & Efforts' },
+    ...(project.projectType === 'Fixed Cost'
+      ? [{ id: 'schedule', label: 'Project Schedule & Efforts' }]
+      : []
+    ),
     { id: 'commercial', label: 'Commercial Details' },
     { id: 'agreements', label: 'Agreements & Invoice' },
     ...(project.projectType === 'Fixed Cost'
@@ -650,8 +653,8 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   key={section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={`py-2 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${activeTab === section.id
-                      ? 'text-neutral-900 dark:text-white border-primary-600 dark:border-primary-400'
-                      : 'text-neutral-600 dark:text-neutral-400 border-transparent hover:text-neutral-900 dark:hover:text-white'
+                    ? 'text-neutral-900 dark:text-white border-primary-600 dark:border-primary-400'
+                    : 'text-neutral-600 dark:text-neutral-400 border-transparent hover:text-neutral-900 dark:hover:text-white'
                     }`}
                 >
                   {section.label}
@@ -903,87 +906,107 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                 <Edit2 className="w-4 h-4 text-neutral-500" />
               </button>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {clientTeamInfo.contacts.map((member) => (
                 <div
                   key={member.id}
-                  className="bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-5 relative"
+                  className="group relative p-5 bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-800/50 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200"
                 >
+                  {/* Decorative corner accent */}
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary-500/10 to-transparent dark:from-primary-400/10 rounded-tr-xl rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+
                   {/* Edit Button - Top Right */}
                   <button
                     onClick={() => {
                       setCurrentEditContact(member);
                       setIsContactEditPanelOpen(true);
                     }}
-                    className="absolute top-4 right-4 p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                    className="absolute top-4 right-4 p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors z-10"
                     title="Edit contact details"
                   >
                     <Edit2 className="w-3.5 h-3.5 text-neutral-500" />
                   </button>
 
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-semibold text-lg flex-shrink-0">
-                      {member.initials}
+                  <div className="relative flex items-start gap-4">
+                    {/* Avatar with gradient */}
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 dark:from-primary-400 dark:to-primary-500 flex items-center justify-center flex-shrink-0 shadow-md ring-2 ring-white dark:ring-neutral-900 ring-offset-2 ring-offset-transparent group-hover:ring-primary-100 dark:group-hover:ring-primary-900/50 transition-all">
+                      <span className="text-base font-bold text-white">
+                        {member.initials}
+                      </span>
                     </div>
-                    <div className="flex-1 min-w-0 pr-6">
-                      <h3 className="font-semibold text-neutral-900 dark:text-white mb-1">{member.name}</h3>
-                      <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">{member.role}</p>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400 flex items-center gap-1.5">
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-semibold text-neutral-900 dark:text-white truncate mb-1">
+                        {member.name}
+                      </h3>
+                      <div className="inline-flex items-center px-2 py-0.5 rounded-md bg-primary-50 dark:bg-primary-950/30 border border-primary-200 dark:border-primary-800 mb-2">
+                        <span className="text-xs font-medium text-primary-700 dark:text-primary-400">
+                          {member.role}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 mb-3">
                         <FileText className="w-3.5 h-3.5" />
-                        {clientTeamInfo.companyName}
-                      </p>
+                        <span className="truncate">{clientTeamInfo.companyName}</span>
+                      </div>
+
+                      {/* Contact info */}
+                      <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2">
+                        <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400 group/email">
+                          <Mail className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 group-hover/email:text-primary-500 transition-colors flex-shrink-0" />
+                          <span className="truncate group-hover/email:text-primary-600 dark:group-hover/email:text-primary-400 transition-colors">
+                            {member.email}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400 group/phone">
+                          <Phone className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 group-hover/phone:text-primary-500 transition-colors flex-shrink-0" />
+                          <span className="group-hover/phone:text-primary-600 dark:group-hover/phone:text-primary-400 transition-colors">
+                            {member.phone}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Location & Timezone */}
+                      <div className="mt-3 space-y-2">
+                        <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                          <MapPin className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 flex-shrink-0" />
+                          <span className="truncate">{member.location}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                          <Globe className="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-500 flex-shrink-0" />
+                          <span className="truncate">{member.timezone}</span>
+                        </div>
+                      </div>
+
+                      {/* Tags */}
+                      {member.tags && member.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-4">
+                          {member.tags.map((tag, idx) => (
+                            <span key={idx} className="px-2 py-0.5 rounded text-[10px] font-medium bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Channels */}
+                      {member.channels && member.channels.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {member.channels.map((channel, idx) => (
+                            <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300 border border-primary-100 dark:border-primary-800">
+                              <MessageSquare className="w-2.5 h-2.5" />
+                              {channel}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <div className="space-y-2.5 mb-4">
-                    <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
-                      <Mail className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span className="truncate">{member.email}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
-                      <Phone className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{member.phone}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
-                      <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{member.location}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
-                      <Globe className="w-3.5 h-3.5 flex-shrink-0" />
-                      <span>{member.timezone}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {member.tags?.map((tag, index) => {
-                      const tagColors = [
-                        'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-                        'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-                        'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-                      ];
-                      return (
-                        <span key={index} className={`px-2.5 py-1 rounded-md text-xs font-medium ${tagColors[index % tagColors.length]}`}>
-                          {tag}
-                        </span>
-                      );
-                    })}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {member.channels?.map((channel, index) => {
-                      const channelColors = [
-                        'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-                        'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-                        'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400',
-                      ];
-                      return (
-                        <span key={index} className={`px-2.5 py-1 rounded-md text-xs font-medium flex items-center gap-1 ${channelColors[index % channelColors.length]}`}>
-                          <MessageSquare className="w-3 h-3" />
-                          {channel}
-                        </span>
-                      );
-                    })}
                   </div>
                 </div>
               ))}
             </div>
+
           </div>
         </section>
 
@@ -1039,73 +1062,14 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
           </div>
         </section>
 
-        {/* Project Schedule & Efforts Section */}
-        <section id="schedule" className="scroll-mt-48">
-          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Project Schedule & Efforts</h2>
-              <button
-                onClick={() => setIsScheduleEditPanelOpen(true)}
-                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
-              >
-                <Edit2 className="w-4 h-4 text-neutral-500" />
-              </button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5" />
-                  Project Start Date
-                </label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.startDate}</p>
-              </div>
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                  <Calendar className="w-3.5 h-3.5" />
-                  Project End Date
-                </label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.endDate}</p>
-              </div>
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5" />
-                  Project PDs
-                </label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.projectPDs}</p>
-              </div>
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5" />
-                  Schedule in Weeks
-                </label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.scheduleWeeks}</p>
-              </div>
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5" />
-                  UAT in Weeks
-                </label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.uatWeeks}</p>
-              </div>
-              <div>
-                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5" />
-                  Post Delivery Support
-                </label>
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.postDeliverySupport}</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Commercial Details Section */}
-        <section id="commercial" className="scroll-mt-48">
-          <div className="space-y-6">
+        {/* Project Schedule & Efforts Section - Show only for Fixed Cost projects */}
+        {project.projectType === 'Fixed Cost' && (
+          <section id="schedule" className="scroll-mt-48">
             <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Commercial Details</h2>
+                <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Project Schedule & Efforts</h2>
                 <button
-                  onClick={() => setIsCommercialEditPanelOpen(true)}
+                  onClick={() => setIsScheduleEditPanelOpen(true)}
                   className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors"
                 >
                   <Edit2 className="w-4 h-4 text-neutral-500" />
@@ -1113,48 +1077,150 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div>
-                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Currency</label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.currency}</p>
+                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                    <Calendar className="w-3.5 h-3.5" />
+                    Project Start Date
+                  </label>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.startDate}</p>
                 </div>
                 <div>
                   <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                    <DollarSign className="w-3.5 h-3.5" />
-                    Costing (USD)
+                    <Calendar className="w-3.5 h-3.5" />
+                    Project End Date
                   </label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">${commercialDetails.costingUSD.toLocaleString()}</p>
-                </div>
-                <div>
-                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Cost (Local Currency)</label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.currency} {commercialDetails.costLocal.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.endDate}</p>
                 </div>
                 <div>
                   <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                    <FileText className="w-3.5 h-3.5" />
-                    Payment Terms
+                    <Clock className="w-3.5 h-3.5" />
+                    Project PDs
                   </label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.paymentTerms}</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.projectPDs}</p>
                 </div>
                 <div>
                   <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
-                    <DollarSign className="w-3.5 h-3.5" />
-                    Upfront Amount
+                    <Clock className="w-3.5 h-3.5" />
+                    Schedule in Weeks
                   </label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">${commercialDetails.upfrontAmount.toLocaleString()}</p>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.scheduleWeeks}</p>
                 </div>
                 <div>
-                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Upfront Status</label>
-                  <span className={`inline-flex px-2.5 py-1 rounded-md text-xs font-semibold capitalize ${getUpfrontStatusBadge(commercialDetails.upfrontStatus)}`}>
-                    {commercialDetails.upfrontStatus}
+                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                    <Clock className="w-3.5 h-3.5" />
+                    UAT in Weeks
+                  </label>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.uatWeeks}</p>
+                </div>
+                <div>
+                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                    <Clock className="w-3.5 h-3.5" />
+                    Post Delivery Support
+                  </label>
+                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{scheduleEfforts.postDeliverySupport}</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Commercial Details Section */}
+        <section id="commercial" className="scroll-mt-48">
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Commercial Details</h2>
+              <button
+                onClick={() => setIsCommercialEditPanelOpen(true)}
+                className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg transition-colors border border-neutral-200 dark:border-neutral-700 shadow-sm"
+              >
+                <Edit2 className="w-4 h-4 text-neutral-500" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* Total Amount Fields */}
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                  <DollarSign className="w-3.5 h-3.5" />
+                  Costing (USD)
+                </label>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">${commercialDetails.costingUSD.toLocaleString()}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Currency</label>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.currency}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Cost (Local Currency)</label>
+                <p className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                  {commercialDetails.currency} {commercialDetails.costLocal.toLocaleString()}
+                </p>
+              </div>
+
+              {/* Payment Terms Fields (Only if Fixed Cost) */}
+              {project.projectType === 'Fixed Cost' && (
+                <>
+                  <div>
+                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                      <FileText className="w-3.5 h-3.5" />
+                      Payment Terms
+                    </label>
+                    <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.paymentTerms}</p>
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Milestones</label>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      {commercialDetails.selectedMilestones?.map(m => (
+                        <span key={m} className="px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded text-[10px] font-bold border border-blue-100 dark:border-blue-800">
+                          {m}
+                        </span>
+                      )) || <span className="text-sm text-neutral-400 italic">No milestones selected</span>}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Upfront Fields */}
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Upfront Amount</label>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.currency} {commercialDetails.upfrontAmount.toLocaleString()}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Upfront Status</label>
+                <span className={`inline-flex px-2.5 py-1 rounded-md text-xs font-semibold capitalize ${getUpfrontStatusBadge(commercialDetails.upfrontStatus)}`}>
+                  {commercialDetails.upfrontStatus}
+                </span>
+              </div>
+
+              {/* Payment Mode Fields */}
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Payment Mode</label>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.paymentMode}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Sub Payment Mode</label>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.subPaymentMode}</p>
+              </div>
+
+              {/* Transaction Cost Field */}
+              <div>
+                <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Transaction Cost
+                </label>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                    {commercialDetails.transactionAmountCharged ? 'Charged' : 'Not Charged'}
                   </span>
+                  {commercialDetails.transactionAmountCharged && (
+                    <span className="text-sm font-bold text-primary-600">
+                      ({commercialDetails.currency} {commercialDetails.transactionCost.toLocaleString()})
+                    </span>
+                  )}
                 </div>
-                <div>
-                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Payment Mode</label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.paymentMode}</p>
-                </div>
-                <div>
-                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Sub Payment Mode</label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.subPaymentMode}</p>
-                </div>
+              </div>
+
+              {/* Support Included Toggle (Only if Fixed Cost) */}
+              {project.projectType === 'Fixed Cost' && (
                 <div>
                   <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 flex items-center gap-2">
                     <CheckCircle2 className="w-3.5 h-3.5" />
@@ -1164,47 +1230,38 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                     {commercialDetails.supportIncluded ? 'Yes' : 'No'}
                   </span>
                 </div>
-                <div>
-                  <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Transaction Cost</label>
-                  <p className="text-sm font-medium text-neutral-900 dark:text-white">
-                    ${commercialDetails.transactionCost.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            </div>
+              )}
 
-            {project.projectType === 'Fixed Cost' && commercialDetails.supportIncluded && (
-              <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <CheckCircle2 className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <h3 className="text-base font-semibold text-neutral-900 dark:text-white">Support Details</h3>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Support Details Fields (Only if Fixed Cost & Support Included) */}
+              {project.projectType === 'Fixed Cost' && commercialDetails.supportIncluded && (
+                <>
                   <div>
                     <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Support Type</label>
                     <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.supportType}</p>
                   </div>
                   <div>
-                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Validity</label>
+                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Support Validity</label>
                     <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.supportValidity}</p>
                   </div>
                   <div>
-                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">No. of Months</label>
+                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Support Months</label>
                     <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.supportMonths}</p>
                   </div>
                   <div>
-                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">No. of Hours</label>
+                    <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Support Hours</label>
                     <p className="text-sm font-medium text-neutral-900 dark:text-white">{commercialDetails.supportHours}</p>
                   </div>
                   <div>
                     <label className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-2 block">Support Amount</label>
-                    <p className="text-sm font-medium text-neutral-900 dark:text-white">${commercialDetails.supportAmount.toLocaleString()}</p>
+                    <p className="text-sm font-medium text-primary-600 dark:text-primary-400">${commercialDetails.supportAmount.toLocaleString()}</p>
                   </div>
-                </div>
-              </div>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </section>
+
+
 
         {/* Agreements & Invoice Section */}
         <section id="agreements" className="scroll-mt-48">
@@ -1250,8 +1307,8 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   <div
                     key={key}
                     className={`relative p-4 rounded-lg border-2 transition-all ${agreement.status
-                        ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
-                        : 'bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-neutral-700'
+                      ? 'bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800'
+                      : 'bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-neutral-700'
                       }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -1395,22 +1452,22 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                   <thead className="bg-neutral-50 dark:bg-neutral-800">
                     <tr>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                        Code
+                        Milestone Code
                       </th>
                       <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                         Milestone Name
                       </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                        Deliverables
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                        Due Date
+                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Milestone %
                       </th>
                       <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                        Amount
+                        Milestone Amount
                       </th>
-                      <th className="px-4 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                        Payment %
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Milestone Date
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                        Milestone Deliverable
                       </th>
                     </tr>
                   </thead>
@@ -1418,33 +1475,33 @@ export function ProjectDetailsModule({ project: propProject, onBack, onEdit, onA
                     {milestones.map((milestone, index) => (
                       <tr key={milestone.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
                         <td className="px-4 py-4">
-                          <span className="inline-flex items-center justify-center w-10 h-10 bg-primary-600 dark:bg-primary-500 text-white font-bold rounded-lg">
+                          <span className="inline-flex items-center justify-center w-10 h-10 bg-primary-600 dark:bg-primary-500 text-white font-bold rounded-lg shadow-sm">
                             {milestone.code}
                           </span>
                         </td>
                         <td className="px-4 py-4">
-                          <div className="font-medium text-neutral-900 dark:text-white">
+                          <div className="font-semibold text-neutral-900 dark:text-white">
                             {milestone.name}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="text-sm text-neutral-600 dark:text-neutral-400 max-w-md">
-                            {milestone.deliverables}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4">
-                          <div className="text-sm text-neutral-900 dark:text-white">
-                            {new Date(milestone.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </div>
-                        </td>
-                        <td className="px-4 py-4 text-right">
-                          <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                            ${milestone.amount.toLocaleString()}
                           </div>
                         </td>
                         <td className="px-4 py-4 text-right">
                           <div className="text-lg font-bold text-primary-600 dark:text-primary-400">
                             {milestone.percentage}%
+                          </div>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <div className="text-sm font-bold text-neutral-900 dark:text-white">
+                            ${milestone.amount.toLocaleString()}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                            {new Date(milestone.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </div>
+                        </td>
+                        <td className="px-4 py-4">
+                          <div className="text-sm text-neutral-600 dark:text-neutral-400 max-w-xs xl:max-w-md">
+                            {milestone.deliverables}
                           </div>
                         </td>
                       </tr>

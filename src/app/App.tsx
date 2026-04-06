@@ -9,11 +9,10 @@ import LeadsModule from "./components/LeadsModule";
 import ProjectsModule from "./components/ProjectsModule";
 import MilestonesModule from "./components/MilestonesModule";
 import HireRenewalModule from "./components/HireRenewalModule";
-import SupportAMCModule from "./components/SupportAMCModule";
 import ChangeRequestsModule from "./components/ChangeRequestsModule";
 import InfrastructureModule from "./components/InfrastructureModule";
 import AddonsModule from "./components/AddonsModule";
-import AWSModule from "./components/AWSModule";
+import AwsModule from "./components/AwsModule";
 import MilestonesMasterModule from "./components/MilestonesMasterModule";
 import PaymentTermsMasterModule from "./components/PaymentTermsMasterModule";
 import MilestoneStatusChangeLogsModule from "./components/MilestoneStatusChangeLogsModule";
@@ -130,13 +129,8 @@ export default function App() {
             onFiltersConsumed={() => setInitialFilters([])} 
           />
         ) : currentPage === "hire-renewal" ? (
-          <HireRenewalModule 
-            onNavigate={handleNavigate}
-            initialFilters={initialFilters} 
-            onFiltersConsumed={() => setInitialFilters([])} 
-          />
-        ) : currentPage === "support-amc" ? (
-          <SupportAMCModule />
+          <HireRenewalModule />
+
         ) : currentPage === "change-requests" ? (
           <ChangeRequestsModule />
         ) : currentPage === "infrastructure" ? (
@@ -148,7 +142,11 @@ export default function App() {
             onFiltersConsumed={() => setInitialFilters([])} 
           />
         ) : currentPage === "aws" ? (
-          <AWSModule />
+          <AwsModule 
+            onNavigate={handleNavigate}
+            initialFilters={initialFilters} 
+            onFiltersConsumed={() => setInitialFilters([])} 
+          />
         ) : currentPage === "milestones-master" ? (
           <MilestonesMasterModule />
         ) : currentPage === "payment-terms-master" ? (
@@ -156,11 +154,7 @@ export default function App() {
         ) : currentPage === "milestone-status-logs" ? (
           <MilestoneStatusChangeLogsModule />
         ) : currentPage === "resource-renewals" ? (
-          <ResourceRenewalsModule 
-            onNavigate={handleNavigate}
-            initialFilters={initialFilters} 
-            onFiltersConsumed={() => setInitialFilters([])} 
-          />
+          <ResourceRenewalsModule />
         ) : currentPage === "project-allotment" ? (
           <ProjectAllotmentModule />
         ) : currentPage === "user-roles" ? (

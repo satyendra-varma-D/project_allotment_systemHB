@@ -1,389 +1,561 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import {
-  Users,
   Calendar,
-  DollarSign,
   MoreVertical,
-  Plus,
-  BarChart3,
-  RefreshCw,
-  Upload,
-  Download,
-  Printer,
   Edit2,
   Trash2,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  AlertCircle,
-  User,
-  Briefcase,
-  FileText,
-  Code,
-  Search,
-  Filter,
-  Eye,
-  LayoutGrid,
-  List
 } from 'lucide-react';
-import { ListingHeader, SummaryWidgets, AdvancedSearchPanel, FilterChips, Pagination } from './hb/listing';
+import { ListingHeader, AdvancedSearchPanel } from './hb/listing';
 import type { FilterCondition, ViewMode } from './hb/listing';
 import { HireRenewalEditSidePanel } from './HireRenewalEditSidePanel';
+import { ResourceEngagementData } from '../types/ResourceEngagement';
 
-// Resource Engagement data interface
-interface ResourceEngagement {
-  id: string;
-  resourceId: string;
-  resourceName: string;
-  role: string;
-  department: string;
-  engagementModel: 'Full-Time' | 'Part-Time' | 'Contract' | 'Consultant';
-  status: 'Active' | 'Inactive';
-  projectName?: string;
-  startDate: string;
-  endDate?: string;
-  email: string;
-  phone: string;
-  skills: string[];
-  yearsOfExperience: number;
-  remarks?: string;
-  createdDate: string;
-}
-
-// Mock data
-const mockEngagements: ResourceEngagement[] = [
+const mockResources: ResourceEngagementData[] = [
   {
     id: '1',
-    resourceId: 'RES-2024-001',
-    resourceName: 'Alex Thompson',
-    role: 'Senior Backend Developer',
-    department: 'Development',
-    engagementModel: 'Full-Time',
-    status: 'Active',
+    resourceId: 'RES-001',
+    projectCode: 'CRM-001',
     projectName: 'Enterprise CRM Platform',
-    startDate: '2024-01-15',
-    endDate: '2024-07-15',
-    email: 'alex.thompson@example.com',
-    phone: '+1-555-123-4567',
-    skills: ['Node.js', 'Python', 'AWS'],
+    clientName: 'Tech Solutions Inc.',
+    crt: 'Alex Thompson',
+    resourceType: 'Senior Backend Developer',
+    resourceSkill: 'Node.js, Python, AWS',
+    hireType: 'Full-Time',
+    hireCycle: 'Monthly',
+    noOfHours: 160,
+    currency: 'USD',
+    hourlyRate: 50,
+    amountLocal: 8000,
+    amountUSD: 8000,
+    renewalStartDate: '2024-01-15',
+    renewalEndDate: '2024-07-15',
+    publishStatus: 'Published',
+    paymentStatus: 'Received',
+    paymentStatusDate: '2024-04-05',
+    status: 'Active',
+    department: 'Development',
     yearsOfExperience: 5,
-    createdDate: '2024-01-10',
+    email: 'alex.thompson@example.com',
+    invoiceNumber: 'INV-2024-0115',
+    paymentMode: 'Bank Transfer',
+    subPaymentMode: 'NEFT',
+    transactionCost: 25,
+    transactionNumber: 'TXN-20240405-001',
   },
   {
     id: '2',
-    resourceId: 'RES-2024-002',
-    resourceName: 'Sarah Williams',
-    role: 'UI/UX Designer',
-    department: 'Design',
-    engagementModel: 'Contract',
-    status: 'Active',
+    resourceId: 'RES-002',
+    projectCode: 'MB-001',
     projectName: 'Mobile Banking App',
-    startDate: '2024-02-01',
-    endDate: '2024-04-30',
-    email: 'sarah.williams@example.com',
-    phone: '+1-555-987-6543',
-    skills: ['Figma', 'Adobe XD', 'Sketch'],
+    clientName: 'Bank of America',
+    crt: 'Sarah Williams',
+    resourceType: 'Senior Designer',
+    resourceSkill: 'Figma',
+    hireType: 'Part-Time',
+    hireCycle: 'Monthly',
+    noOfHours: 80,
+    currency: 'EUR',
+    hourlyRate: 45,
+    amountLocal: 7200,
+    amountUSD: 7776,
+    renewalStartDate: '2024-02-01',
+    renewalEndDate: '2024-04-30',
+    publishStatus: 'Published',
+    paymentStatus: 'Invoice Raised',
+    paymentStatusDate: '2024-04-10',
+    status: 'Active',
+    department: 'Design',
     yearsOfExperience: 3,
-    remarks: 'Contract renewal under discussion',
-    createdDate: '2024-01-25',
+    email: 'sarah.williams@example.com',
+    invoiceNumber: 'INV-2024-0201',
   },
   {
     id: '3',
-    resourceId: 'RES-2023-045',
-    resourceName: 'Michael Chen',
-    role: 'DevOps Engineer',
-    department: 'Operations',
-    engagementModel: 'Part-Time',
-    status: 'Inactive',
+    resourceId: 'RES-003',
+    projectCode: 'CRM-001',
     projectName: 'Enterprise CRM Platform',
-    startDate: '2023-06-20',
-    endDate: '2024-01-15',
-    email: 'michael.chen@example.com',
-    phone: '+1-555-555-5555',
-    skills: ['Docker', 'Kubernetes', 'Jenkins'],
-    yearsOfExperience: 4,
-    remarks: 'Contract ended, available for future projects',
-    createdDate: '2023-06-15',
-  },
-  {
-    id: '4',
-    resourceId: 'RES-2024-003',
-    resourceName: 'Emma Davis',
-    role: 'QA Lead',
-    department: 'Quality Assurance',
-    engagementModel: 'Consultant',
-    status: 'Active',
-    projectName: 'E-Commerce Platform Redesign',
-    startDate: '2023-11-01',
-    endDate: '2024-05-31',
-    email: 'emma.davis@example.com',
-    phone: '+1-555-111-2222',
-    skills: ['Selenium', 'JIRA', 'TestRail'],
-    yearsOfExperience: 6,
-    createdDate: '2023-10-25',
-  },
-  {
-    id: '5',
-    resourceId: 'RES-2024-004',
-    resourceName: 'James Rodriguez',
-    role: 'Mobile Developer',
-    department: 'Development',
-    engagementModel: 'Full-Time',
-    status: 'Active',
-    projectName: 'Mobile Banking App',
-    startDate: '2024-02-01',
-    endDate: '2024-08-01',
-    email: 'james.rodriguez@example.com',
-    phone: '+1-555-333-4444',
-    skills: ['React Native', 'Swift', 'Kotlin'],
-    yearsOfExperience: 4,
-    createdDate: '2024-01-28',
-  },
-  {
-    id: '6',
-    resourceId: 'RES-2023-012',
-    resourceName: 'Lisa Anderson',
-    role: 'Frontend Developer',
-    department: 'Development',
-    engagementModel: 'Contract',
+    clientName: 'Tech Solutions Inc.',
+    crt: 'Michael Chen',
+    resourceType: 'DevOps Engineer',
+    resourceSkill: 'Docker/Kubernetes',
+    hireType: 'Part-Time',
+    hireCycle: 'Monthly',
+    noOfHours: 80,
+    currency: 'GBP',
+    hourlyRate: 60,
+    amountLocal: 4800,
+    amountUSD: 6096,
+    renewalStartDate: '2023-06-20',
+    renewalEndDate: '2024-01-15',
+    publishStatus: 'Published',
+    paymentStatus: 'Received',
+    paymentStatusDate: '2024-01-20',
     status: 'Inactive',
-    projectName: 'Corporate Website Redesign',
-    startDate: '2023-03-01',
-    endDate: '2023-11-30',
-    email: 'lisa.anderson@example.com',
-    phone: '+1-555-777-8888',
-    skills: ['React', 'TypeScript', 'Tailwind'],
-    yearsOfExperience: 3,
-    remarks: 'Project completed successfully',
-    createdDate: '2023-02-25',
+    department: 'Operations',
+    yearsOfExperience: 4,
+    email: 'michael.chen@example.com',
+    invoiceNumber: 'INV-2023-0620',
+    paymentMode: 'Wire Transfer',
+    subPaymentMode: 'SWIFT',
+    transactionCost: 50,
+    transactionNumber: 'TXN-20240120-003',
   },
 ];
 
-interface HireRenewalModuleProps {
-  initialFilters?: any[];
-  onFiltersConsumed?: () => void;
-  onNavigate?: (pageId: string, filters?: any[]) => void;
-}
-
-export default function HireRenewalModule({ initialFilters, onFiltersConsumed, onNavigate }: HireRenewalModuleProps) {
+export default function HireRenewalModule() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(12);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedEngagement, setSelectedEngagement] = useState<ResourceEngagement | null>(null);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const [engagements, setEngagements] = useState<ResourceEngagement[]>(mockEngagements);
+  const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
+  const [selectedResource, setSelectedResource] = useState<ResourceEngagementData | null>(null);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
-  const [backToProjectName, setBackToProjectName] = useState<string | undefined>(undefined);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (initialFilters && initialFilters.length > 0) {
-      // Capture project name for back navigation before consuming filters
-      const projectFilter = initialFilters.find(f => f.field === 'projectName' || f.field === 'Project Name');
-      if (projectFilter?.value) {
-        setBackToProjectName(projectFilter.value);
-      }
+  const filteredData = useMemo(() => {
+    return mockResources.filter(item => 
+      item.crt.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.projectName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.resourceType.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.projectCode.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
 
-      const filtersWithIds = initialFilters.map(f => ({
-        id: f.id || `filter-${Date.now()}-${Math.random()}`,
-        field: f.field,
-        values: Array.isArray(f.value) ? f.value : [f.value]
-      }));
-      setActiveFilters(prev => [...prev, ...filtersWithIds]);
-      onFiltersConsumed?.();
-    }
-  }, [initialFilters, onFiltersConsumed]);
-  const [showSummary, setShowSummary] = useState(false);
-
-  // Calculate summary statistics
-  const summaryData = useMemo(() => {
-    const total = engagements.length;
-    const active = engagements.filter(e => e.status === 'Active').length;
-    const inactive = engagements.filter(e => e.status === 'Inactive').length;
-    const fullTime = engagements.filter(e => e.engagementModel === 'Full-Time').length;
-    const contract = engagements.filter(e => e.engagementModel === 'Contract').length;
-    const development = engagements.filter(e => e.department === 'Development').length;
-
-    return [
-      {
-        label: 'Total Resources',
-        value: total.toString(),
-        icon: 'Users',
-        bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-        iconColor: 'text-blue-600 dark:text-blue-400',
-        trend: '+3',
-        trendDirection: 'up' as const,
-      },
-      {
-        label: 'Active',
-        value: active.toString(),
-        icon: 'CheckCircle2',
-        bgColor: 'bg-green-50 dark:bg-green-950/30',
-        iconColor: 'text-green-600 dark:text-green-400',
-        trend: '+2',
-        trendDirection: 'up' as const,
-      },
-      {
-        label: 'Inactive',
-        value: inactive.toString(),
-        icon: 'XCircle',
-        bgColor: 'bg-neutral-50 dark:bg-neutral-800/30',
-        iconColor: 'text-neutral-600 dark:text-neutral-400',
-        trend: '-1',
-        trendDirection: 'down' as const,
-      },
-      {
-        label: 'Full-Time',
-        value: fullTime.toString(),
-        icon: 'Briefcase',
-        bgColor: 'bg-purple-50 dark:bg-purple-950/30',
-        iconColor: 'text-purple-600 dark:text-purple-400',
-        trend: '+2',
-        trendDirection: 'up' as const,
-      },
-      {
-        label: 'Contract',
-        value: contract.toString(),
-        icon: 'FileText',
-        bgColor: 'bg-orange-50 dark:bg-orange-950/30',
-        iconColor: 'text-orange-600 dark:text-orange-400',
-        trend: '+1',
-        trendDirection: 'up' as const,
-      },
-      {
-        label: 'Development',
-        value: development.toString(),
-        icon: 'Code',
-        bgColor: 'bg-indigo-50 dark:bg-indigo-950/30',
-        iconColor: 'text-indigo-600 dark:text-indigo-400',
-        trend: '+1',
-        trendDirection: 'up' as const,
-      },
-    ];
-  }, [engagements]);
-
-  // Filter and search logic
-  const filteredEngagements = useMemo(() => {
-    let filtered = [...engagements];
-
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (engagement) =>
-          engagement.resourceName.toLowerCase().includes(query) ||
-          engagement.resourceId.toLowerCase().includes(query) ||
-          engagement.projectName?.toLowerCase().includes(query) ||
-          engagement.role.toLowerCase().includes(query)
-      );
-    }
-
-    activeFilters.forEach((filter) => {
-      if (filter.values && filter.values.length > 0) {
-        filtered = filtered.filter((engagement) => {
-          const engagementValue = engagement[filter.field as keyof ResourceEngagement];
-          if (typeof engagementValue === 'string') {
-            return filter.values.some(val => 
-              engagementValue.toLowerCase().includes(val.toLowerCase())
-            );
-          }
-          return filter.values.includes(String(engagementValue));
-        });
-      }
-    });
-
-    return filtered;
-  }, [engagements, searchQuery, activeFilters]);
-
-  // Pagination
-  const totalPages = Math.ceil(filteredEngagements.length / itemsPerPage);
-  const paginatedEngagements = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredEngagements.slice(startIndex, startIndex + itemsPerPage);
-  }, [filteredEngagements, currentPage, itemsPerPage]);
-
-  // Handlers
-  const handleAddFilter = (filter: FilterCondition) => {
-    setActiveFilters([...activeFilters, filter]);
+  const handleEdit = (resource: ResourceEngagementData) => {
+    setSelectedResource(resource);
+    setIsEditPanelOpen(true);
+    setOpenMenuId(null);
   };
 
-  const handleRemoveFilter = (index: number) => {
-    setActiveFilters(activeFilters.filter((_, i) => i !== index));
+  const getStatusStyle = (status: string) => {
+    return status === 'Active' 
+      ? 'bg-green-100 text-green-700 dark:bg-green-900/10 dark:text-green-400 border border-green-200 dark:border-green-800'
+      : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700';
   };
 
-  const handleClearFilters = () => {
-    setActiveFilters([]);
-  };
-
-  const handleEditEngagement = (engagement: ResourceEngagement) => {
-    setSelectedEngagement(engagement);
-    setIsAddModalOpen(true);
-  };
-
-  const handleDeleteEngagement = (engagementId: string) => {
-    if (confirm('Are you sure you want to delete this engagement?')) {
-      setEngagements(engagements.filter(e => e.id !== engagementId));
-    }
-  };
-
-  const handleSaveEngagement = () => {
-    setIsAddModalOpen(false);
-    setSelectedEngagement(null);
-  };
-
-  // Style helper functions
-  const getStatusStyle = (status: 'Active' | 'Inactive') => {
-    return status === 'Active'
-      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-      : 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
-  };
-
-  const getEngagementModelStyle = (model: string) => {
-    const styles: Record<string, string> = {
-      'Full-Time': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-      'Part-Time': 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-      'Contract': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-      'Consultant': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400',
+  const getPaymentStyle = (status: string) => {
+    const styles = {
+      'Received': 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-800',
+      'Invoice Raised': 'bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-900/10 dark:text-purple-400 dark:border-purple-800',
+      'Requested': 'bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-900/10 dark:text-orange-400 dark:border-orange-800',
+      'Pending': 'bg-neutral-50 text-neutral-600 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700',
     };
-    return styles[model] || 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400';
+    return styles[status as keyof typeof styles] || styles.Pending;
   };
 
-
-  const handleBack = () => {
-    if (backToProjectName && onNavigate) {
-      onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
-    }
+  const getPublishStyle = (status: string) => {
+    const styles = {
+      'Published': 'bg-green-50 text-green-700 border border-green-200',
+      'Draft': 'bg-yellow-50 text-yellow-700 border border-yellow-200',
+      'Cancelled': 'bg-red-50 text-red-700 border border-red-200',
+    };
+    return styles[status as keyof typeof styles] || styles.Draft;
   };
+
+  const formatAmount = (item: ResourceEngagementData) => {
+    if (item.currency === 'USD') return `$${item.amountUSD.toLocaleString()}`;
+    return `$${item.amountUSD.toLocaleString()} (${item.currency} ${item.amountLocal.toLocaleString()})`;
+  };
+
+  // Action menu component
+  const ActionMenu = ({ item }: { item: ResourceEngagementData }) => (
+    <div className="relative">
+      <button 
+        onClick={() => setOpenMenuId(openMenuId === item.id ? null : item.id)}
+        className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-xl transition-colors"
+      >
+        <MoreVertical className="w-4 h-4 text-neutral-400" />
+      </button>
+      {openMenuId === item.id && (
+        <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpenMenuId(null)} />
+          <div className="absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-2xl py-2 w-48 z-20 animate-in fade-in zoom-in-95 duration-200">
+            <button
+              onClick={() => handleEdit(item)}
+              className="w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 flex items-center gap-3 transition-colors"
+            >
+              <Edit2 className="w-4 h-4 text-primary-600" />
+              <span className="font-medium">Edit Resource</span>
+            </button>
+            <button
+              className="w-full px-4 py-2.5 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3 text-red-600 transition-colors"
+            >
+              <Trash2 className="w-4 h-4" />
+              <span className="font-medium">Remove</span>
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+
+  // ─── TABLE VIEW ─────────────────────────────────
+  const renderTableView = () => (
+    <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse min-w-[1400px]">
+          <thead>
+            <tr className="bg-neutral-50 dark:bg-neutral-800/50 border-b border-neutral-200 dark:border-neutral-800">
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider sticky left-0 bg-neutral-50 dark:bg-neutral-800/50 z-10">Project Code</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Project Name</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Client</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">CRT</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Resource Type</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Skill</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Hire Type</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Hire Cycle</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Hours</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Currency</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Hourly Rate</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Amount (USD)</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Amount (Local)</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Start Date</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">End Date</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Publish</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Payment</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Invoice #</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Pay Mode</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Sub Mode</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Txn Cost</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Txn #</th>
+              <th className="px-4 py-3 text-[10px] font-bold text-neutral-500 uppercase tracking-wider text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
+            {filteredData.map((item) => (
+              <tr key={item.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/30 transition-colors group text-sm">
+                <td className="px-4 py-3 sticky left-0 bg-white dark:bg-neutral-900 group-hover:bg-neutral-50 dark:group-hover:bg-neutral-800/30 z-10">
+                  <span className="font-bold text-primary-600 text-xs">{item.projectCode}</span>
+                </td>
+                <td className="px-4 py-3 font-semibold text-neutral-900 dark:text-white whitespace-nowrap">{item.projectName}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{item.clientName}</td>
+                <td className="px-4 py-3 font-semibold text-neutral-900 dark:text-white whitespace-nowrap">{item.crt}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{item.resourceType}</td>
+                <td className="px-4 py-3 text-neutral-500 whitespace-nowrap">{item.resourceSkill}</td>
+                <td className="px-4 py-3">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.hireType === 'Full-Time' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+                    {item.hireType}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">{item.hireCycle}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 text-center">{item.noOfHours}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 font-medium">{item.currency}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">${item.hourlyRate}</td>
+                <td className="px-4 py-3 font-bold text-neutral-900 dark:text-white">${item.amountUSD.toLocaleString()}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">
+                  {item.currency !== 'USD' ? `${item.currency} ${item.amountLocal.toLocaleString()}` : '—'}
+                </td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{item.renewalStartDate}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{item.renewalEndDate}</td>
+                <td className="px-4 py-3">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPublishStyle(item.publishStatus)}`}>
+                    {item.publishStatus}
+                  </span>
+                </td>
+                <td className="px-4 py-3">
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPaymentStyle(item.paymentStatus)}`}>
+                    {item.paymentStatus}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 text-xs">{item.invoiceNumber || '—'}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 text-xs">{item.paymentMode || '—'}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 text-xs">{item.subPaymentMode || '—'}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 text-xs">{item.transactionCost ? `$${item.transactionCost}` : '—'}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 text-xs whitespace-nowrap">{item.transactionNumber || '—'}</td>
+                <td className="px-4 py-3 text-right">
+                  <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button onClick={() => handleEdit(item)} className="p-1.5 text-neutral-500 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-all">
+                      <Edit2 className="w-3.5 h-3.5" />
+                    </button>
+                    <button className="p-1.5 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  // ─── LIST VIEW ─────────────────────────────────
+  const renderListView = () => (
+    <div className="space-y-3">
+      {filteredData.map((item) => (
+        <div key={item.id} className="group bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-300 overflow-hidden">
+          {/* Top accent */}
+          <div className={`h-1 ${item.status === 'Active' ? 'bg-green-500' : 'bg-neutral-300 dark:bg-neutral-700'}`} />
+          
+          <div className="p-5">
+            {/* Row 1: Header — ID, Name, Status, Actions */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <span className="px-2.5 py-1 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-primary-100 dark:border-primary-900/30 shrink-0">
+                  {item.resourceId || 'RES-NEW'}
+                </span>
+                <h3 className="font-bold text-neutral-900 dark:text-white truncate text-base">{item.crt}</h3>
+                <span className="text-xs text-neutral-500 font-medium shrink-0">({item.resourceType})</span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase shrink-0 ${getStatusStyle(item.status)}`}>
+                  {item.status}
+                </span>
+              </div>
+              <ActionMenu item={item} />
+            </div>
+
+            {/* Row 2: All key fields in a horizontal grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-3">
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Project Code</div>
+                <div className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{item.projectCode}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Project Name</div>
+                <div className="text-xs font-semibold text-neutral-700 dark:text-neutral-300 truncate">{item.projectName}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Client</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400 truncate">{item.clientName}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Skill</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400 truncate">{item.resourceSkill}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Hire Type</div>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.hireType === 'Full-Time' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+                  {item.hireType}
+                </span>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Hire Cycle</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.hireCycle}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">No of Hours</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.noOfHours} hrs</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Hourly Rate</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.currency} {item.hourlyRate}</div>
+              </div>
+            </div>
+
+            {/* Row 3: Commercial & Payment info */}
+            <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-3">
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Amount (USD)</div>
+                <div className="text-sm font-black text-neutral-900 dark:text-white">${item.amountUSD.toLocaleString()}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Amount ({item.currency})</div>
+                <div className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  {item.currency !== 'USD' ? `${item.currency} ${item.amountLocal.toLocaleString()}` : '—'}
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Start Date</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />{item.renewalStartDate}
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">End Date</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />{item.renewalEndDate}
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Publish Status</div>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPublishStyle(item.publishStatus)}`}>{item.publishStatus}</span>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Payment Status</div>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPaymentStyle(item.paymentStatus)}`}>{item.paymentStatus}</span>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Invoice #</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.invoiceNumber || '—'}</div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Payment Mode</div>
+                <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.paymentMode || '—'}</div>
+              </div>
+            </div>
+
+            {/* Row 4: Extra payment details (if applicable) */}
+            {(item.subPaymentMode || item.transactionCost || item.transactionNumber) && (
+              <div className="mt-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-3">
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Sub Pay Mode</div>
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.subPaymentMode || '—'}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Txn Cost</div>
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.transactionCost ? `$${item.transactionCost}` : '—'}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Txn Number</div>
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400">{item.transactionNumber || '—'}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // ─── GRID VIEW ─────────────────────────────────
+  const renderGridView = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {filteredData.map((item) => (
+        <div 
+          key={item.id} 
+          className="group relative bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-primary-500/5 transition-all duration-300"
+        >
+          {/* Status Indicator Top */}
+          <div className={`absolute top-0 left-0 w-full h-1.5 ${item.status === 'Active' ? 'bg-green-500' : 'bg-neutral-300 dark:bg-neutral-700'}`} />
+          
+          <div className="p-6">
+            {/* Header Row */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="px-2.5 py-1 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-primary-100 dark:border-primary-900/30">
+                    {item.resourceId || 'RES-NEW'}
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tight bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400">
+                    {item.department?.toUpperCase() || 'DEV'}
+                  </span>
+                </div>
+                <h3 className="font-bold text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors truncate">
+                  {item.crt}
+                </h3>
+                <p className="text-xs text-neutral-500 font-medium mt-0.5">{item.resourceType} • {item.resourceSkill}</p>
+              </div>
+              <ActionMenu item={item} />
+            </div>
+
+            <div className="space-y-3">
+              {/* Project & Client */}
+              <div className="flex flex-col gap-1">
+                <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">Project & Client</div>
+                <div className="text-sm font-semibold text-neutral-800 dark:text-neutral-200 truncate">{item.projectName}</div>
+                <div className="text-xs text-neutral-500 flex items-center gap-1.5">
+                   <div className="w-1.5 h-1.5 rounded-full bg-primary-500"></div>
+                   {item.clientName}
+                </div>
+              </div>
+
+              {/* Commercials Highlight */}
+              <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-xl border border-neutral-100 dark:border-neutral-800/50">
+                 <div className="flex justify-between items-end">
+                    <div>
+                       <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">Resource Amount</div>
+                       <div className="flex items-baseline gap-2">
+                          <span className="text-xl font-black text-neutral-900 dark:text-white">
+                            ${item.amountUSD.toLocaleString()}
+                          </span>
+                          {item.currency !== 'USD' && (
+                            <span className="text-[10px] font-bold text-neutral-500">
+                              ({item.currency} {item.amountLocal.toLocaleString()})
+                            </span>
+                          )}
+                       </div>
+                    </div>
+                    <div className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-tight ${getPaymentStyle(item.paymentStatus)}`}>
+                       {item.paymentStatus}
+                    </div>
+                 </div>
+              </div>
+
+              {/* Details Grid - 4 fields */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Hire Type</div>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${item.hireType === 'Full-Time' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'}`}>
+                    {item.hireType}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Hire Cycle</div>
+                  <div className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{item.hireCycle} • {item.noOfHours}h</div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Start Date</div>
+                  <div className="text-xs font-bold text-neutral-900 dark:text-white flex items-center gap-1">
+                     <Calendar className="w-3 h-3 text-neutral-400" />
+                     {item.renewalStartDate}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">End Date</div>
+                  <div className="text-xs font-bold text-neutral-900 dark:text-white flex items-center gap-1">
+                     <Calendar className="w-3 h-3 text-neutral-400" />
+                     {item.renewalEndDate}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Hourly Rate</div>
+                  <div className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{item.currency} {item.hourlyRate}/hr</div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Publish</div>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${getPublishStyle(item.publishStatus)}`}>{item.publishStatus}</span>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between items-center">
+                 <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest ${getStatusStyle(item.status)}`}>
+                   {item.status}
+                 </span>
+                 <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                   {item.invoiceNumber || 'NO INVOICE'}
+                 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
-      {/* Page Header */}
       <ListingHeader
         title="Resources"
-        subtitle="Manage all hired resources (Active & Inactive) - Complete resource directory irrespective of status"
-        moduleName="Resource Engagement"
+        subtitle="Complete directory of all hired resources (Active & Inactive)"
+        moduleName="Resource"
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         onFilterClick={() => setIsAdvancedSearchOpen(true)}
         onRefresh={() => console.log('Refresh')}
-        exportOptions={{
-          onExportCSV: () => console.log('Export CSV'),
-          onExportExcel: () => console.log('Export Excel'),
-          onExportPDF: () => console.log('Export PDF'),
+        onAdd={() => {
+          setSelectedResource(null);
+          setIsEditPanelOpen(true);
         }}
-        showSummary={showSummary}
-        onSummaryToggle={() => setShowSummary(!showSummary)}
-        onAdd={() => setIsAddModalOpen(true)}
-        onBack={backToProjectName ? handleBack : undefined}
       />
 
-      {/* Summary Widgets - Conditionally shown */}
-      {showSummary && <div className="px-6 pb-6">
-        <SummaryWidgets widgets={summaryData} />
-      </div>}
+      <div className="flex-1 overflow-y-auto px-6 pb-6 mt-4 scrollbar-hide">
+        {viewMode === 'table' ? renderTableView() : viewMode === 'list' ? renderListView() : renderGridView()}
+      </div>
+
+      <HireRenewalEditSidePanel
+        isOpen={isEditPanelOpen}
+        onClose={() => {
+          setIsEditPanelOpen(false);
+          setOpenMenuId(null);
+        }}
+        engagement={selectedResource}
+        onSave={(data) => {
+          console.log('Saved:', data);
+          setIsEditPanelOpen(false);
+        }}
+      />
 
       <AdvancedSearchPanel
         isOpen={isAdvancedSearchOpen}
@@ -391,331 +563,11 @@ export default function HireRenewalModule({ initialFilters, onFiltersConsumed, o
         filters={activeFilters}
         onFiltersChange={setActiveFilters}
         filterOptions={{
-          'Engagement Model': ['Full-Time', 'Part-Time', 'Contract', 'Consultant'],
-          'Project Name': [],
-          'Resource Name': [],
+          'Status': ['Active', 'Inactive'],
+          'Department': ['Development', 'Design', 'QA', 'Operations'],
+          'Hire Type': ['Full-Time', 'Part-Time', 'Average'],
+          'Payment Status': ['Pending', 'Requested', 'Invoice Raised', 'Received'],
         }}
-      />
-
-      {activeFilters.length > 0 && (
-        <div className="px-6 pb-4">
-          <FilterChips
-            filters={activeFilters}
-            onRemove={(id) => setActiveFilters(activeFilters.filter((f) => f.id !== id))}
-            onClearAll={() => setActiveFilters([])}
-          />
-        </div>
-      )}
-
-      <div className="px-6 pb-6">
-        {viewMode === 'grid' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {paginatedEngagements.map((engagement) => (
-              <div
-                key={engagement.id}
-                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 group"
-              >
-                {/* Colored Top Border Accent - Based on Status */}
-                <div className={`h-1 ${ engagement.status === 'Active' ? 'bg-green-500' : 'bg-neutral-300'
-                }`} />
-
-                {/* Card Content */}
-                <div className="p-4">
-                  {/* Header Row */}
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-2 px-2.5 py-1 bg-primary-50 dark:bg-primary-950/30 rounded-md">
-                      <User className="w-3 h-3 text-primary-600 dark:text-primary-400" />
-                      <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">{engagement.resourceId}</span>
-                    </div>
-
-                    {/* Action Menu */}
-                    <div className="relative ml-auto">
-                      <button
-                        onClick={() => setOpenMenuId(openMenuId === engagement.id ? null : engagement.id)}
-                        className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md transition-colors"
-                      >
-                        <MoreVertical className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
-                      </button>
-                      {openMenuId === engagement.id && (
-                        <>
-                          <div 
-                            className="fixed inset-0 z-10" 
-                            onClick={() => setOpenMenuId(null)}
-                          />
-                          <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
-                            <button
-                              onClick={() => {
-                                handleEditEngagement(engagement);
-                                setOpenMenuId(null);
-                              }}
-                              className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
-                            >
-                              <Edit2 className="w-3.5 h-3.5" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => {
-                                handleDeleteEngagement(engagement.id);
-                                setOpenMenuId(null);
-                              }}
-                              className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2.5 transition-colors"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                              Delete
-                            </button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Resource Name Title */}
-                  <h3 className="font-semibold text-base text-neutral-900 dark:text-white mb-2 line-clamp-2 leading-snug min-h-[2.5rem]">
-                    {engagement.resourceName}
-                  </h3>
-                  
-                  {/* Role with Icon */}
-                  <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-[10px] font-semibold flex-shrink-0">
-                      {engagement.resourceName.charAt(0)}
-                    </div>
-                    <span className="text-xs font-medium truncate">{engagement.role}</span>
-                  </div>
-
-                  {/* Status Badges */}
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold ${getStatusStyle(engagement.status)}`}>
-                      {engagement.status}
-                    </span>
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold ${getEngagementModelStyle(engagement.engagementModel)}`}>
-                      {engagement.engagementModel}
-                    </span>
-                  </div>
-
-                  {/* Divider */}
-                  <div className="border-t border-neutral-100 dark:border-neutral-800 my-3" />
-
-                  {/* Compact Information Grid - 2 columns */}
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    {/* Project Name */}
-                    <div className="col-span-2">
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Project</div>
-                      <div className="font-medium text-neutral-900 dark:text-white truncate">{engagement.projectName || 'N/A'}</div>
-                    </div>
-                    
-                    {/* Department */}
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Department</div>
-                      <div className="font-medium text-neutral-900 dark:text-white truncate">{engagement.department}</div>
-                    </div>
-                    
-                    {/* Experience */}
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Experience</div>
-                      <div className="font-medium text-neutral-900 dark:text-white">{engagement.yearsOfExperience} years</div>
-                    </div>
-                    
-                    {/* Start Date */}
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Start Date</div>
-                      <div className="font-medium text-neutral-900 dark:text-white">{engagement.startDate}</div>
-                    </div>
-                    
-                    {/* End Date */}
-                    <div>
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">End Date</div>
-                      <div className="font-medium text-neutral-900 dark:text-white">{engagement.endDate || 'Ongoing'}</div>
-                    </div>
-                    
-                    {/* Skills */}
-                    <div className="col-span-2">
-                      <div className="text-[10px] uppercase tracking-wide text-neutral-500 dark:text-neutral-500 font-medium mb-1">Skills</div>
-                      <div className="font-medium text-neutral-900 dark:text-white truncate">{engagement.skills.join(', ')}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {viewMode === 'list' && (
-          <div className="space-y-4">
-            {paginatedEngagements.map((engagement) => (
-              <div
-                key={engagement.id}
-                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm text-neutral-500 dark:text-neutral-400">{engagement.resourceId}</span>
-                      <span className={`px-2 py-1 rounded-md text-xs font-medium ${getStatusStyle(engagement.status)}`}>
-                        {engagement.status}
-                      </span>
-                      <span className={`px-2 py-1 rounded-md text-xs font-medium ${getEngagementModelStyle(engagement.engagementModel)}`}>
-                        {engagement.engagementModel}
-                      </span>
-                    </div>
-                    <h3 className="font-medium text-neutral-900 dark:text-white mb-3">{engagement.resourceName} - {engagement.role}</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Project</span>
-                        <span className="text-neutral-900 dark:text-white">{engagement.projectName || 'N/A'}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Department</span>
-                        <span className="text-neutral-900 dark:text-white">{engagement.department}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Experience</span>
-                        <span className="text-neutral-900 dark:text-white">{engagement.yearsOfExperience} years</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">End Date</span>
-                        <span className="text-neutral-900 dark:text-white font-medium">{engagement.endDate || 'Ongoing'}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="ml-4 relative group">
-                    <button className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded">
-                      <MoreVertical className="w-4 h-4 text-neutral-500" />
-                    </button>
-                    <div className="hidden group-hover:block absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                      <button
-                        onClick={() => handleEditEngagement(engagement)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteEngagement(engagement.id)}
-                        className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {viewMode === 'table' && (
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Resource
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Project
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Department
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Model
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Period
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                  {paginatedEngagements.map((engagement) => (
-                    <tr key={engagement.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                      <td className="px-6 py-4">
-                        <div>
-                          <div className="font-medium text-neutral-900 dark:text-white flex items-center gap-2">
-                            {engagement.resourceName}
-                          </div>
-                          <div className="text-sm text-neutral-500 dark:text-neutral-400">{engagement.role}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
-                        {engagement.projectName || 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
-                        {engagement.department}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${getEngagementModelStyle(engagement.engagementModel)}`}>
-                          {engagement.engagementModel}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <div className="text-neutral-900 dark:text-white">{engagement.startDate}</div>
-                        <div className="text-neutral-500 dark:text-neutral-400">{engagement.endDate || 'Ongoing'}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${getStatusStyle(engagement.status)}`}>
-                          {engagement.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="relative inline-block group">
-                          <button className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded">
-                            <MoreVertical className="w-4 h-4 text-neutral-500" />
-                          </button>
-                          <div className="hidden group-hover:block absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg py-1 w-40 z-10">
-                            <button
-                              onClick={() => handleEditEngagement(engagement)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => handleDeleteEngagement(engagement.id)}
-                              className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        <div className="mt-6">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-            itemsPerPage={itemsPerPage}
-            onItemsPerPageChange={setItemsPerPage}
-            totalItems={filteredEngagements.length}
-          />
-        </div>
-      </div>
-
-      <HireRenewalEditSidePanel
-        key={selectedEngagement?.id || 'new-engagement'}
-        isOpen={isAddModalOpen}
-        onClose={() => {
-          setIsAddModalOpen(false);
-          setSelectedEngagement(null);
-        }}
-        engagement={selectedEngagement}
-        onSave={handleSaveEngagement}
       />
     </div>
   );

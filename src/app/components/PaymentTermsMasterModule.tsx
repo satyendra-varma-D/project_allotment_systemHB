@@ -10,6 +10,14 @@ import {
 } from 'lucide-react';
 import { ListingHeader, SummaryWidgets, AdvancedSearchPanel, FilterChips, Pagination } from './hb/listing';
 import type { FilterCondition, ViewMode } from './hb/listing';
+import { SidePanel, SidePanelFooter } from './hb/common/SidePanel';
+import {
+  FormField,
+  FormLabel,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+} from './hb/common/Form';
 
 // Payment Terms interface
 interface PaymentTermsDetail {
@@ -645,6 +653,82 @@ export default function PaymentTermsMasterModule() {
           />
         </div>
       </div>
+
+      {/* Add/Edit Modal */}
+      <SidePanel
+        key={selectedTerm?.id || 'new-term'}
+        isOpen={isAddModalOpen}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setSelectedTerm(null);
+        }}
+        title={selectedTerm ? 'Edit :: Milestone Template Master' : 'Add :: Milestone Template Master'}
+        footer={
+          <SidePanelFooter
+            onCancel={() => {
+              setIsAddModalOpen(false);
+              setSelectedTerm(null);
+            }}
+            onSave={() => {
+              setIsAddModalOpen(false);
+              setSelectedTerm(null);
+            }}
+          />
+        }
+      >
+        <div className="space-y-5">
+          <FormField>
+            <FormLabel required>Milestone Template Name</FormLabel>
+            <FormInput 
+              placeholder="Ex: 10:20:30:40" 
+              defaultValue={selectedTerm?.structureName} 
+            />
+          </FormField>
+
+          <FormField>
+            <FormLabel required>Milestone Template Code</FormLabel>
+            <FormInput 
+              placeholder="" 
+              defaultValue={selectedTerm?.paymentTermsId} 
+            />
+          </FormField>
+
+          <FormField>
+            <FormLabel required>Payment Milestones</FormLabel>
+            <FormSelect defaultValue="">
+              <option value="" disabled>Please select Payment Milestones</option>
+              <option value="M0,M1">M0, M1</option>
+              <option value="M0,M1,M2">M0, M1, M2</option>
+              <option value="M0,M1,M2,M3">M0, M1, M2, M3</option>
+            </FormSelect>
+          </FormField>
+
+          <FormField>
+            <FormLabel>Description</FormLabel>
+            <FormTextarea 
+              placeholder="" 
+              defaultValue={selectedTerm?.description}
+              rows={4}
+            />
+          </FormField>
+
+          <FormField>
+            <FormLabel>Seq No</FormLabel>
+            <FormInput 
+              type="number"
+              defaultValue={selectedTerm ? "1" : "0"} 
+            />
+          </FormField>
+
+          <FormField>
+            <FormLabel required>Status</FormLabel>
+            <FormSelect defaultValue={selectedTerm?.status || 'active'}>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </FormSelect>
+          </FormField>
+        </div>
+      </SidePanel>
     </div>
   );
 }

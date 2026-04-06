@@ -117,7 +117,8 @@ interface ListingHeaderProps {
   cloneTooltip?: string;
 
   // Add button
-  onAdd: () => void;
+  onAdd?: () => void;
+  hideAddButton?: boolean;
 
   // Back button (optional)
   onBack?: () => void;
@@ -151,6 +152,7 @@ export function ListingHeader({
   cloneDisabled = false,
   cloneTooltip,
   onAdd,
+  hideAddButton = false,
   onBack,
   customActions,
   className = '',
@@ -424,9 +426,11 @@ export function ListingHeader({
           )}
 
           {/* Add New Button */}
-          <PrimaryButton icon={Plus} onClick={onAdd}>
-            Add {moduleName}
-          </PrimaryButton>
+          {!hideAddButton && onAdd && (
+            <PrimaryButton icon={Plus} onClick={onAdd}>
+              Add {moduleName}
+            </PrimaryButton>
+          )}
         </div>
       </div>
     </div>

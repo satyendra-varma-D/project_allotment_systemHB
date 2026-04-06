@@ -100,7 +100,7 @@ export function AddEditAddonPanel({
       />
       
       {/* Side Panel */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-[600px] bg-white dark:bg-neutral-900 shadow-2xl z-[101] flex flex-col">
+      <div className="fixed right-0 top-0 bottom-0 w-full max-w-2xl bg-white dark:bg-neutral-900 shadow-2xl z-[101] flex flex-col animate-in slide-in-from-right duration-300">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-800">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -182,76 +182,74 @@ export function AddEditAddonPanel({
             </div>
           </FormSection>
 
-          {/* Proposed Details Section - Only visible when status is Confirmed */}
-          {showApprovedFields && (
-            <FormSection title="Proposed Details">
-              <div className="grid grid-cols-2 gap-4">
-                <FormField>
-                  <FormLabel required>Proposed Total Hours</FormLabel>
-                  <FormInput
-                    type="number"
-                    value={formData.proposedTotalHours}
-                    onChange={(e) => handleChange('proposedTotalHours', e.target.value)}
-                    placeholder="Enter hours"
-                    required
-                  />
-                </FormField>
+          {/* Estimation & Costing Details - Always visible */}
+          <FormSection title="Estimation & Costing Details">
+            <div className="grid grid-cols-2 gap-4">
+              <FormField>
+                <FormLabel required>Proposed Total Hours</FormLabel>
+                <FormInput
+                  type="number"
+                  value={formData.proposedTotalHours}
+                  onChange={(e) => handleChange('proposedTotalHours', e.target.value)}
+                  placeholder="Enter hours"
+                  required
+                />
+              </FormField>
 
-                <FormField>
-                  <FormLabel required>Schedule (In Weeks)</FormLabel>
-                  <FormInput
-                    type="number"
-                    value={formData.scheduleInWeeks}
-                    onChange={(e) => handleChange('scheduleInWeeks', e.target.value)}
-                    placeholder="Enter weeks"
-                    required
-                  />
-                </FormField>
+              <FormField>
+                <FormLabel required>Schedule (In Weeks)</FormLabel>
+                <FormInput
+                  type="number"
+                  value={formData.scheduleInWeeks}
+                  onChange={(e) => handleChange('scheduleInWeeks', e.target.value)}
+                  placeholder="Enter weeks"
+                  required
+                />
+              </FormField>
 
-                <FormField>
-                  <FormLabel required>Amount (USD)</FormLabel>
-                  <FormInput
-                    type="number"
-                    value={formData.amountUSD}
-                    onChange={(e) => handleChange('amountUSD', e.target.value)}
-                    placeholder="Enter amount in USD"
-                    required
-                  />
-                </FormField>
+              <FormField>
+                <FormLabel required>Amount (USD)</FormLabel>
+                <FormInput
+                  type="number"
+                  value={formData.amountUSD}
+                  onChange={(e) => handleChange('amountUSD', e.target.value)}
+                  placeholder="Enter amount in USD"
+                  required
+                />
+              </FormField>
 
-                <FormField>
-                  <FormLabel>Amount (Project Currency)</FormLabel>
-                  <FormInput
-                    type="number"
-                    value={formData.amountProjectCurrency}
-                    onChange={(e) => handleChange('amountProjectCurrency', e.target.value)}
-                    placeholder="Enter amount in project currency"
-                  />
-                </FormField>
+              <FormField>
+                <FormLabel>Amount (Project Currency)</FormLabel>
+                <FormInput
+                  type="number"
+                  value={formData.amountProjectCurrency}
+                  onChange={(e) => handleChange('amountProjectCurrency', e.target.value)}
+                  placeholder="Enter amount in project currency"
+                />
+              </FormField>
 
-                <FormField>
-                  <FormLabel required>Addon Requested Date</FormLabel>
-                  <FormInput
-                    type="date"
-                    value={formData.addonRequestedDate}
-                    onChange={(e) => handleChange('addonRequestedDate', e.target.value)}
-                    required
-                  />
-                </FormField>
+              <FormField>
+                <FormLabel required>Addon Requested Date</FormLabel>
+                <FormInput
+                  type="date"
+                  value={formData.addonRequestedDate}
+                  onChange={(e) => handleChange('addonRequestedDate', e.target.value)}
+                  required
+                />
+              </FormField>
 
-                <FormField>
-                  <FormLabel required>Addon Requested By</FormLabel>
-                  <FormInput
-                    type="text"
-                    value={formData.addonRequestedBy}
-                    onChange={(e) => handleChange('addonRequestedBy', e.target.value)}
-                    placeholder="Enter requester name"
-                    required
-                  />
-                </FormField>
-              </div>
-            </FormSection>
-          )}
+              <FormField>
+                <FormLabel required>Addon Requested By</FormLabel>
+                <FormInput
+                  type="text"
+                  value={formData.addonRequestedBy}
+                  onChange={(e) => handleChange('addonRequestedBy', e.target.value)}
+                  placeholder="Enter requester name"
+                  required
+                />
+              </FormField>
+            </div>
+          </FormSection>
 
           {/* Project Information Section */}
           <FormSection 

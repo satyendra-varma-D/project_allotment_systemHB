@@ -28,25 +28,32 @@ import type { MilestoneData } from './MilestonesEditSidePanel';
 // Milestone data interface
 interface Milestone {
   id: string;
-  milestoneId: string;
   projectId: string;
-  projectCode: string; // Added
+  projectCode: string;
   projectName: string;
-  clientName: string; // Added
+  clientName: string;
+  crt: string;
   milestoneName: string;
   milestoneCode: string;
-  milestoneAmount: number; // Added
-  currency: string; // Added
-  milestoneType: string; // Added
+  milestonePercentage: number;
+  amountLocal: number;
+  amountUSD: number;
+  currency: string;
+  milestoneType: string;
   plannedDate: string;
   actualDate?: string;
-  paymentStatus: 'Pending' | 'Partially Paid' | 'Paid' | 'Overdue'; // Added
+  deliverable?: string;
+  paymentStatus: 'Draft' | 'Published' | 'Requested' | 'Invoice Raised' | 'Received';
+  paymentStatusDate?: string;
+  invoiceNumber?: string;
+  paymentMode?: string;
+  subPaymentMode?: string;
+  transactionCost?: number;
+  transactionNumber?: string;
   completionStatus: 'Not Started' | 'In Progress' | 'Completed' | 'Delayed';
   approvalStatus: 'Pending' | 'Approved' | 'Rejected';
-  invoiceStatus: 'Not Generated' | 'Generated' | 'Sent' | 'Paid';
   assignedTo: string;
   priority: 'Low' | 'Medium' | 'High';
-  dependencies?: string[];
   remarks?: string;
   createdDate?: string;
 }
@@ -55,136 +62,107 @@ interface Milestone {
 const mockMilestones: Milestone[] = [
   {
     id: '1',
-    milestoneId: 'MS-2024-001',
-    projectId: 'PRJ-2024-001',
-    projectCode: 'CRM-001', // Added
+    projectId: 'PRJ-001',
+    projectCode: 'CRM-001',
     projectName: 'Enterprise CRM Platform',
-    clientName: 'Tech Solutions Inc.', // Added
-    milestoneName: 'Requirements & Analysis',
-    milestoneCode: 'REQ-ANALYSIS',
-    milestoneAmount: 50000, // Added
-    currency: 'USD', // Added
-    milestoneType: 'Analysis', // Added
+    clientName: 'Tech Solutions Inc.',
+    crt: 'Sarah Wilson',
+    milestoneName: 'Requirements & Analysis Completion',
+    milestoneCode: 'MS-REQ-01',
+    milestonePercentage: 10,
+    amountLocal: 5000,
+    amountUSD: 5000,
+    currency: 'USD',
+    milestoneType: 'Fixed',
     plannedDate: '2024-02-15',
     actualDate: '2024-02-14',
-    paymentStatus: 'Paid', // Added
+    deliverable: 'Functional Requirements Document, Technical Specification',
+    paymentStatus: 'Received',
+    paymentStatusDate: '2024-02-28',
+    invoiceNumber: 'INV-2024-001',
+    paymentMode: 'Bank Transfer',
+    subPaymentMode: 'Wire',
+    transactionCost: 15,
+    transactionNumber: 'TXN-99881',
     completionStatus: 'Completed',
     approvalStatus: 'Approved',
-    invoiceStatus: 'Paid',
     assignedTo: 'John Anderson',
     priority: 'High',
-    remarks: 'Completed ahead of schedule',
+    remarks: 'Early delivery validated by client.',
     createdDate: '2024-01-15',
   },
   {
     id: '2',
-    milestoneId: 'MS-2024-002',
-    projectId: 'PRJ-2024-001',
-    projectCode: 'CRM-001', // Added
+    projectId: 'PRJ-001',
+    projectCode: 'CRM-001',
     projectName: 'Enterprise CRM Platform',
-    clientName: 'Tech Solutions Inc.', // Added
-    milestoneName: 'Design & Prototyping',
-    milestoneCode: 'DESIGN-PROTO',
-    milestoneAmount: 30000, // Added
-    currency: 'USD', // Added
-    milestoneType: 'Design', // Added
-    plannedDate: '2024-03-15',
-    actualDate: '2024-03-16',
-    paymentStatus: 'Partially Paid', // Added
+    clientName: 'Tech Solutions Inc.',
+    crt: 'Sarah Wilson',
+    milestoneName: 'System Architecture Design',
+    milestoneCode: 'MS-DES-02',
+    milestonePercentage: 15,
+    amountLocal: 7500,
+    amountUSD: 7500,
+    currency: 'USD',
+    milestoneType: 'Fixed',
+    plannedDate: '2024-03-20',
+    actualDate: '2024-03-22',
+    deliverable: 'High Level Design, Database Schema',
+    paymentStatus: 'Invoice Raised',
+    paymentStatusDate: '2024-03-25',
+    invoiceNumber: 'INV-2024-012',
     completionStatus: 'Completed',
     approvalStatus: 'Approved',
-    invoiceStatus: 'Sent',
     assignedTo: 'John Anderson',
-    priority: 'Medium',
+    priority: 'High',
     createdDate: '2024-01-15',
   },
   {
     id: '3',
-    milestoneId: 'MS-2024-003',
-    projectId: 'PRJ-2024-001',
-    projectCode: 'CRM-001', // Added
-    projectName: 'Enterprise CRM Platform',
-    clientName: 'Tech Solutions Inc.', // Added
-    milestoneName: 'Development Phase 1',
-    milestoneCode: 'DEV-PHASE-1',
-    milestoneAmount: 100000, // Added
-    currency: 'USD', // Added
-    milestoneType: 'Development', // Added
-    plannedDate: '2024-04-30',
-    paymentStatus: 'Pending', // Added
+    projectId: 'PRJ-002',
+    projectCode: 'MB-001',
+    projectName: 'Mobile Banking App',
+    clientName: 'Bank of America',
+    crt: 'Michael Ross',
+    milestoneName: 'UI/UX Interactive Prototype',
+    milestoneCode: 'MS-UI-01',
+    milestonePercentage: 20,
+    amountLocal: 4000,
+    amountUSD: 5080,
+    currency: 'GBP',
+    milestoneType: 'Fixed',
+    plannedDate: '2024-03-01',
+    deliverable: 'Figma Prototype, Style Guide',
+    paymentStatus: 'Requested',
+    paymentStatusDate: '2024-03-01',
+    paymentMode: 'Credit Card',
     completionStatus: 'In Progress',
     approvalStatus: 'Pending',
-    invoiceStatus: 'Not Generated',
-    assignedTo: 'John Anderson',
-    priority: 'High',
-    remarks: 'On track for completion',
-    createdDate: '2024-01-15',
+    assignedTo: 'Emily Chen',
+    priority: 'Medium',
+    createdDate: '2024-02-01',
   },
   {
     id: '4',
-    milestoneId: 'MS-2024-004',
-    projectId: 'PRJ-2024-002',
-    projectCode: 'MB-001', // Added
-    projectName: 'Mobile Banking App',
-    clientName: 'Bank of America', // Added
-    milestoneName: 'UI/UX Design',
-    milestoneCode: 'UIUX-DESIGN',
-    milestoneAmount: 20000, // Added
-    currency: 'USD', // Added
-    milestoneType: 'Design', // Added
-    plannedDate: '2024-03-01',
-    actualDate: '2024-03-05',
-    paymentStatus: 'Paid', // Added
-    completionStatus: 'Completed',
-    approvalStatus: 'Approved',
-    invoiceStatus: 'Generated',
-    assignedTo: 'Emily Chen',
-    priority: 'Medium',
-    remarks: 'Minor delays due to client feedback iterations',
-    createdDate: '2024-02-01',
-  },
-  {
-    id: '5',
-    milestoneId: 'MS-2024-005',
-    projectId: 'PRJ-2024-002',
-    projectCode: 'MB-001', // Added
-    projectName: 'Mobile Banking App',
-    clientName: 'Bank of America', // Added
-    milestoneName: 'Backend Development',
-    milestoneCode: 'BACKEND-DEV',
-    milestoneAmount: 50000, // Added
-    currency: 'USD', // Added
-    milestoneType: 'Development', // Added
-    plannedDate: '2024-04-15',
-    paymentStatus: 'Pending', // Added
-    completionStatus: 'In Progress',
-    approvalStatus: 'Pending',
-    invoiceStatus: 'Not Generated',
-    assignedTo: 'Emily Chen',
-    priority: 'High',
-    createdDate: '2024-02-01',
-  },
-  {
-    id: '6',
-    milestoneId: 'MS-2024-006',
-    projectId: 'PRJ-2024-003',
-    projectCode: 'EC-001', // Added
+    projectId: 'PRJ-003',
+    projectCode: 'EC-001',
     projectName: 'E-Commerce Platform Redesign',
-    clientName: 'Retail Giant', // Added
-    milestoneName: 'Quality Assurance',
-    milestoneCode: 'QA-TESTING',
-    milestoneAmount: 15000, // Added
-    currency: 'USD', // Added
-    milestoneType: 'Testing', // Added
-    plannedDate: '2024-03-20',
-    actualDate: '2024-03-25',
-    paymentStatus: 'Overdue', // Added
-    completionStatus: 'Delayed',
+    clientName: 'Retail Giant',
+    crt: 'Jessica Lee',
+    milestoneName: 'Backend Core Integration',
+    milestoneCode: 'MS-BE-03',
+    milestonePercentage: 25,
+    amountLocal: 12500,
+    amountUSD: 13500,
+    currency: 'EUR',
+    milestoneType: 'Fixed',
+    plannedDate: '2024-04-15',
+    deliverable: 'API Documentation, Core Services',
+    paymentStatus: 'Draft',
+    completionStatus: 'Not Started',
     approvalStatus: 'Pending',
-    invoiceStatus: 'Not Generated',
     assignedTo: 'Sarah Johnson',
-    priority: 'Low',
-    remarks: 'Extended testing due to critical bugs found',
+    priority: 'High',
     createdDate: '2023-11-01',
   },
 ];
@@ -256,8 +234,8 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
     const completed = milestones.filter(m => m.completionStatus === 'Completed').length;
     const inProgress = milestones.filter(m => m.completionStatus === 'In Progress').length;
     const delayed = milestones.filter(m => m.completionStatus === 'Delayed').length;
-    const paid = milestones.filter(m => m.paymentStatus === 'Paid').length;
-    const invoicesPending = milestones.filter(m => m.invoiceStatus === 'Not Generated').length;
+    const paidCount = milestones.filter(m => m.paymentStatus === 'Received').length;
+    const requestedCount = milestones.filter(m => m.paymentStatus === 'Requested').length;
 
     return [
       {
@@ -297,17 +275,17 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
         trendDirection: 'down' as const,
       },
       {
-        label: 'Total Payment %',
-        value: `${paid}%`,
-        icon: 'Activity',
-        bgColor: 'bg-purple-50 dark:bg-purple-950/30',
-        iconColor: 'text-purple-600 dark:text-purple-400',
+        label: 'Received',
+        value: paidCount.toString(),
+        icon: 'DollarSign',
+        bgColor: 'bg-emerald-50 dark:bg-emerald-950/30',
+        iconColor: 'text-emerald-600 dark:text-emerald-400',
         trend: '+8',
         trendDirection: 'up' as const,
       },
       {
-        label: 'Pending Invoices',
-        value: invoicesPending.toString(),
+        label: 'Requested',
+        value: requestedCount.toString(),
         icon: 'AlertCircle',
         bgColor: 'bg-amber-50 dark:bg-amber-950/30',
         iconColor: 'text-amber-600 dark:text-amber-400',
@@ -326,7 +304,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
       filtered = filtered.filter(
         (milestone) =>
           milestone.milestoneName.toLowerCase().includes(query) ||
-          milestone.milestoneId.toLowerCase().includes(query) ||
+          milestone.milestoneCode.toLowerCase().includes(query) ||
           milestone.projectName.toLowerCase().includes(query)
       );
     }
@@ -387,49 +365,30 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
   // Get status styles
   const getCompletionStyle = (status: Milestone['completionStatus']) => {
     const styles = {
-      'Not Started': 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400',
-      'In Progress': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-      'Completed': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-      'Delayed': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+      'Not Started': 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700',
+      'In Progress': 'bg-blue-100 text-blue-700 dark:bg-blue-900/10 dark:text-blue-400 border border-blue-200 dark:border-blue-800',
+      'Completed': 'bg-green-100 text-green-700 dark:bg-green-900/10 dark:text-green-400 border border-green-200 dark:border-green-800',
+      'Delayed': 'bg-red-100 text-red-700 dark:bg-red-900/10 dark:text-red-400 border border-red-200 dark:border-red-800',
     };
     return styles[status];
   };
 
   const getPaymentStyle = (status: Milestone['paymentStatus']) => {
     const styles = {
-      'Pending': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-      'Partially Paid': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-      'Paid': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-      'Overdue': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+      'Draft': 'bg-neutral-100 text-neutral-600 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700',
+      'Published': 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/10 dark:text-blue-400 dark:border-blue-800',
+      'Requested': 'bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-900/10 dark:text-orange-400 dark:border-orange-800',
+      'Invoice Raised': 'bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-900/10 dark:text-purple-400 dark:border-purple-800',
+      'Received': 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-800',
     };
-    return styles[status];
-  };
-
-  const getPaymentStatusBadgeStyle = (status: Milestone['paymentStatus']) => {
-    const styles = {
-      'Pending': 'bg-orange-50 text-orange-700 border border-orange-200 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-800',
-      'Partially Paid': 'bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800',
-      'Paid': 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800',
-      'Overdue': 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800',
-    };
-    return styles[status];
+    return styles[status] || styles['Draft'];
   };
 
   const getApprovalStyle = (status: Milestone['approvalStatus']) => {
     const styles = {
-      'Pending': 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-      'Approved': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-      'Rejected': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-    };
-    return styles[status];
-  };
-
-  const getInvoiceStyle = (status: Milestone['invoiceStatus']) => {
-    const styles = {
-      'Not Generated': 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-400',
-      'Generated': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-      'Sent': 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-      'Paid': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+      'Pending': 'bg-neutral-100 text-neutral-600 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-400 dark:border-neutral-700',
+      'Approved': 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/10 dark:text-green-400 dark:border-green-800',
+      'Rejected': 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/10 dark:text-red-400 dark:border-red-800',
     };
     return styles[status];
   };
@@ -519,72 +478,67 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
       <div className="px-6 pb-6">
         {/* Grid View */}
         {viewMode === 'grid' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {paginatedMilestones.map((milestone) => (
               <div
                 key={milestone.id}
-                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-200 group"
+                className="group relative bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden hover:shadow-xl hover:shadow-primary-500/5 transition-all duration-300"
               >
-                {/* Colored Top Border Accent - Based on Completion Status */}
-                <div className={`h-1 ${
+                {/* Status Indicator Top */}
+                <div className={`absolute top-0 left-0 w-full h-1.5 ${
                   milestone.completionStatus === 'Completed' ? 'bg-green-500' :
                   milestone.completionStatus === 'In Progress' ? 'bg-blue-500' :
                   milestone.completionStatus === 'Delayed' ? 'bg-red-500' :
-                  milestone.completionStatus === 'Not Started' ? 'bg-orange-500' :
-                  'bg-neutral-300'
+                  'bg-neutral-300 dark:bg-neutral-700'
                 }`} />
 
-                {/* Card Content */}
-                <div className="p-5">
-                  {/* Header Row - Title with Badges and Actions */}
-                  <div className="flex items-start justify-between mb-4">
+                <div className="p-6">
+                  {/* Header Row */}
+                  <div className="flex items-start justify-between mb-5">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="px-2.5 py-1 bg-primary-50 dark:bg-primary-950/30 text-primary-600 dark:text-primary-400 rounded-md text-xs font-semibold">
-                          {milestone.milestoneId}
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="px-2.5 py-1 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-primary-100 dark:border-primary-900/30">
+                          {milestone.milestoneCode}
                         </span>
-                        <span className="text-xs text-neutral-400 dark:text-neutral-500">{milestone.milestoneType}</span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tight bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400">
+                          {milestone.milestonePercentage}% Weight
+                        </span>
                       </div>
-                      <h3 className="font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2">
+                      <h3 className="font-bold text-neutral-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                         {milestone.milestoneName}
                       </h3>
                     </div>
                     
-                    {/* Action Menu */}
                     <div className="relative ml-2">
                       <button 
                         onClick={() => setOpenMenuId(openMenuId === milestone.id ? null : milestone.id)}
-                        className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-all"
+                        className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-xl transition-colors"
                       >
-                        <MoreVertical className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                        <MoreVertical className="w-5 h-5 text-neutral-400" />
                       </button>
-                      
                       {openMenuId === milestone.id && (
                         <>
-                          <div 
-                            className="fixed inset-0 z-10" 
-                            onClick={() => setOpenMenuId(null)}
-                          />
-                          <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-48 z-20">
+                          <div className="fixed inset-0 z-10" onClick={() => setOpenMenuId(null)} />
+                          <div className="absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-2xl py-2 w-48 z-20 animate-in fade-in zoom-in-95 duration-200">
                             <button
                               onClick={() => {
                                 handleEditMilestone(milestone);
                                 setOpenMenuId(null);
                               }}
-                              className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2.5 transition-colors"
+                              className="w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 dark:hover:bg-primary-900/20 flex items-center gap-3 transition-colors"
                             >
-                              <Edit2 className="w-3.5 h-3.5" />
-                              Edit
+                              <Edit2 className="w-4 h-4 text-primary-600" />
+                              <span className="font-medium">Edit Milestone</span>
                             </button>
                             <button
                               onClick={() => {
                                 handleDeleteMilestone(milestone.id);
                                 setOpenMenuId(null);
                               }}
-                              className="w-full px-3 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2.5 transition-colors"
+                              className="w-full px-4 py-2.5 text-left text-sm hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3 text-red-600 transition-colors"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
-                              Delete
+                              <Trash2 className="w-4 h-4" />
+                              <span className="font-medium">Remove</span>
                             </button>
                           </div>
                         </>
@@ -592,71 +546,74 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
                     </div>
                   </div>
 
-                  {/* Project Info */}
-                  <div className="flex items-start gap-2 mb-3 text-sm">
-                    <FileText className="w-4 h-4 text-neutral-400 dark:text-neutral-500 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-0.5">Project</div>
-                      <div className="text-neutral-900 dark:text-white font-medium">{milestone.projectName}</div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400">{milestone.projectCode}</div>
-                    </div>
-                  </div>
-
-                  {/* Client Info */}
-                  <div className="flex items-start gap-2 mb-4 text-sm">
-                    <div className="w-4 h-4 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white text-[9px] font-semibold flex-shrink-0 mt-0.5">
-                      {milestone.clientName.charAt(0)}
-                    </div>
-                    <div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-0.5">Client</div>
-                      <div className="text-neutral-900 dark:text-white font-medium">{milestone.clientName}</div>
-                    </div>
-                  </div>
-
-                  {/* Amount - Prominent */}
-                  <div className="flex items-baseline gap-2 mb-4">
-                    <DollarSign className="w-4 h-4 text-primary-500 dark:text-primary-400" />
-                    <div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mb-0.5">Milestone Amount</div>
-                      <div className="text-2xl font-semibold text-neutral-900 dark:text-white">
-                        {formatCurrency(milestone.milestoneAmount, milestone.currency)}
+                  <div className="space-y-4">
+                    {/* Project & Client */}
+                    <div className="flex flex-col gap-1">
+                      <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">Project & Client</div>
+                      <div className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">{milestone.projectName}</div>
+                      <div className="text-xs text-neutral-500 dark:text-neutral-500 flex items-center gap-1.5">
+                         <div className="w-1.5 h-1.5 rounded-full bg-primary-500"></div>
+                         {milestone.clientName}
                       </div>
                     </div>
-                  </div>
 
-                  {/* Dates Section */}
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-                        <Calendar className="w-3 h-3" />
-                        Planned Date
+                    {/* Commercials Highlight */}
+                    <div className="bg-neutral-50 dark:bg-neutral-800/40 p-3 rounded-xl border border-neutral-100 dark:border-neutral-800/50">
+                       <div className="flex justify-between items-end">
+                          <div>
+                             <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">Milestone Amount</div>
+                             <div className="flex items-baseline gap-2">
+                                <span className="text-xl font-black text-neutral-900 dark:text-white">
+                                  ${milestone.amountUSD.toLocaleString()}
+                                </span>
+                                {milestone.currency !== 'USD' && (
+                                  <span className="text-xs font-bold text-neutral-500">
+                                    ({milestone.amountLocal.toLocaleString()} {milestone.currency})
+                                  </span>
+                                )}
+                             </div>
+                          </div>
+                          <div className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-tight ${getPaymentStyle(milestone.paymentStatus)}`}>
+                             {milestone.paymentStatus}
+                          </div>
+                       </div>
+                    </div>
+
+                    {/* Timeline */}
+                    <div className="grid grid-cols-2 gap-4 py-1">
+                      <div>
+                        <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">Planned Date</div>
+                        <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+                           <Calendar className="w-3.5 h-3.5 text-neutral-400" />
+                           {milestone.plannedDate}
+                        </div>
                       </div>
-                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                        {milestone.plannedDate}
+                      <div>
+                        <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">Status</div>
+                        <div className={`w-fit px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tight ${getCompletionStyle(milestone.completionStatus)}`}>
+                          {milestone.completionStatus}
+                        </div>
                       </div>
                     </div>
-                    <div>
-                      <div className="flex items-center gap-1.5 text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-                        <Calendar className="w-3 h-3" />
-                        Actual Date
+
+                    {/* Deliverable/Remarks */}
+                    {milestone.deliverable && (
+                      <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800">
+                        <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+                           <FileText className="w-3 h-3" />
+                           Deliverables
+                        </div>
+                        <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2 leading-relaxed italic">
+                          "{milestone.deliverable}"
+                        </p>
                       </div>
-                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
-                        {milestone.actualDate || '-'}
-                      </div>
+                    )}
+
+                    {/* Footer Info */}
+                    <div className="pt-4 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
+                       <span>Assigned: <span className="text-neutral-600 dark:text-neutral-300 font-bold">{milestone.assignedTo}</span></span>
+                       <span className="uppercase tracking-tighter">{milestone.milestoneType}</span>
                     </div>
-                  </div>
-
-                  {/* Assigned To Info */}
-                  <div className="flex items-center justify-between text-xs mb-3 pb-3 border-b border-neutral-100 dark:border-neutral-800">
-                    <span className="text-neutral-500 dark:text-neutral-400">Assigned: {milestone.assignedTo}</span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${getCompletionStyle(milestone.completionStatus)}`}>
-                      {milestone.completionStatus}
-                    </span>
-                  </div>
-
-                  {/* Payment Status Badge - Bottom */}
-                  <div className={`w-full py-2 px-3 rounded-md text-center text-sm font-semibold ${getPaymentStatusBadgeStyle(milestone.paymentStatus)}`}>
-                    Payment: {milestone.paymentStatus}
                   </div>
                 </div>
               </div>
@@ -670,75 +627,53 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
             {paginatedMilestones.map((milestone) => (
               <div
                 key={milestone.id}
-                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-6 hover:shadow-md transition-shadow"
+                className="group bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6 hover:shadow-xl hover:shadow-primary-500/5 transition-all duration-300 flex items-center gap-6"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm text-neutral-500 dark:text-neutral-400">{milestone.milestoneId}</span>
-                      {/* Payment Status Badge - matching Grid view */}
-                      <span className={`px-3 py-1 rounded-lg text-xs font-medium ${getPaymentStyle(milestone.paymentStatus)}`}>
-                        Payment: {milestone.paymentStatus}
+                <div className={`w-1.5 h-16 rounded-full ${
+                  milestone.completionStatus === 'Completed' ? 'bg-green-500' :
+                  milestone.completionStatus === 'In Progress' ? 'bg-blue-500' :
+                  'bg-neutral-200 dark:bg-neutral-800'
+                }`} />
+
+                <div className="flex-1 min-w-0">
+                   <div className="flex items-center gap-3 mb-2">
+                      <span className="text-[10px] font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest px-2 py-0.5 bg-primary-50 dark:bg-primary-900/20 rounded border border-primary-100 dark:border-primary-900/30">
+                        {milestone.milestoneCode}
                       </span>
-                    </div>
-                    <h3 className="font-medium text-neutral-900 dark:text-white mb-3">{milestone.milestoneName}</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Project</span>
-                        <span className="text-neutral-900 dark:text-white">{milestone.projectName}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Code</span>
-                        <span className="text-neutral-900 dark:text-white">{milestone.milestoneCode}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Planned Date</span>
-                        <span className="text-neutral-900 dark:text-white">{milestone.plannedDate}</span>
-                      </div>
-                      <div>
-                        <span className="text-neutral-500 dark:text-neutral-400 block mb-1">Assigned To</span>
-                        <span className="text-neutral-900 dark:text-white">{milestone.assignedTo}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="ml-4 relative">
-                    <button 
-                      onClick={() => setOpenMenuId(openMenuId === milestone.id ? null : milestone.id)}
-                      className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded transition-colors"
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tight ${getPaymentStyle(milestone.paymentStatus)}`}>
+                        {milestone.paymentStatus}
+                      </span>
+                   </div>
+                   <h3 className="font-bold text-neutral-900 dark:text-white text-lg mb-1">{milestone.milestoneName}</h3>
+                   <div className="text-sm font-medium text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+                      {milestone.projectName} &bull; {milestone.clientName}
+                   </div>
+                </div>
+
+                <div className="hidden lg:flex flex-col gap-1 px-8 border-x border-neutral-100 dark:border-neutral-800">
+                   <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Amount (USD)</div>
+                   <div className="text-lg font-black text-neutral-900 dark:text-white">${milestone.amountUSD.toLocaleString()}</div>
+                   <div className="text-[10px] font-bold text-neutral-400">{milestone.milestonePercentage}% Total</div>
+                </div>
+
+                <div className="hidden md:block min-w-[140px]">
+                   <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-1">Target Date</div>
+                   <div className="text-sm font-bold text-neutral-800 dark:text-neutral-200">{milestone.plannedDate}</div>
+                   <div className={`mt-1 w-fit px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tight ${getCompletionStyle(milestone.completionStatus)}`}>
+                      {milestone.completionStatus}
+                   </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleEditMilestone(milestone)}
+                      className="p-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl hover:bg-primary-600 dark:hover:bg-primary-400 dark:hover:text-white transition-all transform active:scale-95 shadow-lg shadow-neutral-900/10"
                     >
-                      <MoreVertical className="w-4 h-4 text-neutral-500" />
+                      <Edit2 className="w-4 h-4" />
                     </button>
-                    {openMenuId === milestone.id && (
-                      <>
-                        <div 
-                          className="fixed inset-0 z-10" 
-                          onClick={() => setOpenMenuId(null)}
-                        />
-                        <div className="absolute right-0 top-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
-                          <button
-                            onClick={() => {
-                              handleEditMilestone(milestone);
-                              setOpenMenuId(null);
-                            }}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
-                          >
-                            <Edit2 className="w-4 h-4" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleDeleteMilestone(milestone.id);
-                              setOpenMenuId(null);
-                            }}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                    <button className="p-2.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
+                      <Eye className="w-4 h-4" />
+                    </button>
                 </div>
               </div>
             ))}
@@ -747,115 +682,94 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
 
         {/* Table View */}
         {viewMode === 'table' && (
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Milestone
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Project
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Code
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Dates
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Payment %
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                      Actions
-                    </th>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-neutral-100 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-800/30">
+                    <th className="px-6 py-4 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Milestone Info</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Project & Client</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Commercials</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Timeline</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-neutral-400 uppercase tracking-widest">Status</th>
+                    <th className="px-6 py-4 text-[10px] font-black text-neutral-400 uppercase tracking-widest text-center">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
+                <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
                   {paginatedMilestones.map((milestone) => (
-                    <tr key={milestone.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
-                      <td className="px-6 py-4">
-                        <div>
-                          <div className="font-medium text-neutral-900 dark:text-white">{milestone.milestoneName}</div>
-                          <div className="text-sm text-neutral-500 dark:text-neutral-400">{milestone.milestoneId}</div>
+                    <tr key={milestone.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors group">
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-[10px] font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest px-1.5 py-0.5 bg-primary-50 dark:bg-primary-900/20 rounded-md w-fit border border-primary-100 dark:border-primary-900/30">
+                            {milestone.milestoneCode}
+                          </span>
+                          <div className="font-bold text-neutral-900 dark:text-white line-clamp-1">{milestone.milestoneName}</div>
+                          <div className="text-[10px] text-neutral-500 font-medium italic line-clamp-1">{milestone.deliverable || 'No deliverable specified'}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-neutral-900 dark:text-white">
-                        {milestone.projectName}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="text-sm text-neutral-900 dark:text-white">{milestone.milestoneCode}</span>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <div className="text-neutral-900 dark:text-white">{milestone.plannedDate}</div>
-                        {milestone.actualDate && (
-                          <div className="text-neutral-500 dark:text-neutral-400">{milestone.actualDate}</div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="text-sm font-medium text-neutral-900 dark:text-white">{milestone.paymentStatus}%</span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="space-y-1">
-                          <div>
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${getCompletionStyle(milestone.completionStatus)}`}>
-                              {milestone.completionStatus}
-                            </span>
-                          </div>
-                          <div>
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${getApprovalStyle(milestone.approvalStatus)}`}>
-                              {milestone.approvalStatus}
-                            </span>
-                          </div>
-                          <div>
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-md ${getInvoiceStyle(milestone.invoiceStatus)}`}>
-                              {milestone.invoiceStatus}
-                            </span>
-                          </div>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col">
+                          <div className="text-sm font-bold text-neutral-800 dark:text-neutral-200">{milestone.projectName}</div>
+                          <div className="text-[10px] text-neutral-500 font-bold uppercase tracking-tighter">{milestone.clientName}</div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="relative inline-block">
-                          <button 
-                            onClick={() => setOpenMenuId(openMenuId === milestone.id ? null : milestone.id)}
-                            className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded transition-colors"
-                          >
-                            <MoreVertical className="w-4 h-4 text-neutral-500" />
-                          </button>
-                          {openMenuId === milestone.id && (
-                            <>
-                              <div 
-                                className="fixed inset-0 z-10" 
-                                onClick={() => setOpenMenuId(null)}
-                              />
-                              <div className="absolute right-0 top-8 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-xl py-1 w-40 z-20">
-                                <button
-                                  onClick={() => {
-                                    handleEditMilestone(milestone);
-                                    setOpenMenuId(null);
-                                  }}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 transition-colors"
-                                >
-                                  <Edit2 className="w-4 h-4" />
-                                  Edit
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    handleDeleteMilestone(milestone.id);
-                                    setOpenMenuId(null);
-                                  }}
-                                  className="w-full px-4 py-2 text-left text-sm hover:bg-neutral-50 dark:hover:bg-neutral-700 flex items-center gap-2 text-red-600 transition-colors"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                  Delete
-                                </button>
-                              </div>
-                            </>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col">
+                           <div className="text-sm font-black text-neutral-900 dark:text-white">${milestone.amountUSD.toLocaleString()}</div>
+                           <div className="text-[10px] text-neutral-400 font-bold">{milestone.milestonePercentage}% of Total</div>
+                           {milestone.currency !== 'USD' && (
+                             <div className="text-[10px] text-neutral-400 font-medium italic">
+                               ({milestone.amountLocal.toLocaleString()} {milestone.currency})
+                             </div>
+                           )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-1.5 text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                             <Calendar className="w-3.5 h-3.5 text-neutral-400" />
+                             {milestone.plannedDate}
+                          </div>
+                          {milestone.actualDate && (
+                            <div className="text-[10px] text-green-600 dark:text-green-400 font-bold flex items-center gap-1">
+                               <CheckCircle2 className="w-3 h-3" />
+                               Done: {milestone.actualDate}
+                            </div>
                           )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex flex-col gap-1.5">
+                          <span className={`w-fit px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tight ${getCompletionStyle(milestone.completionStatus)}`}>
+                            {milestone.completionStatus}
+                          </span>
+                          <span className={`w-fit px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tight ${getPaymentStyle(milestone.paymentStatus)}`}>
+                            Payment: {milestone.paymentStatus}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-5">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => handleEditMilestone(milestone)}
+                            className="p-2 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-xl transition-colors group/edit"
+                            title="Edit"
+                          >
+                            <Edit2 className="w-4 h-4 text-neutral-400 group-hover/edit:text-primary-600 transition-colors" />
+                          </button>
+                          <button 
+                            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-xl transition-colors"
+                            title="View Details"
+                          >
+                            <Eye className="w-4 h-4 text-neutral-400" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteMilestone(milestone.id)}
+                            className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors group/del"
+                            title="Remove"
+                          >
+                            <Trash2 className="w-4 h-4 text-neutral-400 group-hover/del:text-red-500 transition-colors" />
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -883,7 +797,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
       <MilestonesEditSidePanel
         key={selectedMilestone?.id || 'new-milestone'}
         isOpen={isAddModalOpen}
-        milestone={selectedMilestone as any}
+        milestone={selectedMilestone}
         onClose={() => {
           setIsAddModalOpen(false);
           setSelectedMilestone(null);
@@ -893,32 +807,40 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
             // Update existing milestone
             setMilestones(milestones.map(m =>
               m.id === selectedMilestone.id
-                ? ({ ...selectedMilestone, ...milestoneData } as any)
+                ? ({ ...selectedMilestone, ...milestoneData } as Milestone)
                 : m
             ));
           } else {
             // Add new milestone
             const newMilestone: Milestone = {
               id: `milestone-${Date.now()}`,
-              milestoneId: `MS-2024-${String(milestones.length + 1).padStart(3, '0')}`,
-              projectId: milestoneData.projectId,
-              projectCode: 'PRJ-CODE',
-              projectName: 'Project Name',
-              clientName: 'Client Name',
+              projectId: milestoneData.projectId || '',
+              projectCode: milestoneData.projectCode || 'PRJ-CODE',
+              projectName: milestoneData.projectName || 'Project Name',
+              clientName: milestoneData.clientName || 'Client Name',
+              crt: milestoneData.crt || 'Sarah Wilson',
               milestoneName: milestoneData.milestoneName,
-              milestoneCode: milestoneData.milestoneCode,
-              milestoneAmount: 0,
-              currency: 'USD',
-              milestoneType: 'Development',
+              milestoneCode: milestoneData.milestoneCode || `MS-${Date.now()}`,
+              milestonePercentage: milestoneData.milestonePercentage || 0,
+              amountLocal: milestoneData.amountLocal || 0,
+              amountUSD: milestoneData.amountUSD || 0,
+              currency: milestoneData.currency || 'USD',
+              milestoneType: milestoneData.milestoneType || 'Fixed',
               plannedDate: milestoneData.plannedDate,
               actualDate: milestoneData.actualDate,
-              paymentStatus: milestoneData.paymentStatus as any || 'Pending',
-              completionStatus: milestoneData.completionStatus as any,
-              approvalStatus: milestoneData.approvalStatus as any,
-              invoiceStatus: milestoneData.invoiceStatus as any,
-              assignedTo: milestoneData.assignedTo,
-              priority: milestoneData.priority as any,
-              remarks: milestoneData.remarks,
+              deliverable: milestoneData.deliverable,
+              paymentStatus: (milestoneData.paymentStatus as any) || 'Draft',
+              paymentStatusDate: milestoneData.paymentStatusDate,
+              invoiceNumber: milestoneData.invoiceNumber,
+              paymentMode: milestoneData.paymentMode,
+              subPaymentMode: milestoneData.subPaymentMode,
+              transactionCost: milestoneData.transactionCost,
+              transactionNumber: milestoneData.transactionNumber,
+              completionStatus: (milestoneData.completionStatus as any) || 'Not Started',
+              approvalStatus: (milestoneData.approvalStatus as any) || 'Pending',
+              assignedTo: milestoneData.assignedTo || 'Unassigned',
+              priority: (milestoneData.priority as any) || 'Medium',
+              remarks: milestoneData.remarks || '',
               createdDate: new Date().toISOString().split('T')[0],
             };
             setMilestones([...milestones, newMilestone]);
