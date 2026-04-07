@@ -6,8 +6,7 @@ import {
   Menu,
   ChevronUp,
   ChevronDown,
-  UserIcon,
-  HelpCircle,
+  CircleHelp,
   User,
 } from "lucide-react";
 import logo from "../../assets/1b7ab447194c5f0fc1b269452281b2173e53bd29.png";
@@ -326,7 +325,7 @@ export function Sidebar({
                   }}
                   className="w-full px-3 py-2 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded transition-colors flex items-center gap-2"
                 >
-                  <HelpCircle className="w-4 h-4" />
+                  <CircleHelp className="w-4 h-4" />
                   <span>Help & Support</span>
                 </button>
               </div>
