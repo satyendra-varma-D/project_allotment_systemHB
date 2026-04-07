@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Toaster } from "sonner";
 import { Sidebar } from "./components/Sidebar";
 import { GlobalHeader } from "./components/GlobalHeader";
+
 import UIKit from "./components/UIKit";
 import SampleDesign from "./components/SampleDesign";
 import DashboardModule from "./components/DashboardModule";
@@ -13,6 +14,7 @@ import ChangeRequestsModule from "./components/ChangeRequestsModule";
 import InfrastructureModule from "./components/InfrastructureModule";
 import AddonsModule from "./components/AddonsModule";
 import AwsModule from "./components/AWSModule";
+
 import MilestonesMasterModule from "./components/MilestonesMasterModule";
 import PaymentTermsMasterModule from "./components/PaymentTermsMasterModule";
 import MilestoneStatusChangeLogsModule from "./components/MilestoneStatusChangeLogsModule";
@@ -44,6 +46,7 @@ export default function App() {
 
   useEffect(() => {
     const root = document.documentElement;
+
     if (isDark) {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -69,7 +72,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 transition-colors">
-      {/* Sidebar */}
       <Sidebar
         onLogout={handleLogout}
         isCollapsed={isSidebarCollapsed}
@@ -80,12 +82,10 @@ export default function App() {
         onNavigate={handleNavigate}
       />
 
-      {/* Main Content */}
       <main
         className={`transition-all duration-300 ${isSidebarCollapsed ? "ml-16" : "ml-64"
           }`}
       >
-        {/* Header */}
         <GlobalHeader
           isDarkMode={isDark}
           onToggleDarkMode={() => setIsDark(!isDark)}
@@ -94,7 +94,6 @@ export default function App() {
           onThemeChange={setCurrentTheme}
         />
 
-        {/* Pages */}
         {currentPage === "ui-kit" ? (
           <UIKit />
         ) : currentPage === "sample-design" ? (
@@ -156,7 +155,6 @@ export default function App() {
         )}
       </main>
 
-      {/* Toast */}
       <Toaster
         position="top-right"
         expand
