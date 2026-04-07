@@ -7,6 +7,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { ListingHeader, SummaryWidgets, AdvancedSearchPanel, FilterChips, Pagination } from './hb/listing';
+import { toast } from 'sonner';
 import type { FilterCondition, ViewMode } from './hb/listing';
 import { AddEditAddonPanel } from './AddEditAddonPanel';
 
@@ -635,6 +636,36 @@ export default function AddonsModule({ initialFilters, onFiltersConsumed, onNavi
     </div>
   );
 
+  const handleCloneAddon = () => {
+    if (!selectedAddon) return;
+    
+    const clonedAddon: Addon = {
+      ...selectedAddon,
+      id: `AD-CLONE-${Date.now()}`,
+      addonId: `${selectedAddon.addonId}-COPY`,
+      addonTitle: `Copy of ${selectedAddon.addonTitle}`,
+      addonStatus: 'Identified',
+      createdDate: new Date().toISOString().split('T')[0],
+      addonAddedDate: new Date().toISOString().split('T')[0],
+    };
+    
+    setAddons([clonedAddon, ...addons]);
+    setSelectedAddon(clonedAddon);
+    toast.success(`Addon "${selectedAddon.addonTitle}" cloned successfully`);
+  };
+
+  const handleRefresh = () => {
+    toast.promise(new Promise(resolve => setTimeout(resolve, 800)), {
+      loading: 'Refreshing addons list...',
+      success: 'Data updated successfully',
+      error: 'Refresh failed',
+    });
+  };
+
+  const handleExport = () => {
+    toast.info('Exporting addons data...');
+  };
+
   const handleBack = () => {
     if (backToProjectName && onNavigate) {
       onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
@@ -652,8 +683,11 @@ export default function AddonsModule({ initialFilters, onFiltersConsumed, onNavi
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         onFilterClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}
-        onRefresh={() => {}}
-        onExport={() => {}}
+        onRefresh={handleRefresh}
+        onExport={handleExport}
+        onClone={handleCloneAddon}
+        cloneDisabled={!selectedAddon}
+        cloneTooltip={selectedAddon ? `Clone ${selectedAddon.addonTitle}` : 'Select an addon to clone'}
         showSummary={showSummary}
         onSummaryToggle={() => setShowSummary(!showSummary)}
         onAdd={() => setIsAddModalOpen(true)}

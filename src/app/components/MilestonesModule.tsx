@@ -21,6 +21,7 @@ import {
   User,
 } from 'lucide-react';
 import { ListingHeader, SummaryWidgets, AdvancedSearchPanel, FilterChips, Pagination } from './hb/listing';
+import { toast } from 'sonner';
 import type { FilterCondition, ListingColumnConfig } from './hb/listing';
 import { MilestonesEditSidePanel } from './MilestonesEditSidePanel';
 import type { MilestoneData } from './MilestonesEditSidePanel';
@@ -404,6 +405,37 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
   };
 
 
+  const handleCloneMilestone = () => {
+    if (!selectedMilestone) return;
+    
+    const clonedMilestone: Milestone = {
+      ...selectedMilestone,
+      id: `clone-${Date.now()}`,
+      milestoneCode: `${selectedMilestone.milestoneCode}-COPY`,
+      milestoneName: `Copy of ${selectedMilestone.milestoneName}`,
+      completionStatus: 'Not Started',
+      approvalStatus: 'Pending',
+      paymentStatus: 'Draft',
+      createdDate: new Date().toISOString().split('T')[0],
+    };
+    
+    setMilestones([clonedMilestone, ...milestones]);
+    setSelectedMilestone(clonedMilestone);
+    toast.success(`Milestone "${selectedMilestone.milestoneName}" cloned successfully`);
+  };
+
+  const handleRefresh = () => {
+    toast.promise(new Promise(resolve => setTimeout(resolve, 800)), {
+      loading: 'Refreshing milestones list...',
+      success: 'Milestone data updated',
+      error: 'Refresh failed',
+    });
+  };
+
+  const handleExport = () => {
+    toast.info('Exporting milestones data...');
+  };
+
   const handleBack = () => {
     if (backToProjectName && onNavigate) {
       onNavigate('projects', [{ field: 'projectName', value: backToProjectName, openDetail: true }]);
@@ -425,12 +457,11 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
         visibleColumns={visibleColumns}
         onToggleColumn={toggleColumn}
         onFilterClick={() => setIsAdvancedSearchOpen(true)}
-        onRefresh={() => {}}
-        exportOptions={{
-          onExportCSV: () => console.log('Export CSV'),
-          onExportExcel: () => console.log('Export Excel'),
-          onExportPDF: () => console.log('Export PDF'),
-        }}
+        onRefresh={handleRefresh}
+        onExport={handleExport}
+        onClone={handleCloneMilestone}
+        cloneDisabled={!selectedMilestone}
+        cloneTooltip={selectedMilestone ? `Clone ${selectedMilestone.milestoneName}` : 'Select a milestone to clone'}
         showSummary={showSummary}
         onSummaryToggle={() => setShowSummary(!showSummary)}
         onAdd={() => setIsAddModalOpen(true)}
@@ -797,7 +828,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
       <MilestonesEditSidePanel
         key={selectedMilestone?.id || 'new-milestone'}
         isOpen={isAddModalOpen}
-        milestone={selectedMilestone}
+        milestone={selectedMilestone as any}
         onClose={() => {
           setIsAddModalOpen(false);
           setSelectedMilestone(null);
@@ -810,6 +841,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
                 ? ({ ...selectedMilestone, ...milestoneData } as Milestone)
                 : m
             ));
+            toast.success('Milestone updated');
           } else {
             // Add new milestone
             const newMilestone: Milestone = {
@@ -844,6 +876,7 @@ export default function MilestonesModule({ initialFilters, onFiltersConsumed, on
               createdDate: new Date().toISOString().split('T')[0],
             };
             setMilestones([...milestones, newMilestone]);
+            toast.success('New milestone added');
           }
           setIsAddModalOpen(false);
           setSelectedMilestone(null);

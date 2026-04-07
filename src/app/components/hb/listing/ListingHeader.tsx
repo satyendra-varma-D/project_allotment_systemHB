@@ -17,6 +17,8 @@ import {
   FileSpreadsheet,
   FileText,
   ArrowLeft,
+  Briefcase,
+  Settings,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { IconButton } from './IconButton';
@@ -105,7 +107,7 @@ export function ListingHeader({
   const [showSearchInput, setShowSearchInput] = useState(false);
   const [showColumnMenu, setShowColumnMenu] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const [showViewMenu, setShowViewMenu] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const viewIcons = {
     grid: Grid3x3,
@@ -113,13 +115,16 @@ export function ListingHeader({
     table: Table,
   };
 
-  const viewLabels = {
-    grid: 'Grid View',
-    list: 'List View',
-    table: 'Table View',
-  };
-
   const CurrentViewIcon = viewIcons[viewMode];
+
+  const handleRefreshClick = () => {
+    if (onRefresh && !isRefreshing) {
+      setIsRefreshing(true);
+      onRefresh();
+      toast.success('Data refreshed');
+      setTimeout(() => setIsRefreshing(false), 1000);
+    }
+  };
 
   return (
     <div className={`mb-6 px-6 ${className}`}>
@@ -131,51 +136,69 @@ export function ListingHeader({
             </button>
           )}
           <div>
-            <h2 className="text-[32px] font-semibold">{title}</h2>
-            {subtitle && <p className="text-sm">{subtitle}</p>}
+            <h2 className="text-[32px] font-semibold text-neutral-900 dark:text-white leading-tight">
+              {title}
+            </h2>
+            {subtitle && (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 uppercase tracking-tight font-medium">
+                {subtitle}
+              </p>
+            )}
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          {/* View Switch */}
+          {/* View Switcher Dropdown */}
           <IconButton
             icon={CurrentViewIcon}
-            onClick={() => setShowViewMenu(!showViewMenu)}
+            title="Change View"
+            active={false}
+            menuItems={[
+              { icon: Grid3x3, label: 'Grid View', onClick: () => onViewModeChange('grid') },
+              { icon: List, label: 'List View', onClick: () => onViewModeChange('list') },
+              { icon: Table, label: 'Table View', onClick: () => onViewModeChange('table') },
+            ]}
           />
 
           {/* Column Selector */}
           {viewMode === 'table' && (
             <IconButton
-              icon={Columns} // ✅ FIXED
+              icon={Columns}
+              title="Select Columns"
               onClick={() => setShowColumnMenu(!showColumnMenu)}
             />
           )}
 
           {/* Filter */}
-          {onFilterClick && <IconButton icon={Filter} onClick={onFilterClick} />}
+          {onFilterClick && (
+            <IconButton 
+              icon={Filter} 
+              title="Advanced Filter"
+              onClick={onFilterClick} 
+            />
+          )}
 
           {/* Refresh */}
           {onRefresh && (
             <IconButton
               icon={RefreshCw}
-              onClick={() => {
-                onRefresh();
-                toast.success('Data refreshed');
-              }}
+              title="Refresh Data"
+              className={isRefreshing ? 'animate-spin border-primary-500 text-primary-500' : ''}
+              onClick={handleRefreshClick}
             />
           )}
 
-          {/* Export */}
+          {/* Export Dropdown */}
           {(onExport || exportOptions) && (
             <IconButton
               icon={Download}
-              onClick={() => {
-                if (exportOptions) {
-                  setShowExportMenu(!showExportMenu);
-                } else {
-                  onExport?.();
-                }
-              }}
+              title="Export Options"
+              menuItems={[
+                { icon: FileText, label: 'Export as CSV', onClick: exportOptions?.onExportCSV || onExport },
+                { icon: Briefcase, label: 'Export as Excel', onClick: exportOptions?.onExportExcel || onExport },
+                { divider: true },
+                { icon: Settings, label: 'Export as PDF', onClick: exportOptions?.onExportPDF || onExport },
+              ]}
             />
           )}
 
@@ -183,16 +206,21 @@ export function ListingHeader({
           {onSummaryToggle && (
             <IconButton
               icon={showSummary ? EyeOff : Eye}
+              title={showSummary ? "Hide Summary" : "Show Summary"}
+              active={showSummary}
               onClick={onSummaryToggle}
             />
           )}
 
           {/* Clone */}
           {onClone && (
-            <button onClick={onClone}>
-              <Copy className="w-4 h-4" />
-              Clone
-            </button>
+            <IconButton
+              icon={Copy}
+              title={cloneTooltip || "Clone Selected"}
+              disabled={cloneDisabled}
+              onClick={onClone}
+              className={cloneDisabled ? 'opacity-50' : ''}
+            />
           )}
 
           {/* Add */}

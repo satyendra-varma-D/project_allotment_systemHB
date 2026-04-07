@@ -9,6 +9,7 @@ import {
   HardDrive
 } from 'lucide-react';
 import { ListingHeader, SummaryWidgets, AdvancedSearchPanel, FilterChips, Pagination } from './hb/listing';
+import { toast } from 'sonner';
 import type { FilterCondition, ViewMode } from './hb/listing';
 import { AddEditAwsPanel } from './AddEditAwsPanel';
 import type { AwsFormData } from './AddEditAwsPanel';
@@ -292,37 +293,42 @@ export default function AwsModule({ initialFilters, onFiltersConsumed, onNavigat
                 </div>
               )}
 
+              {/* Commercials Highlight - Standardized */}
+              <div className="bg-neutral-50 dark:bg-neutral-800/40 p-4 rounded-xl border border-neutral-100 dark:border-neutral-800/50">
+                 <div className="flex justify-between items-end">
+                    <div>
+                       <div className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">Resource Amount</div>
+                       <div className="flex items-baseline gap-2">
+                          <span className="text-xl font-black text-neutral-900 dark:text-white">
+                            ${Number(entry.amountUSD).toLocaleString()}
+                          </span>
+                       </div>
+                    </div>
+                    <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-tight ${getStatusStyle(entry.status)}`}>
+                       {entry.status}
+                    </span>
+                 </div>
+              </div>
+
               {/* Server Details Grid */}
-              <div className="bg-neutral-50 dark:bg-neutral-800/40 p-3 rounded-xl border border-neutral-100 dark:border-neutral-800/50">
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div>
-                    <span className="text-neutral-500 font-medium">Server Type: </span>
-                    <span className="font-bold text-neutral-800 dark:text-neutral-200">{entry.serverType || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-neutral-500 font-medium">Subs Type: </span>
-                    <span className="font-bold text-neutral-800 dark:text-neutral-200">{entry.subscriptionType || 'N/A'}</span>
-                  </div>
-                  <div className="col-span-2 pt-1">
-                    <span className="text-neutral-500 font-medium">Configuration: </span>
-                    <span className="text-neutral-700 dark:text-neutral-300 line-clamp-1">{entry.configuration || 'N/A'}</span>
-                  </div>
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Server Type</div>
+                  <div className="font-semibold text-neutral-800 dark:text-neutral-200 truncate">{entry.serverType || '—'}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Subs Type</div>
+                  <div className="font-semibold text-neutral-800 dark:text-neutral-200 truncate">{entry.subscriptionType || '—'}</div>
                 </div>
               </div>
 
               {/* Details Details Grid */}
-              <div className="grid grid-cols-2 gap-3 pb-2">
+              <div className="grid grid-cols-2 gap-3 pb-2 border-t border-neutral-100 dark:border-neutral-800 pt-3">
                 <div>
                   <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Duration/Dates</div>
                   <div className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
                     {entry.durationMonths ? `${entry.durationMonths}m ` : ''}
                     {entry.startDate ? `${entry.startDate} to ${entry.endDate}` : 'No dates'}
-                  </div>
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Amount (USD)</div>
-                  <div className="text-sm border-b-2 border-primary-200 inline-block font-black text-neutral-900 dark:text-white">
-                    ${Number(entry.amountUSD).toLocaleString()}
                   </div>
                 </div>
                 <div>
@@ -333,16 +339,20 @@ export default function AwsModule({ initialFilters, onFiltersConsumed, onNavigat
                   <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Confirmed By</div>
                   <div className="text-xs text-neutral-600 dark:text-neutral-400 truncate">{entry.confirmedBy || 'Pending'}</div>
                 </div>
+                <div>
+                  <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-0.5">Amount (INR)</div>
+                  <div className="text-xs text-neutral-600 dark:text-neutral-400">{Number(entry.amount).toLocaleString()} {entry.currency?.split(' - ')[1] || 'INR'}</div>
+                </div>
               </div>
 
               {/* Footer Indicator */}
-              <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between items-center">
-                 <span className="text-[10px] font-bold text-neutral-400 flex flex-col uppercase tracking-widest">
-                   <span>Requested</span>
-                   <span>{entry.requestedDate}</span>
+              <div className="pt-3 border-t border-neutral-100 dark:border-neutral-800 flex justify-between items-center text-[10px]">
+                 <span className="font-bold text-neutral-400 uppercase tracking-widest flex items-center gap-1.5">
+                   <Calendar className="w-3 h-3" />
+                   Requested: {entry.requestedDate}
                  </span>
-                 <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${getStatusStyle(entry.status)}`}>
-                    {entry.status}
+                 <span className="text-neutral-400 font-bold uppercase tracking-widest">
+                    CONFIG: <span className="text-neutral-700 dark:text-neutral-300">{entry.configuration || '—'}</span>
                  </span>
               </div>
             </div>
@@ -529,6 +539,31 @@ export default function AwsModule({ initialFilters, onFiltersConsumed, onNavigat
     </div>
   );
 
+  const handleCloneAws = () => {
+    if (!selectedAws) return;
+    const clonedAws: AwsFormData = {
+      ...selectedAws,
+      id: `clone-${Date.now()}`,
+      awsId: `${selectedAws.awsId}-COPY`,
+      projectName: `Copy of ${selectedAws.projectName}`,
+    };
+    setAwsEntries([clonedAws, ...awsEntries]);
+    setSelectedAws(clonedAws);
+    toast.success(`Cloned ${selectedAws.awsId} successfully`);
+  };
+
+  const handleRefresh = () => {
+    toast.promise(new Promise(resolve => setTimeout(resolve, 800)), {
+      loading: 'Refreshing AWS data...',
+      success: 'AWS data updated from cloud',
+      error: 'Refresh failed',
+    });
+  };
+
+  const handleExport = () => {
+    toast.info('Generating AWS resource report...');
+  };
+
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       <ListingHeader
@@ -540,8 +575,11 @@ export default function AwsModule({ initialFilters, onFiltersConsumed, onNavigat
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         onFilterClick={() => setIsAdvancedSearchOpen(!isAdvancedSearchOpen)}
-        onRefresh={() => {}}
-        onExport={() => {}}
+        onRefresh={handleRefresh}
+        onExport={handleExport}
+        onClone={handleCloneAws}
+        cloneDisabled={!selectedAws}
+        cloneTooltip={selectedAws ? `Clone ${selectedAws.awsId}` : 'Select a record to clone'}
         showSummary={showSummary}
         onSummaryToggle={() => setShowSummary(!showSummary)}
         onAdd={() => setIsAddModalOpen(true)}
@@ -602,12 +640,15 @@ export default function AwsModule({ initialFilters, onFiltersConsumed, onNavigat
         onSave={(data) => {
           if (selectedAws) {
             setAwsEntries(awsEntries.map(a => a.id === selectedAws.id ? { ...data, id: selectedAws.id } : a));
+            toast.success('AWS details updated');
           } else {
+            const newId = `AWS-${Date.now()}`;
             setAwsEntries([...awsEntries, { 
               ...data, 
-              id: `AWS-${Date.now()}`,
+              id: newId,
               awsId: `AWS-${new Date().getFullYear()}-${String(awsEntries.length + 1).padStart(3, '0')}`
             }]);
+            toast.success('New AWS configuration added');
           }
           setIsAddModalOpen(false);
           setSelectedAws(null);

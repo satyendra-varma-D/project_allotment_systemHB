@@ -46,6 +46,7 @@ interface IconButtonProps {
   onClick?: () => void;
   title?: string;
   active?: boolean;
+  disabled?: boolean;
   className?: string;
   menuItems?: MenuItem[];
 }
@@ -55,6 +56,7 @@ export function IconButton({
   onClick, 
   title, 
   active = false, 
+  disabled = false,
   className = '',
   menuItems 
 }: IconButtonProps) {
@@ -96,8 +98,9 @@ export function IconButton({
     <div className="relative">
       <button
         ref={buttonRef}
-        onClick={handleClick}
+        onClick={!disabled ? handleClick : undefined}
         title={title}
+        disabled={disabled}
         className={`
           w-10 h-10 
           flex items-center justify-center 
@@ -108,6 +111,7 @@ export function IconButton({
             ? 'border-primary-500 dark:border-primary-600 text-primary-600 dark:text-primary-400'
             : 'border-neutral-200 dark:border-neutral-800 hover:border-primary-300 dark:hover:border-primary-700'
           }
+          ${disabled ? 'opacity-50 cursor-not-allowed bg-neutral-100 dark:bg-neutral-900 border-neutral-100 dark:border-neutral-800 pointer-events-none' : ''}
           rounded-lg 
           transition-all
           ${className}

@@ -25,6 +25,7 @@ import { ProjectDetailsModule } from './ProjectDetailsModule';
 import { ProjectEditSidePanel } from './ProjectEditSidePanel';
 import { ProjectEmailPreview } from './ProjectEmailPreview';
 import { ProjectEmailComposer } from './ProjectEmailComposer';
+import { toast } from 'sonner';
 
 // Project data interface based on spec
 interface Project {
@@ -452,22 +453,32 @@ export default function ProjectsModule({ onNavigate, initialFilters, onFiltersCo
   };
 
   const handleCloneProject = () => {
-    if (!selectedProject) {
-      alert('Please select a project to clone');
-      return;
-    }
-    alert(`Cloning project: ${selectedProject.projectName}`);
-    // In real implementation, create a copy of the selected project
+    if (!selectedProject) return;
+    
+    const clonedProject: Project = {
+      ...selectedProject,
+      id: `clone-${Date.now()}`,
+      projectId: `${selectedProject.projectId}-COPY`,
+      projectName: `Copy of ${selectedProject.projectName}`,
+      projectStatus: 'Draft',
+      createdDate: new Date().toISOString().split('T')[0],
+      modifiedDate: new Date().toISOString().split('T')[0],
+    };
+    
+    setProjects([clonedProject, ...projects]);
+    setSelectedProject(clonedProject);
+    toast.success(`Project "${selectedProject.projectName}" cloned successfully`);
   };
 
   const handleRefresh = () => {
-    // Reload data
-    console.log('Refreshing data...');
+    // Simulated refresh
+    console.log('Refreshing projects data...');
+    // In a real app, this would be an API call
   };
 
   const handleExport = () => {
-    // Export functionality
-    console.log('Exporting data...');
+    toast.info('Preparing export files...');
+    // Simulated export
   };
 
   const handleEmailPreview = (project: Project) => {

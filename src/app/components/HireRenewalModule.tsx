@@ -5,7 +5,8 @@ import {
   Edit2,
   Trash2,
 } from 'lucide-react';
-import { ListingHeader, AdvancedSearchPanel } from './hb/listing';
+import { ListingHeader, AdvancedSearchPanel, SummaryWidgets, FilterChips, Pagination } from './hb/listing';
+import { toast } from 'sonner';
 import type { FilterCondition, ViewMode } from './hb/listing';
 import { HireRenewalEditSidePanel } from './HireRenewalEditSidePanel';
 import { ResourceEngagementData } from '../types/ResourceEngagement';
@@ -107,18 +108,19 @@ export default function HireRenewalModule() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAdvancedSearchOpen, setIsAdvancedSearchOpen] = useState(false);
   const [isEditPanelOpen, setIsEditPanelOpen] = useState(false);
+  const [resources, setResources] = useState<ResourceEngagementData[]>(mockResources);
   const [selectedResource, setSelectedResource] = useState<ResourceEngagementData | null>(null);
   const [activeFilters, setActiveFilters] = useState<FilterCondition[]>([]);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const filteredData = useMemo(() => {
-    return mockResources.filter(item => 
+    return resources.filter(item => 
       item.crt.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.projectName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.resourceType.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.projectCode.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [searchQuery]);
+  }, [searchQuery, resources]);
 
   const handleEdit = (resource: ResourceEngagementData) => {
     setSelectedResource(resource);
@@ -522,6 +524,34 @@ export default function HireRenewalModule() {
     </div>
   );
 
+  const handleCloneResource = () => {
+    if (!selectedResource) return;
+    
+    const clonedResource: ResourceEngagementData = {
+      ...selectedResource,
+      id: `clone-${Date.now()}`,
+      resourceId: `${selectedResource.resourceId}-COPY`,
+      crt: `${selectedResource.crt} (Copy)`,
+      status: 'Active',
+    };
+    
+    setResources([clonedResource, ...resources]);
+    setSelectedResource(clonedResource);
+    toast.success(`Resource "${selectedResource.crt}" cloned successfully`);
+  };
+
+  const handleRefresh = () => {
+    toast.promise(new Promise(resolve => setTimeout(resolve, 800)), {
+      loading: 'Refreshing resources list...',
+      success: 'Resource data synchronized',
+      error: 'Refresh failed',
+    });
+  };
+
+  const handleExport = () => {
+    toast.info('Exporting resource directory...');
+  };
+
   return (
     <div className="h-full flex flex-col bg-neutral-50 dark:bg-neutral-950">
       <ListingHeader
@@ -533,7 +563,11 @@ export default function HireRenewalModule() {
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         onFilterClick={() => setIsAdvancedSearchOpen(true)}
-        onRefresh={() => console.log('Refresh')}
+        onRefresh={handleRefresh}
+        onExport={handleExport}
+        onClone={handleCloneResource}
+        cloneDisabled={!selectedResource}
+        cloneTooltip={selectedResource ? `Clone ${selectedResource.crt}` : 'Select a resource to clone'}
         onAdd={() => {
           setSelectedResource(null);
           setIsEditPanelOpen(true);
@@ -553,6 +587,7 @@ export default function HireRenewalModule() {
         engagement={selectedResource}
         onSave={(data) => {
           console.log('Saved:', data);
+          toast.success('Resource details saved');
           setIsEditPanelOpen(false);
         }}
       />
