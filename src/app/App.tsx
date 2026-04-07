@@ -12,7 +12,7 @@ import HireRenewalModule from "./components/HireRenewalModule";
 import ChangeRequestsModule from "./components/ChangeRequestsModule";
 import InfrastructureModule from "./components/InfrastructureModule";
 import AddonsModule from "./components/AddonsModule";
-import AwsModule from "./components/AwsModule";
+import AwsModule from "./components/AWSModule";
 import MilestonesMasterModule from "./components/MilestonesMasterModule";
 import PaymentTermsMasterModule from "./components/PaymentTermsMasterModule";
 import MilestoneStatusChangeLogsModule from "./components/MilestoneStatusChangeLogsModule";
@@ -94,9 +94,8 @@ export default function App() {
 
       {/* Main Content */}
       <main
-        className={`transition-all duration-300 ${
-          isSidebarCollapsed ? "ml-16" : "ml-64"
-        }`}
+        className={`transition-all duration-300 ${isSidebarCollapsed ? "ml-16" : "ml-64"
+          }`}
       >
         {/* Global Header */}
         <GlobalHeader
@@ -117,16 +116,16 @@ export default function App() {
         ) : currentPage === "leads" ? (
           <LeadsModule />
         ) : currentPage === "projects" ? (
-          <ProjectsModule 
-            onNavigate={handleNavigate} 
+          <ProjectsModule
+            onNavigate={handleNavigate}
             initialFilters={initialFilters}
             onFiltersConsumed={() => setInitialFilters([])}
           />
         ) : currentPage === "milestones" ? (
-          <MilestonesModule 
+          <MilestonesModule
             onNavigate={handleNavigate}
-            initialFilters={initialFilters} 
-            onFiltersConsumed={() => setInitialFilters([])} 
+            initialFilters={initialFilters}
+            onFiltersConsumed={() => setInitialFilters([])}
           />
         ) : currentPage === "hire-renewal" ? (
           <HireRenewalModule />
@@ -136,16 +135,16 @@ export default function App() {
         ) : currentPage === "infrastructure" ? (
           <InfrastructureModule />
         ) : currentPage === "addons" ? (
-          <AddonsModule 
+          <AddonsModule
             onNavigate={handleNavigate}
-            initialFilters={initialFilters} 
-            onFiltersConsumed={() => setInitialFilters([])} 
+            initialFilters={initialFilters}
+            onFiltersConsumed={() => setInitialFilters([])}
           />
         ) : currentPage === "aws" ? (
-          <AwsModule 
+          <AwsModule
             onNavigate={handleNavigate}
-            initialFilters={initialFilters} 
-            onFiltersConsumed={() => setInitialFilters([])} 
+            initialFilters={initialFilters}
+            onFiltersConsumed={() => setInitialFilters([])}
           />
         ) : currentPage === "milestones-master" ? (
           <MilestonesMasterModule />
