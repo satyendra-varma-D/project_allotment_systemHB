@@ -26,8 +26,7 @@ import EmailGroupsModule from "./components/EmailGroupsModule";
 export default function App() {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("theme");
-      return saved === "dark";
+      return localStorage.getItem("theme") === "dark";
     }
     return false;
   });
@@ -39,16 +38,12 @@ export default function App() {
     return "natural";
   });
 
-  const [isSidebarCollapsed, setIsSidebarCollapsed] =
-    useState(false);
-
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [initialFilters, setInitialFilters] = useState<any[]>([]);
 
-  /* -------------------- Theme Effects -------------------- */
   useEffect(() => {
     const root = document.documentElement;
-
     if (isDark) {
       root.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -60,23 +55,16 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem("colorTheme", currentTheme);
-    document.documentElement.setAttribute(
-      "data-theme",
-      currentTheme,
-    );
+    document.documentElement.setAttribute("data-theme", currentTheme);
   }, [currentTheme]);
+
+  const handleNavigate = (pageId: string, filters?: any[]) => {
+    setInitialFilters(filters || []);
+    setCurrentPage(pageId);
+  };
 
   const handleLogout = () => {
     console.log("Logout clicked");
-  };
-
-  const handleNavigate = (pageId: string, filters?: any[]) => {
-    if (filters) {
-      setInitialFilters(filters);
-    } else {
-      setInitialFilters([]);
-    }
-    setCurrentPage(pageId);
   };
 
   return (
@@ -97,7 +85,7 @@ export default function App() {
         className={`transition-all duration-300 ${isSidebarCollapsed ? "ml-16" : "ml-64"
           }`}
       >
-        {/* Global Header */}
+        {/* Header */}
         <GlobalHeader
           isDarkMode={isDark}
           onToggleDarkMode={() => setIsDark(!isDark)}
@@ -106,7 +94,7 @@ export default function App() {
           onThemeChange={setCurrentTheme}
         />
 
-        {/* Page Content */}
+        {/* Pages */}
         {currentPage === "ui-kit" ? (
           <UIKit />
         ) : currentPage === "sample-design" ? (
@@ -129,7 +117,6 @@ export default function App() {
           />
         ) : currentPage === "hire-renewal" ? (
           <HireRenewalModule />
-
         ) : currentPage === "change-requests" ? (
           <ChangeRequestsModule />
         ) : currentPage === "infrastructure" ? (
@@ -165,28 +152,7 @@ export default function App() {
         ) : currentPage === "email-groups" ? (
           <EmailGroupsModule />
         ) : (
-          <div className="p-6">
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg p-8">
-              {currentPage === "support-amc" && (
-                <>
-                  <h2 className="text-2xl font-medium text-neutral-900 dark:text-white mb-2">Support / AMC Management</h2>
-                  <p className="text-neutral-600 dark:text-neutral-400">Manage post-delivery support contracts and Annual Maintenance Contracts.</p>
-                </>
-              )}
-              {currentPage === "change-requests" && (
-                <>
-                  <h2 className="text-2xl font-medium text-neutral-900 dark:text-white mb-2">Addons</h2>
-                  <p className="text-neutral-600 dark:text-neutral-400">Track additional scope, addons, and delivery extensions.</p>
-                </>
-              )}
-              {currentPage === "infrastructure" && (
-                <>
-                  <h2 className="text-2xl font-medium text-neutral-900 dark:text-white mb-2">Infrastructure</h2>
-                  <p className="text-neutral-600 dark:text-neutral-400">Track infrastructure provisioning, cloud services, and recurring infra costs.</p>
-                </>
-              )}
-            </div>
-          </div>
+          <div className="p-6">Page not found</div>
         )}
       </main>
 
